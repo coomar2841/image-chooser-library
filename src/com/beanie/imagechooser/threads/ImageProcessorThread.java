@@ -107,9 +107,9 @@ public class ImageProcessorThread extends Thread {
                 File original = new File(filePath);
                 File file = new File(
                         (original.getParent() + File.separator + original.getName()).replace(".",
-                                "fact_" + factor + "."));
+                                "_fact_" + factor + "."));
                 FileOutputStream stream = new FileOutputStream(file);
-                bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                 return file.getAbsolutePath();
             }
 
