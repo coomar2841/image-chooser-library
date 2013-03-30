@@ -2,11 +2,15 @@
 package com.beanie.imagechooser.api;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Calendar;
 
 import android.app.Activity;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -64,6 +68,7 @@ public class ImageChooserManager implements ImageProcessorListener {
     private void choosePicture() {
         checkDirectory();
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/*");
         startActivity(intent);
     }
 
@@ -124,6 +129,7 @@ public class ImageChooserManager implements ImageProcessorListener {
                 String path = filePathOriginal;
                 ImageProcessorThread thread = new ImageProcessorThread(path);
                 thread.setListener(this);
+                thread.setContext(activity.getApplicationContext());
                 thread.start();
             }
         }
@@ -160,13 +166,13 @@ public class ImageChooserManager implements ImageProcessorListener {
             imageUri = Uri.parse(imageUri.toString().replace("com.android.gallery3d",
                     "com.google.android.gallery3d"));
         }
-        Cursor cursor = activity.getContentResolver().query(imageUri, null, null, null, null);
+        Cursor cursor = activity.getContentResolver().query(imageUri, proj, null, null, null);
 
         cursor.moveToFirst();
 
         String filePath = "";
         if (imageUri.toString().startsWith("content://com.google.android.gallery3d")) {
-            filePath = cursor.getString(cursor.getColumnIndexOrThrow(MediaColumns.DISPLAY_NAME));
+            filePath = imageUri.toString();
         } else {
             filePath = cursor.getString(cursor.getColumnIndexOrThrow(MediaColumns.DATA));
         }
@@ -181,4 +187,5 @@ public class ImageChooserManager implements ImageProcessorListener {
                 + File.separator + MY_DIR);
         return directory.getAbsolutePath();
     }
+
 }

@@ -16,6 +16,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
@@ -39,6 +40,8 @@ public class ImageProcessorThread extends Thread {
 
     private int THUMBNAIL_SMALL = 2;
 
+    private Context context;
+
     public ImageProcessorThread(String filePath) {
         this.filePath = filePath;
     }
@@ -47,29 +50,42 @@ public class ImageProcessorThread extends Thread {
         this.listener = listener;
     }
 
-    @Override
-    public void run() {
-        processImage();
+    public void setContext(Context context) {
+        this.context = context;
     }
 
-    private void processImage() {
+    @Override
+    public void run() {
+        try {
+            processImage();
+        } catch (IOException e) {
+            e.printStackTrace();
+            if (listener != null) {
+                listener.onError(e.getMessage());
+            }
+        }
+    }
+
+    private void processImage() throws IOException {
         if (filePath == null || TextUtils.isEmpty(filePath)) {
             if (listener != null) {
                 listener.onError("Coulnd't process a null file");
             }
         } else if (filePath.startsWith("http")) {
             downloadAndProcess(filePath);
+        } else if (filePath.startsWith("content://com.google.android.gallery3d")) {
+            processPicasaImage(filePath);
         } else {
             process();
         }
     }
 
-    private void downloadAndProcess(String url) {
+    private void downloadAndProcess(String url) throws IOException {
         filePath = downloadImage(url);
         process();
     }
 
-    private void process() {
+    private void process() throws IOException {
         if (!filePath.contains(ImageChooserManager.MY_DIR)) {
             copyFileToDir();
         }
@@ -77,7 +93,7 @@ public class ImageProcessorThread extends Thread {
         processingDone(this.filePath, thumbnails[0], thumbnails[1]);
     }
 
-    private void copyFileToDir() {
+    private void copyFileToDir() throws IOException {
         try {
             File file;
             file = new File(Uri.parse(filePath).getPath());
@@ -95,8 +111,10 @@ public class ImageProcessorThread extends Thread {
             filePath = copyTo.getAbsolutePath();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            throw e;
         } catch (IOException e) {
             e.printStackTrace();
+            throw e;
         }
     }
 
@@ -179,6 +197,7 @@ public class ImageProcessorThread extends Thread {
             return file.getAbsolutePath();
 
         } catch (IOException e) {
+
             e.printStackTrace();
         }
         return null;
@@ -222,5 +241,31 @@ public class ImageProcessorThread extends Thread {
             e.printStackTrace();
         }
         return localFilePath;
+    }
+
+    private void processPicasaImage(String filePath) throws IOException {
+        if (Config.DEBUG) {
+            Log.i(TAG, "Picasa Started");
+        }
+        String imageUri = filePath;
+        try {
+            Bitmap tempBitmap = BitmapFactory.decodeStream(context.getContentResolver()
+                    .openInputStream(Uri.parse(imageUri)));
+
+            this.filePath = ImageChooserManager.getDirectory() + File.separator
+                    + Calendar.getInstance().getTimeInMillis() + ".jpg";
+
+            FileOutputStream stream = new FileOutputStream(this.filePath);
+            tempBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            tempBitmap.recycle();
+
+            process();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            throw e;
+        }
+        if (Config.DEBUG) {
+            Log.i(TAG, "Picasa Done");
+        }
     }
 }
