@@ -9,18 +9,22 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
 import android.media.ExifInterface;
-import android.net.Uri;
 import android.text.TextUtils;
-import android.widget.ImageView;
+import android.util.Log;
 
 import com.beanie.imagechooser.api.ChosenImage;
+import com.beanie.imagechooser.api.config.Config;
 
 public class ImageProcessorThread extends Thread {
+    private final static String TAG = "ImageProcessorThread";
+
     private ImageProcessorListener listener;
 
     private String filePath;
 
-    private String directory;
+    private int THUMBNAIL_BIG = 1;
+
+    private int THUMBNAIL_SMALL = 2;
 
     public ImageProcessorThread(String filePath) {
         this.filePath = filePath;
@@ -76,42 +80,65 @@ public class ImageProcessorThread extends Thread {
     }
 
     private String getThumnailPath() {
-        return compressAndSave(4);
+        if (Config.DEBUG) {
+            Log.i(TAG, "Compressing ... THUMBNAIL");
+        }
+        return compressAndSave(THUMBNAIL_BIG);
     }
 
     private String getThumbnailSmallPath() {
-        return compressAndSave(16);
+        if (Config.DEBUG) {
+            Log.i(TAG, "Compressing ... THUMBNAIL SMALL");
+        }
+        return compressAndSave(THUMBNAIL_SMALL);
     }
 
-    private String compressAndSave(int factor) {
+    private String compressAndSave(int scale) {
         try {
             ExifInterface exif = new ExifInterface(filePath);
             String width = exif.getAttribute(ExifInterface.TAG_IMAGE_WIDTH);
             String length = exif.getAttribute(ExifInterface.TAG_IMAGE_LENGTH);
+            if (Config.DEBUG) {
+                Log.i(TAG, "Before: " + width + "x" + length);
+            }
 
             int w = Integer.parseInt(width);
             int l = Integer.parseInt(length);
 
-            if (w > 200 || l > 200) {
-                l = 200 * l / w;
-                w = 200;
-                Options options = new Options();
-                if (w > 1500) {
-                    options.inSampleSize = factor / 4;
-                } else {
-                    options.inSampleSize = factor;
-                }
-                options.outHeight = l;
-                options.outWidth = w;
-                Bitmap bitmap = BitmapFactory.decodeFile(filePath, options);
-                File original = new File(filePath);
-                File file = new File(
-                        (original.getParent() + File.separator + original.getName()).replace(".",
-                                "_fact_" + factor + "."));
-                FileOutputStream stream = new FileOutputStream(file);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                return file.getAbsolutePath();
+            int what = w > l ? w : l;
+
+            Options options = new Options();
+            if (what > 1500) {
+                options.inSampleSize = scale * 4;
+            } else if (what > 1000 && what <= 1500) {
+                options.inSampleSize = scale * 3;
+            } else if (what > 400 && what <= 1000) {
+                options.inSampleSize = scale * 2;
+            } else {
+                options.inSampleSize = scale;
             }
+            if (Config.DEBUG) {
+                Log.i(TAG, "Scale: " + (what / options.inSampleSize));
+            }
+            Bitmap bitmap = BitmapFactory.decodeFile(filePath, options);
+            File original = new File(filePath);
+            File file = new File(
+                    (original.getParent() + File.separator + original.getName()).replace(".",
+                            "_fact_" + scale + "."));
+            FileOutputStream stream = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+
+            if (Config.DEBUG) {
+                ExifInterface exifAfter = new ExifInterface(file.getAbsolutePath());
+                String widthAfter = exifAfter.getAttribute(ExifInterface.TAG_IMAGE_WIDTH);
+                String lengthAfter = exifAfter.getAttribute(ExifInterface.TAG_IMAGE_LENGTH);
+                if (Config.DEBUG) {
+                    Log.i(TAG, "After: " + widthAfter + "x" + lengthAfter);
+                }
+            }
+            stream.flush();
+            stream.close();
+            return file.getAbsolutePath();
 
         } catch (IOException e) {
             e.printStackTrace();
