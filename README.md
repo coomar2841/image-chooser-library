@@ -3,11 +3,11 @@ Version 1.0
 Usage:
 
 For choosing an image from gallery
-'''java
+```java
 imageChooserManager = new ImageChooserManager(this, ChooserType.REQUEST_CHOOSE_IMAGE);
 imageChooserManager.setImageChooserListener(this);
 imageChooserManager.choose();
-'''
+```
 
 For capturing a picture using your camera
 imageChooserManager = new ImageChooserManager(this, ChooserType.REQUEST_TAKE_PICTURE);
