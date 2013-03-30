@@ -71,7 +71,10 @@ public class ImageChooserManager implements ImageProcessorListener {
     private void takePicture() {
         checkDirectory();
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(filePathOriginal)));
+        intent.putExtra(
+                MediaStore.EXTRA_OUTPUT,
+                Uri.fromFile(new File(getDirectory() + File.separator
+                        + Calendar.getInstance().getTimeInMillis() + ".jpg")));
         startActivity(intent);
     }
 
@@ -88,9 +91,6 @@ public class ImageChooserManager implements ImageProcessorListener {
         if (!directory.exists()) {
             directory.mkdir();
         }
-
-        filePathOriginal = new File(directory.getAbsolutePath() + File.separator
-                + Calendar.getInstance().getTimeInMillis() + ".jpg").getAbsolutePath();
     }
 
     public void submit(int requestCode, Intent data) {
@@ -109,11 +109,14 @@ public class ImageChooserManager implements ImageProcessorListener {
             if (data.getDataString().startsWith("content:")) {
                 filePathOriginal = getAbsoluteImagePathFromUri(Uri.parse(data.getDataString()));
             }
+            if (data.getDataString().startsWith("file://")) {
+                filePathOriginal = data.getDataString().substring(7);
+            }
             if (filePathOriginal == null || TextUtils.isEmpty(filePathOriginal)) {
                 onError("File path was null");
             } else {
                 if (Config.DEBUG) {
-                    Log.i(TAG, "File: " + data.getDataString());
+                    Log.i(TAG, "File: " + filePathOriginal);
                 }
                 String path = filePathOriginal;
                 ImageProcessorThread thread = new ImageProcessorThread(path);

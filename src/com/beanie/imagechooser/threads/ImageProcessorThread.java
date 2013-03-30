@@ -7,13 +7,27 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.util.Calendar;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.protocol.HTTP;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
 import android.media.ExifInterface;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
+import android.webkit.URLUtil;
 
 import com.beanie.imagechooser.api.ChosenImage;
 import com.beanie.imagechooser.api.ImageChooserManager;
@@ -56,6 +70,7 @@ public class ImageProcessorThread extends Thread {
     }
 
     private void downloadAndProcess(String url) {
+        filePath = downloadImage(url);
         process();
     }
 
@@ -68,10 +83,12 @@ public class ImageProcessorThread extends Thread {
     }
 
     private void copyFileToDir() {
-        File file = new File(filePath);
-        File copyTo = new File(ImageChooserManager.getDirectory() + File.separator + file.getName());
         try {
-            FileInputStream streamIn = new FileInputStream(new File(filePath));
+            File file;
+            file = new File(Uri.parse(filePath).getPath());
+            File copyTo = new File(ImageChooserManager.getDirectory() + File.separator
+                    + file.getName());
+            FileInputStream streamIn = new FileInputStream(file);
             BufferedOutputStream outStream = new BufferedOutputStream(new FileOutputStream(copyTo));
             byte[] buf = new byte[2048];
             int len;
@@ -80,12 +97,12 @@ public class ImageProcessorThread extends Thread {
             }
             streamIn.close();
             outStream.close();
+            filePath = copyTo.getAbsolutePath();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        filePath = copyTo.getAbsolutePath();
     }
 
     private void processingDone(String original, String thumbnail, String thunbnailSmall) {
@@ -170,5 +187,45 @@ public class ImageProcessorThread extends Thread {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public String downloadImage(String url) {
+        String localFilePath = "";
+        HttpClient client = new DefaultHttpClient();
+        HttpGet getRequest = new HttpGet(url);
+
+        try {
+            HttpResponse response = client.execute(getRequest);
+            InputStream stream = response.getEntity().getContent();
+
+            localFilePath = ImageChooserManager.getDirectory() + File.separator
+                    + Calendar.getInstance().getTimeInMillis() + ".jpg";
+            File localFile = new File(localFilePath);
+
+            // stream to write to file
+            FileOutputStream fileOutputStream = new FileOutputStream(localFile);
+
+            // buffer to hold bytes we read from the input stream
+            byte[] buffer = new byte[1024];
+
+            // read from input stream, write to file
+            int len;
+            while ((len = stream.read(buffer)) > 0)
+                fileOutputStream.write(buffer, 0, len);
+            fileOutputStream.flush();
+            fileOutputStream.close();
+            stream.close();
+
+            if (Config.DEBUG) {
+                Log.i(TAG, "Image saved: " + localFilePath.toString());
+            }
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return localFilePath;
     }
 }
