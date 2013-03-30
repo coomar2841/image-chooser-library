@@ -10,25 +10,29 @@ imageChooserManager.choose();
 ```
 
 For capturing a picture using your camera
+```java
 imageChooserManager = new ImageChooserManager(this, ChooserType.REQUEST_TAKE_PICTURE);
 imageChooserManager.setImageChooserListener(this);
 imageChooserManager.choose();
+```
 
 On Activity result, do this:
 
+```java
 @Override
 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    if (resultCode == RESULT_OK
-                && (requestCode == ChooserType.REQUEST_CHOOSE_IMAGE || requestCode == ChooserType.REQUEST_TAKE_PICTURE)) {
-        imageChooserManager.submit(requestCode, data);
-    }
+if (resultCode == RESULT_OK && (requestCode == ChooserType.REQUEST_CHOOSE_IMAGE || requestCode == ChooserType.REQUEST_TAKE_PICTURE)) {
+imageChooserManager.submit(requestCode, data);
 }
+}
+```
 
 For the callbacks, you would implement it this way.
 
 Implement the ImageChooserListener interface
 
 Override these methods:
+```java
 @Override
 public void onImageChosen(final ChosenImage image) {
    runOnUiThread(new Runnable() {
@@ -44,7 +48,8 @@ public void onImageChosen(final ChosenImage image) {
       }
    });
 }
-
+```
+```java
 @Override
 public void onError(final String reason) {
    runOnUiThread(new Runnable() {
@@ -55,4 +60,5 @@ public void onError(final String reason) {
      }
     });
 }
+```
        
