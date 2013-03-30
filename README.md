@@ -22,7 +22,8 @@ On Activity result, do this:
 @Override
 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 	if (resultCode == RESULT_OK && 
-			(requestCode == ChooserType.REQUEST_CHOOSE_IMAGE || requestCode == ChooserType.REQUEST_TAKE_PICTURE)) {
+		(requestCode == ChooserType.REQUEST_CHOOSE_IMAGE ||
+				requestCode == ChooserType.REQUEST_TAKE_PICTURE)) {
 		imageChooserManager.submit(requestCode, data);
 	}
 }
