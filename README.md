@@ -1,6 +1,10 @@
-Version 1.0
+## Version 1.0
+1. Supports adding images by using the device's camera
+2. Supports adding pictures from the Camera folder of your gallery
+3. Supports adding pictures from your synced Picasa folders on your phone
+4. Supports 3 types of image output sizes (Original, Thumbnail and Thumbnail smaller)
 
-Usage:
+###### Usage:
 
 For choosing an image from gallery
 ```java
@@ -51,6 +55,7 @@ public void onImageChosen(final ChosenImage image) {
 	});
 }
 ```
+
 ```java
 @Override
 public void onError(final String reason) {
