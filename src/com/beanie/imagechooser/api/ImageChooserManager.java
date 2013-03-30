@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.MediaStore.MediaColumns;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -62,9 +63,7 @@ public class ImageChooserManager implements ImageProcessorListener {
 
     private void choosePicture() {
         checkDirectory();
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivity(intent);
     }
 
@@ -106,10 +105,14 @@ public class ImageChooserManager implements ImageProcessorListener {
 
     private void processImageFromGallery(Intent data) {
         if (data != null && data.getDataString() != null) {
-            if (data.getDataString().startsWith("content:")) {
+            String uri = data.getData().toString();
+            if (Config.DEBUG) {
+                Log.i(TAG, "Got : " + uri);
+            }
+            if (uri.startsWith("content:")) {
                 filePathOriginal = getAbsoluteImagePathFromUri(Uri.parse(data.getDataString()));
             }
-            if (data.getDataString().startsWith("file://")) {
+            if (uri.startsWith("file://")) {
                 filePathOriginal = data.getDataString().substring(7);
             }
             if (filePathOriginal == null || TextUtils.isEmpty(filePathOriginal)) {
@@ -150,14 +153,23 @@ public class ImageChooserManager implements ImageProcessorListener {
 
     private String getAbsoluteImagePathFromUri(Uri imageUri) {
         String[] proj = {
-            MediaStore.Images.Media.DATA
+                MediaColumns.DATA, MediaColumns.DISPLAY_NAME
         };
-        Cursor cursor = activity.getContentResolver().query(imageUri, proj, null, null, null);
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+
+        if (imageUri.toString().startsWith("content://com.android.gallery3d.provider")) {
+            imageUri = Uri.parse(imageUri.toString().replace("com.android.gallery3d",
+                    "com.google.android.gallery3d"));
+        }
+        Cursor cursor = activity.getContentResolver().query(imageUri, null, null, null, null);
+
         cursor.moveToFirst();
 
-        String filePath = cursor.getString(column_index);
-
+        String filePath = "";
+        if (imageUri.toString().startsWith("content://com.google.android.gallery3d")) {
+            filePath = cursor.getString(cursor.getColumnIndexOrThrow(MediaColumns.DISPLAY_NAME));
+        } else {
+            filePath = cursor.getString(cursor.getColumnIndexOrThrow(MediaColumns.DATA));
+        }
         cursor.close();
 
         return filePath;

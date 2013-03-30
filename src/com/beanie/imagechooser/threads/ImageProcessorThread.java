@@ -8,9 +8,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLDecoder;
 import java.util.Calendar;
 
 import org.apache.http.HttpResponse;
@@ -18,7 +15,6 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.protocol.HTTP;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -27,7 +23,6 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
-import android.webkit.URLUtil;
 
 import com.beanie.imagechooser.api.ChosenImage;
 import com.beanie.imagechooser.api.ImageChooserManager;
