@@ -4,6 +4,14 @@
 3. Supports adding pictures from your synced Picasa folders on your phone
 4. Supports 3 types of image output sizes (Original, Thumbnail and Thumbnail smaller)
 
+### Pre-Requisites:
+1. Your app should have internet permission.
+2. WRITE_EXTERNAL_STORAGE and READ_EXTERNAL_STORAGE permissions are required
+
+### Future releases
+1. Manage cache files from within your app.
+2. Use your own directory for the cache files.
+
 ### Usage:
 
 __For choosing an image from gallery__
