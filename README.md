@@ -4,7 +4,7 @@
 3. Supports adding pictures from your synced Picasa folders on your phone
 4. Supports 3 types of image output sizes (Original, Thumbnail and Thumbnail smaller)
 
-## Usage:
+### Usage:
 
 __For choosing an image from gallery__
 ```java
