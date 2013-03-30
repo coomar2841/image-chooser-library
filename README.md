@@ -21,9 +21,10 @@ On Activity result, do this:
 ```java
 @Override
 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-if (resultCode == RESULT_OK && (requestCode == ChooserType.REQUEST_CHOOSE_IMAGE || requestCode == ChooserType.REQUEST_TAKE_PICTURE)) {
-imageChooserManager.submit(requestCode, data);
-}
+	if (resultCode == RESULT_OK && 
+			(requestCode == ChooserType.REQUEST_CHOOSE_IMAGE || requestCode == ChooserType.REQUEST_TAKE_PICTURE)) {
+		imageChooserManager.submit(requestCode, data);
+	}
 }
 ```
 
@@ -35,30 +36,30 @@ Override these methods:
 ```java
 @Override
 public void onImageChosen(final ChosenImage image) {
-   runOnUiThread(new Runnable() {
+	runOnUiThread(new Runnable() {
 
-      @Override
-      public void run() {
-        	if (image != null) {
+		@Override
+		public void run() {
+			if (image != null) {
 				// Use the image
 				// image.getFilePathOriginal();
 				// image.getFileThumbnail();
 				// image.getFileThumbnailSmall();
-            }
-      }
-   });
+			}
+		}
+	});
 }
 ```
 ```java
 @Override
 public void onError(final String reason) {
-   runOnUiThread(new Runnable() {
+	runOnUiThread(new Runnable() {
 
-     @Override
-     public void run() {
-     	// Show error message
-     }
-    });
+		@Override
+		public void run() {
+			// Show error message
+		}
+	});
 }
 ```
        
