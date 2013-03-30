@@ -1,7 +1,10 @@
 
 package com.beanie.imagechooser.threads;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -13,6 +16,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.beanie.imagechooser.api.ChosenImage;
+import com.beanie.imagechooser.api.ImageChooserManager;
 import com.beanie.imagechooser.api.config.Config;
 
 public class ImageProcessorThread extends Thread {
@@ -52,14 +56,36 @@ public class ImageProcessorThread extends Thread {
     }
 
     private void downloadAndProcess(String url) {
-
         process();
     }
 
     private void process() {
-
+        if (!filePath.contains(ImageChooserManager.MY_DIR)) {
+            copyFileToDir();
+        }
         String[] thumbnails = createThumbnails();
         processingDone(this.filePath, thumbnails[0], thumbnails[1]);
+    }
+
+    private void copyFileToDir() {
+        File file = new File(filePath);
+        File copyTo = new File(ImageChooserManager.getDirectory() + File.separator + file.getName());
+        try {
+            FileInputStream streamIn = new FileInputStream(new File(filePath));
+            BufferedOutputStream outStream = new BufferedOutputStream(new FileOutputStream(copyTo));
+            byte[] buf = new byte[2048];
+            int len;
+            while ((len = streamIn.read(buf)) > 0) {
+                outStream.write(buf, 0, len);
+            }
+            streamIn.close();
+            outStream.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        filePath = copyTo.getAbsolutePath();
     }
 
     private void processingDone(String original, String thumbnail, String thunbnailSmall) {

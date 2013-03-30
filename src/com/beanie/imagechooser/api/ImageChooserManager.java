@@ -6,21 +6,27 @@ import java.util.Calendar;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.TextUtils;
+import android.util.Log;
 
+import com.beanie.imagechooser.api.config.Config;
 import com.beanie.imagechooser.threads.ImageProcessorListener;
 import com.beanie.imagechooser.threads.ImageProcessorThread;
 
 public class ImageChooserManager implements ImageProcessorListener {
+    private final static String TAG = "ImageChooserManager";
+
     public final static String KEY_FILE_ORIGINAL = "key_file_original";
 
     public final static String KEY_THUMB_BIG = "key_thumb_big";
 
     public final static String KEY_THUMB_SMALL = "key_thumb_small";
 
-    private final static String MY_DIR = "bimagechooser";
+    public final static String MY_DIR = "bimagechooser";
 
     private String filePathOriginal;
 
@@ -57,6 +63,8 @@ public class ImageChooserManager implements ImageProcessorListener {
     private void choosePicture() {
         checkDirectory();
         Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivity(intent);
     }
 
@@ -73,13 +81,9 @@ public class ImageChooserManager implements ImageProcessorListener {
 
     private void checkDirectory() {
         File directory = null;
-        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
-                    + File.separator + MY_DIR);
-        } else {
-            directory = new File(Environment.getDataDirectory() + File.separator
-                    + activity.getPackageName() + File.separator + MY_DIR);
-        }
+
+        directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
+                + File.separator + MY_DIR);
 
         if (!directory.exists()) {
             directory.mkdir();
@@ -101,6 +105,22 @@ public class ImageChooserManager implements ImageProcessorListener {
     }
 
     private void processImageFromGallery(Intent data) {
+        if (data != null && data.getDataString() != null) {
+            if (data.getDataString().startsWith("content:")) {
+                filePathOriginal = getAbsoluteImagePathFromUri(Uri.parse(data.getDataString()));
+            }
+            if (filePathOriginal == null || TextUtils.isEmpty(filePathOriginal)) {
+                onError("File path was null");
+            } else {
+                if (Config.DEBUG) {
+                    Log.i(TAG, "File: " + data.getDataString());
+                }
+                String path = filePathOriginal;
+                ImageProcessorThread thread = new ImageProcessorThread(path);
+                thread.setListener(this);
+                thread.start();
+            }
+        }
 
     }
 
@@ -123,5 +143,27 @@ public class ImageChooserManager implements ImageProcessorListener {
         if (listener != null) {
             listener.onError(reason);
         }
+    }
+
+    private String getAbsoluteImagePathFromUri(Uri imageUri) {
+        String[] proj = {
+            MediaStore.Images.Media.DATA
+        };
+        Cursor cursor = activity.getContentResolver().query(imageUri, proj, null, null, null);
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+
+        String filePath = cursor.getString(column_index);
+
+        cursor.close();
+
+        return filePath;
+    }
+
+    public static String getDirectory() {
+        File directory = null;
+        directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
+                + File.separator + MY_DIR);
+        return directory.getAbsolutePath();
     }
 }
