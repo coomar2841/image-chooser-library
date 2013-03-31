@@ -12,6 +12,12 @@
 1. Manage cache files from within your app.
 2. Use your own directory for the cache files.
 
+### Integration with your apps
+1. Clone this repository and add this as a dependency to your Android project. This is a library project.
+2. Download the jar file, and add it to your Android project's build path
+
+[Link to image-chooser-library v1.0](https://dl.dropbox.com/u/6696191/image-chooser-library/v1.0/image-chooser-library-1.0.jar)
+
 ### Usage:
 
 __For choosing an image from gallery__
