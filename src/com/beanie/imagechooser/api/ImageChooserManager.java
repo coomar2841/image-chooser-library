@@ -17,6 +17,12 @@ import com.beanie.imagechooser.api.config.Config;
 import com.beanie.imagechooser.threads.ImageProcessorListener;
 import com.beanie.imagechooser.threads.ImageProcessorThread;
 
+/**
+ * Easy Image Chooser Library for Android Apps. Forget about coding workarounds
+ * for different devices, OSes and folders.
+ * 
+ * @author Beanie
+ */
 public class ImageChooserManager implements ImageProcessorListener {
     private final static String TAG = "ImageChooserManager";
 
@@ -34,6 +40,14 @@ public class ImageChooserManager implements ImageProcessorListener {
 
     private boolean shouldCreateThumbnails;
 
+    /**
+     * Simplest constructor. Specify the type
+     * {@link ChooserType.REQUEST_CHOOSE_IMAGE} or
+     * {@link ChooserType.REQUEST_TAKE_PICTURE}
+     * 
+     * @param activity
+     * @param type
+     */
     public ImageChooserManager(Activity activity, int type) {
         this.activity = activity;
         this.type = type;
@@ -41,6 +55,18 @@ public class ImageChooserManager implements ImageProcessorListener {
         this.shouldCreateThumbnails = true;
     }
 
+    /**
+     * Specify the type {@link ChooserType.REQUEST_CHOOSE_IMAGE} or
+     * {@link ChooserType.REQUEST_TAKE_PICTURE}
+     * <p>
+     * Optionally, you can control where the exported images with their
+     * thumbnails would be stored.
+     * </p>
+     * 
+     * @param activity
+     * @param type
+     * @param foldername
+     */
     public ImageChooserManager(Activity activity, int type, String foldername) {
         this.activity = activity;
         this.type = type;
@@ -48,6 +74,18 @@ public class ImageChooserManager implements ImageProcessorListener {
         this.shouldCreateThumbnails = true;
     }
 
+    /**
+     * Specify the type {@link ChooserType.REQUEST_CHOOSE_IMAGE} or
+     * {@link ChooserType.REQUEST_TAKE_PICTURE}
+     * <p>
+     * Optionally, you can set whether you need thumbnail generation or not. If
+     * not, you would get the original image for the thumbnails as well
+     * </p>
+     * 
+     * @param activity
+     * @param type
+     * @param shouldCreateThumbnails
+     */
     public ImageChooserManager(Activity activity, int type, boolean shouldCreateThumbnails) {
         this.activity = activity;
         this.type = type;
@@ -55,10 +93,19 @@ public class ImageChooserManager implements ImageProcessorListener {
         this.shouldCreateThumbnails = shouldCreateThumbnails;
     }
 
-    public void setImageChooserListener(ImageChooserListener listener) {
-        this.listener = listener;
-    }
-
+    /**
+     * Specify the type {@link ChooserType.REQUEST_CHOOSE_IMAGE} or
+     * {@link ChooserType.REQUEST_TAKE_PICTURE}
+     * <p>
+     * Specify your own foldername and whether you want the generated thumbnails
+     * or not
+     * </p>
+     * 
+     * @param activity
+     * @param type
+     * @param foldername
+     * @param shouldCreateThumbnails
+     */
     public ImageChooserManager(Activity activity, int type, String foldername,
             boolean shouldCreateThumbnails) {
         this.activity = activity;
@@ -67,6 +114,22 @@ public class ImageChooserManager implements ImageProcessorListener {
         this.shouldCreateThumbnails = shouldCreateThumbnails;
     }
 
+    /**
+     * Set a listener, to get callbacks when the images and the thumbnails are
+     * processed
+     * 
+     * @param listener
+     */
+    public void setImageChooserListener(ImageChooserListener listener) {
+        this.listener = listener;
+    }
+
+    /**
+     * Call this method, to start the chooser, i.e, The camera app or the
+     * gallery depending upon the type
+     * 
+     * @throws IllegalAccessException
+     */
     public void choose() throws IllegalAccessException {
         if (listener == null) {
             throw new IllegalArgumentException(
@@ -111,6 +174,14 @@ public class ImageChooserManager implements ImageProcessorListener {
         }
     }
 
+    /**
+     * Call this method to process the result from within your onActivityResult
+     * method. You don't need to do any processing at all. Just pass in the
+     * request code and the data, and everything else will be taken care of.
+     * 
+     * @param requestCode
+     * @param data
+     */
     public void submit(int requestCode, Intent data) {
         switch (type) {
             case ChooserType.REQUEST_CHOOSE_IMAGE:

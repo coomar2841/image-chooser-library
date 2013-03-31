@@ -1,3 +1,10 @@
+## Version 1.1
+
+### Changes
+1. Added optional ouput folder configuration
+2. Added folder cache limit and auto delete old files.
+3. Added an optional flag to control thumbnail generation
+
 ## Version 1.0
 1. Supports adding images by using the device's camera
 2. Supports adding pictures from the Camera folder of your gallery

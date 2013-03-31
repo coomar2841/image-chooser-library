@@ -105,7 +105,7 @@ public class ImageProcessorThread extends Thread {
             String[] thumbnails = createThumbnails();
             processingDone(this.filePath, thumbnails[0], thumbnails[1]);
         } else {
-            processingDone(this.filePath, null, null);
+            processingDone(this.filePath, this.filePath, this.filePath);
         }
     }
 
