@@ -2,17 +2,12 @@
 package com.beanie.imagechooser.api;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Calendar;
 
 import android.app.Activity;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.MediaStore.MediaColumns;
 import android.text.TextUtils;
@@ -25,13 +20,7 @@ import com.beanie.imagechooser.threads.ImageProcessorThread;
 public class ImageChooserManager implements ImageProcessorListener {
     private final static String TAG = "ImageChooserManager";
 
-    public final static String KEY_FILE_ORIGINAL = "key_file_original";
-
-    public final static String KEY_THUMB_BIG = "key_thumb_big";
-
-    public final static String KEY_THUMB_SMALL = "key_thumb_small";
-
-    public final static String MY_DIR = "bimagechooser";
+    private final static String DIRECTORY = "bimagechooser";
 
     private String filePathOriginal;
 
@@ -41,13 +30,41 @@ public class ImageChooserManager implements ImageProcessorListener {
 
     private int type;
 
+    private String foldername;
+
+    private boolean shouldCreateThumbnails;
+
     public ImageChooserManager(Activity activity, int type) {
         this.activity = activity;
         this.type = type;
+        this.foldername = DIRECTORY;
+        this.shouldCreateThumbnails = true;
+    }
+
+    public ImageChooserManager(Activity activity, int type, String foldername) {
+        this.activity = activity;
+        this.type = type;
+        this.foldername = foldername;
+        this.shouldCreateThumbnails = true;
+    }
+
+    public ImageChooserManager(Activity activity, int type, boolean shouldCreateThumbnails) {
+        this.activity = activity;
+        this.type = type;
+        this.foldername = DIRECTORY;
+        this.shouldCreateThumbnails = shouldCreateThumbnails;
     }
 
     public void setImageChooserListener(ImageChooserListener listener) {
         this.listener = listener;
+    }
+
+    public ImageChooserManager(Activity activity, int type, String foldername,
+            boolean shouldCreateThumbnails) {
+        this.activity = activity;
+        this.type = type;
+        this.foldername = foldername;
+        this.shouldCreateThumbnails = shouldCreateThumbnails;
     }
 
     public void choose() throws IllegalAccessException {
@@ -77,7 +94,7 @@ public class ImageChooserManager implements ImageProcessorListener {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(
                 MediaStore.EXTRA_OUTPUT,
-                Uri.fromFile(new File(getDirectory() + File.separator
+                Uri.fromFile(new File(FileUtils.getDirectory(foldername) + File.separator
                         + Calendar.getInstance().getTimeInMillis() + ".jpg")));
         startActivity(intent);
     }
@@ -88,10 +105,7 @@ public class ImageChooserManager implements ImageProcessorListener {
 
     private void checkDirectory() {
         File directory = null;
-
-        directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
-                + File.separator + MY_DIR);
-
+        directory = new File(FileUtils.getDirectory(foldername));
         if (!directory.exists()) {
             directory.mkdir();
         }
@@ -127,7 +141,8 @@ public class ImageChooserManager implements ImageProcessorListener {
                     Log.i(TAG, "File: " + filePathOriginal);
                 }
                 String path = filePathOriginal;
-                ImageProcessorThread thread = new ImageProcessorThread(path);
+                ImageProcessorThread thread = new ImageProcessorThread(path, foldername,
+                        shouldCreateThumbnails);
                 thread.setListener(this);
                 thread.setContext(activity.getApplicationContext());
                 thread.start();
@@ -138,7 +153,8 @@ public class ImageChooserManager implements ImageProcessorListener {
 
     private void processCameraImage() {
         String path = filePathOriginal;
-        ImageProcessorThread thread = new ImageProcessorThread(path);
+        ImageProcessorThread thread = new ImageProcessorThread(path, foldername,
+                shouldCreateThumbnails);
         thread.setListener(this);
         thread.start();
     }
@@ -180,12 +196,4 @@ public class ImageChooserManager implements ImageProcessorListener {
 
         return filePath;
     }
-
-    public static String getDirectory() {
-        File directory = null;
-        directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
-                + File.separator + MY_DIR);
-        return directory.getAbsolutePath();
-    }
-
 }

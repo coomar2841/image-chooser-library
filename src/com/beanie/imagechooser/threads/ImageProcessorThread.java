@@ -3,6 +3,7 @@ package com.beanie.imagechooser.threads;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -26,13 +27,17 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.beanie.imagechooser.api.ChosenImage;
-import com.beanie.imagechooser.api.ImageChooserManager;
+import com.beanie.imagechooser.api.FileUtils;
 import com.beanie.imagechooser.api.config.Config;
 
 public class ImageProcessorThread extends Thread {
     private final static String TAG = "ImageProcessorThread";
 
     private ImageProcessorListener listener;
+
+    private final static int MAX_DIRECTORY_SIZE = 5 * 1024 * 1024;
+
+    private final static int MAX_THRESHOLD_DAYS = (int) (0.5 * 24 * 60 * 60 * 1000);
 
     private String filePath;
 
@@ -42,8 +47,14 @@ public class ImageProcessorThread extends Thread {
 
     private Context context;
 
-    public ImageProcessorThread(String filePath) {
+    private String foldername;
+
+    private boolean shouldCreateThumnails;
+
+    public ImageProcessorThread(String filePath, String foldername, boolean shouldCreateThumbnails) {
         this.filePath = filePath;
+        this.foldername = foldername;
+        this.shouldCreateThumnails = shouldCreateThumbnails;
     }
 
     public void setListener(ImageProcessorListener listener) {
@@ -57,6 +68,7 @@ public class ImageProcessorThread extends Thread {
     @Override
     public void run() {
         try {
+            manageDiretoryCache();
             processImage();
         } catch (IOException e) {
             e.printStackTrace();
@@ -86,18 +98,22 @@ public class ImageProcessorThread extends Thread {
     }
 
     private void process() throws IOException {
-        if (!filePath.contains(ImageChooserManager.MY_DIR)) {
+        if (!filePath.contains(foldername)) {
             copyFileToDir();
         }
-        String[] thumbnails = createThumbnails();
-        processingDone(this.filePath, thumbnails[0], thumbnails[1]);
+        if (shouldCreateThumnails) {
+            String[] thumbnails = createThumbnails();
+            processingDone(this.filePath, thumbnails[0], thumbnails[1]);
+        } else {
+            processingDone(this.filePath, null, null);
+        }
     }
 
     private void copyFileToDir() throws IOException {
         try {
             File file;
             file = new File(Uri.parse(filePath).getPath());
-            File copyTo = new File(ImageChooserManager.getDirectory() + File.separator
+            File copyTo = new File(FileUtils.getDirectory(foldername) + File.separator
                     + file.getName());
             FileInputStream streamIn = new FileInputStream(file);
             BufferedOutputStream outStream = new BufferedOutputStream(new FileOutputStream(copyTo));
@@ -212,7 +228,7 @@ public class ImageProcessorThread extends Thread {
             HttpResponse response = client.execute(getRequest);
             InputStream stream = response.getEntity().getContent();
 
-            localFilePath = ImageChooserManager.getDirectory() + File.separator
+            localFilePath = FileUtils.getDirectory(foldername) + File.separator
                     + Calendar.getInstance().getTimeInMillis() + ".jpg";
             File localFile = new File(localFilePath);
 
@@ -252,7 +268,7 @@ public class ImageProcessorThread extends Thread {
             Bitmap tempBitmap = BitmapFactory.decodeStream(context.getContentResolver()
                     .openInputStream(Uri.parse(imageUri)));
 
-            this.filePath = ImageChooserManager.getDirectory() + File.separator
+            this.filePath = FileUtils.getDirectory(foldername) + File.separator
                     + Calendar.getInstance().getTimeInMillis() + ".jpg";
 
             FileOutputStream stream = new FileOutputStream(this.filePath);
@@ -266,6 +282,39 @@ public class ImageProcessorThread extends Thread {
         }
         if (Config.DEBUG) {
             Log.i(TAG, "Picasa Done");
+        }
+    }
+
+    private void manageDiretoryCache() {
+        File directory = null;
+        directory = new File(FileUtils.getDirectory(foldername));
+        File[] files = directory.listFiles();
+        long count = 0;
+        for (File file : files) {
+            count = count + file.length();
+        }
+        if (Config.DEBUG) {
+            Log.i(TAG, "Directory size: " + count);
+        }
+
+        if (count > MAX_DIRECTORY_SIZE) {
+            final long today = Calendar.getInstance().getTimeInMillis();
+            FileFilter filter = new FileFilter() {
+
+                @Override
+                public boolean accept(File pathname) {
+                    if (today - pathname.lastModified() > MAX_THRESHOLD_DAYS) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+            };
+
+            File[] filterFiles = directory.listFiles(filter);
+            for (File file : filterFiles) {
+                file.delete();
+            }
         }
     }
 }
