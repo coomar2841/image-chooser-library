@@ -1,7 +1,7 @@
 ## Version 1.1
 
 ### Changes
-1. Added optional ouput folder configuration
+1. Added optional output folder configuration
 2. Added folder cache limit and auto delete old files.
 3. Added an optional flag to control thumbnail generation
 
