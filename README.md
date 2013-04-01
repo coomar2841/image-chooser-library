@@ -23,6 +23,7 @@
 2. Download the jar file, and add it to your Android project's build path
 
 [Link to image-chooser-library v1.0](https://dl.dropbox.com/u/6696191/image-chooser-library/v1.0/image-chooser-library-1.0.jar)
+
 [Link to image-chooser-library v1.1](https://dl.dropbox.com/u/6696191/image-chooser-library/v1.1/image-chooser-library-1.1.jar)
 
 ### Usage:
