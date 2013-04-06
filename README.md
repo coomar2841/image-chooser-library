@@ -1,7 +1,7 @@
 ## Version 1.2
-1. Added choosing video from gallery(supports both locally stored videos and your picasa videos).
+1. Added choosing video from gallery (supports both locally stored videos and your picasa videos).
 2. Added taking a video using camera.
-3. Returns you back the actual video path, and two thumbnails.
+3. Gives back the actual video path, and two thumbnails.
 
 **Sample App using the library v1.2**
 
