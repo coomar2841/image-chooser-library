@@ -9,13 +9,13 @@
 
 [Link to image-chooser-library v1.2](https://dl.dropbox.com/u/6696191/image-chooser-library/v1.2/image-chooser-library-1.2.jar)
 
-[Link to image-chooser-library v1.1](https://dl.dropbox.com/u/6696191/image-chooser-library/v1.1/image-chooser-library-1.1.jar)
-
 ## Version 1.1
 
 1. Added optional output folder configuration.
 2. Added folder cache limit and auto delete old files.
 3. Added an optional flag to control thumbnail generation.
+
+[Link to image-chooser-library v1.1](https://dl.dropbox.com/u/6696191/image-chooser-library/v1.1/image-chooser-library-1.1.jar)
 
 ## Version 1.0
 1. Supports adding images by using the device's camera.
@@ -32,7 +32,6 @@
 2. Download the jar file, and add it to your Android project's build path
 
 ## Usage:
-------------------------------------------------------------------------------------------------------------
 __For choosing an image from gallery__
 ```java
 imageChooserManager = new ImageChooserManager(this, ChooserType.REQUEST_PICK_PICTURE);
