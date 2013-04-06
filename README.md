@@ -2,7 +2,8 @@
 1. Added choosing video from gallery.
 2. Added taking a video using camera.
 
-Sample App using the library v1.2
+**Sample App using the library v1.2**
+
 [Link to Sample app with v1.2](https://dl.dropbox.com/u/6696191/image-chooser-library/v1.2/image-chooser-app_v1.2.apk)
 
 ## Version 1.1
