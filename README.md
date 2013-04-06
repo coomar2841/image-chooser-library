@@ -92,6 +92,54 @@ public void onError(final String reason) {
 }
 ```
 
+__For capturing a video using your camera__
+```java
+videoChooserManager = new VideoChooserManager(this, ChooserType.REQUEST_CAPTURE_VIDEO);
+videoChooserManager.setVideoChooserListener(this);
+videoChooserManager.choose();
+```
+
+__For selecting a video from your gallery__
+```java
+videoChooserManager = new VideoChooserManager(this, ChooserType.REQUEST_PICK_VIDEO);
+videoChooserManager.setVideoChooserListener(this);
+videoChooserManager.choose();
+```
+
+__Implement the VideoChooserListener interface__
+
+Override these methods:
+```java
+@Override
+public void onVideoChosen(final ChosenVideo video) {
+	runOnUiThread(new Runnable() {
+
+		@Override
+		public void run() {
+			if (video != null) {
+				// Use the video
+				// video.getFilePathOriginal();
+				// video.getFileThumbnail();
+				// video.getFileThumbnailSmall();
+			}
+		}
+	});
+}
+```
+
+```java
+@Override
+public void onError(final String reason) {
+	runOnUiThread(new Runnable() {
+
+		@Override
+		public void run() {
+			// Show error message
+		}
+	});
+}
+```
+
 ### License
 -----------------------------------------------------------------------------------
 Copyright 2013 Kumar Bibek
