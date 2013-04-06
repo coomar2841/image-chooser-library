@@ -220,10 +220,11 @@ public abstract class MediaProcessorThread extends Thread {
 
                 @Override
                 public boolean accept(File pathname) {
+                    System.out.println(today - pathname.lastModified() + " , " + maxThresholdDays);
                     if (today - pathname.lastModified() > maxThresholdDays) {
-                        return false;
-                    } else {
                         return true;
+                    } else {
+                        return false;
                     }
                 }
             };
