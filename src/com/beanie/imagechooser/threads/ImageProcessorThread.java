@@ -81,6 +81,17 @@ public class ImageProcessorThread extends MediaProcessorThread {
             process();
         }
     }
+    
+    @Override
+    protected void process() throws IOException {
+        super.process();
+        if (shouldCreateThumnails) {
+            String[] thumbnails = createThumbnails(this.filePath);
+            processingDone(this.filePath, thumbnails[0], thumbnails[1]);
+        } else {
+            processingDone(this.filePath, this.filePath, this.filePath);
+        }
+    }
 
     @Override
     protected void processingDone(String original, String thumbnail, String thunbnailSmall) {

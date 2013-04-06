@@ -58,15 +58,9 @@ public abstract class MediaProcessorThread extends Thread {
         if (!filePath.contains(foldername)) {
             copyFileToDir();
         }
-        if (shouldCreateThumnails) {
-            String[] thumbnails = createThumbnails(this.filePath);
-            processingDone(this.filePath, thumbnails[0], thumbnails[1]);
-        } else {
-            processingDone(this.filePath, this.filePath, this.filePath);
-        }
     }
 
-    private String[] createThumbnails(String image) {
+    protected String[] createThumbnails(String image) {
         String[] images = new String[2];
         images[0] = getThumnailPath(image);
         images[1] = getThumbnailSmallPath(image);
@@ -77,17 +71,17 @@ public abstract class MediaProcessorThread extends Thread {
         if (Config.DEBUG) {
             Log.i(TAG, "Compressing ... THUMBNAIL");
         }
-        return compressAndSave(file, THUMBNAIL_BIG);
+        return compressAndSaveImage(file, THUMBNAIL_BIG);
     }
 
     private String getThumbnailSmallPath(String file) {
         if (Config.DEBUG) {
             Log.i(TAG, "Compressing ... THUMBNAIL SMALL");
         }
-        return compressAndSave(file, THUMBNAIL_SMALL);
+        return compressAndSaveImage(file, THUMBNAIL_SMALL);
     }
 
-    private String compressAndSave(String fileImage, int scale) {
+    private String compressAndSaveImage(String fileImage, int scale) {
         try {
             ExifInterface exif = new ExifInterface(fileImage);
             String width = exif.getAttribute(ExifInterface.TAG_IMAGE_WIDTH);

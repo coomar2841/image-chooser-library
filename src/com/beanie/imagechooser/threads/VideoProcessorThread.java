@@ -1,12 +1,19 @@
 
 package com.beanie.imagechooser.threads;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Calendar;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.media.ThumbnailUtils;
+import android.provider.MediaStore.Video.Thumbnails;
 import android.text.TextUtils;
 
 import com.beanie.imagechooser.api.ChosenVideo;
+import com.beanie.imagechooser.api.FileUtils;
 
 public class VideoProcessorThread extends MediaProcessorThread {
     private final static String TAG = "VideoProcessorThread";
@@ -54,6 +61,28 @@ public class VideoProcessorThread extends MediaProcessorThread {
         } else {
             process();
         }
+    }
+
+    @Override
+    protected void process() throws IOException {
+        super.process();
+        if (shouldCreateThumnails) {
+            String[] thumbnails = createThumbnails(createThumbnailOfVideo());
+            processingDone(this.filePath, thumbnails[0], thumbnails[1]);
+        } else {
+            processingDone(this.filePath, this.filePath, this.filePath);
+        }
+    }
+
+    private String createThumbnailOfVideo() throws IOException {
+        Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(filePath, Thumbnails.MINI_KIND);
+        String thumbnailPath = FileUtils.getDirectory(foldername) + File.separator
+                + Calendar.getInstance().getTimeInMillis() + ".jpg";
+        File file = new File(thumbnailPath);
+        FileOutputStream stream = new FileOutputStream(file);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        stream.flush();
+        return thumbnailPath;
     }
 
     @Override

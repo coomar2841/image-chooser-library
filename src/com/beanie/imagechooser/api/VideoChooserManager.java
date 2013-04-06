@@ -9,7 +9,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
 
-public class VideoChooserManager extends BChooser {
+import com.beanie.imagechooser.threads.VideoProcessorListener;
+import com.beanie.imagechooser.threads.VideoProcessorThread;
+
+public class VideoChooserManager extends BChooser implements VideoProcessorListener {
     private final static String TAG = "VideoChooserManager";
 
     private final static String DIRECTORY = "bvideochooser";
@@ -58,10 +61,9 @@ public class VideoChooserManager extends BChooser {
     private void captureVideo() {
         checkDirectory();
         Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-        intent.putExtra(
-                MediaStore.EXTRA_OUTPUT,
-                Uri.fromFile(new File(FileUtils.getDirectory(foldername) + File.separator
-                        + Calendar.getInstance().getTimeInMillis() + ".mp4")));
+        filePathOriginal = FileUtils.getDirectory(foldername) + File.separator
+                + Calendar.getInstance().getTimeInMillis() + ".mp4";
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(filePathOriginal)));
         startActivity(intent);
     }
 
@@ -89,6 +91,24 @@ public class VideoChooserManager extends BChooser {
     }
 
     private void processCameraVideo(Intent intent) {
+        String path = filePathOriginal;
+        VideoProcessorThread thread = new VideoProcessorThread(path, foldername,
+                shouldCreateThumbnails);
+        thread.setListener(this);
+        thread.start();
+    }
 
+    @Override
+    public void onProcessedVideo(ChosenVideo video) {
+        if (listener != null) {
+            listener.onChosenVideo(video);
+        }
+    }
+
+    @Override
+    public void onError(String reason) {
+        if (listener != null) {
+            listener.onError(reason);
+        }
     }
 }
