@@ -7,6 +7,10 @@
 
 [Link to Sample app with v1.2](https://dl.dropbox.com/u/6696191/image-chooser-library/v1.2/image-chooser-app_v1.2.apk)
 
+[Link to image-chooser-library v1.2](https://dl.dropbox.com/u/6696191/image-chooser-library/v1.2/image-chooser-library-1.2.jar)
+
+[Link to image-chooser-library v1.1](https://dl.dropbox.com/u/6696191/image-chooser-library/v1.1/image-chooser-library-1.1.jar)
+
 ## Version 1.1
 
 1. Added optional output folder configuration.
@@ -30,10 +34,6 @@
 ### Integration with your apps
 1. Clone this repository and add this as a dependency to your Android project. This is a library project.
 2. Download the jar file, and add it to your Android project's build path
-
-[Link to image-chooser-library v1.0](https://dl.dropbox.com/u/6696191/image-chooser-library/v1.0/image-chooser-library-1.0.jar)
-
-[Link to image-chooser-library v1.1](https://dl.dropbox.com/u/6696191/image-chooser-library/v1.1/image-chooser-library-1.1.jar)
 
 ### Usage:
 
