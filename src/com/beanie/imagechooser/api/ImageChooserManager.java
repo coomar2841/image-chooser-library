@@ -129,7 +129,7 @@ public class ImageChooserManager extends BChooser implements ImageProcessorListe
                     "ImageChooserListener cannot be null. Forgot to set ImageChooserListener???");
         }
         switch (type) {
-            case ChooserType.REQUEST_PICK_IMAGE:
+            case ChooserType.REQUEST_PICK_PICTURE:
                 choosePicture();
                 break;
             case ChooserType.REQUEST_CAPTURE_PICTURE:
@@ -166,7 +166,7 @@ public class ImageChooserManager extends BChooser implements ImageProcessorListe
      */
     public void submit(int requestCode, Intent data) {
         switch (type) {
-            case ChooserType.REQUEST_PICK_IMAGE:
+            case ChooserType.REQUEST_PICK_PICTURE:
                 processImageFromGallery(data);
                 break;
             case ChooserType.REQUEST_CAPTURE_PICTURE:

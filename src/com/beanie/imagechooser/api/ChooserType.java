@@ -16,7 +16,7 @@
 package com.beanie.imagechooser.api;
 
 public interface ChooserType {
-    public final static int REQUEST_PICK_IMAGE = 291;
+    public final static int REQUEST_PICK_PICTURE = 291;
     
     public final static int REQUEST_CAPTURE_PICTURE = 294;
     

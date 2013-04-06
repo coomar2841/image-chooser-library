@@ -34,14 +34,14 @@
 
 __For choosing an image from gallery__
 ```java
-imageChooserManager = new ImageChooserManager(this, ChooserType.REQUEST_CHOOSE_IMAGE);
+imageChooserManager = new ImageChooserManager(this, ChooserType.REQUEST_PICK_PICTURE);
 imageChooserManager.setImageChooserListener(this);
 imageChooserManager.choose();
 ```
 
 __For capturing a picture using your camera__
 ```java
-imageChooserManager = new ImageChooserManager(this, ChooserType.REQUEST_TAKE_PICTURE);
+imageChooserManager = new ImageChooserManager(this, ChooserType.REQUEST_CAPTURE_PICTURE);
 imageChooserManager.setImageChooserListener(this);
 imageChooserManager.choose();
 ```
@@ -51,8 +51,8 @@ __On Activity result, do this:__
 @Override
 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 	if (resultCode == RESULT_OK && 
-		(requestCode == ChooserType.REQUEST_CHOOSE_IMAGE ||
-				requestCode == ChooserType.REQUEST_TAKE_PICTURE)) {
+		(requestCode == ChooserType.REQUEST_PICK_PICTURE ||
+				requestCode == ChooserType.REQUEST_CAPTURE_PICTURE)) {
 		imageChooserManager.submit(requestCode, data);
 	}
 }
