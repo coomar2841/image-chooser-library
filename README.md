@@ -106,6 +106,18 @@ videoChooserManager.setVideoChooserListener(this);
 videoChooserManager.choose();
 ```
 
+__On Activity result, do this:__
+```java
+@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	if (resultCode == RESULT_OK && 
+		(requestCode == ChooserType.REQUEST_PICK_VIDEO ||
+				requestCode == ChooserType.REQUEST_CAPTURE_VIDEO)) {
+		videoChooserManager.submit(requestCode, data);
+	}
+}
+```
+
 __Implement the VideoChooserListener interface__
 
 Override these methods:

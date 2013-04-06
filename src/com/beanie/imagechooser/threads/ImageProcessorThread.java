@@ -16,22 +16,12 @@
 
 package com.beanie.imagechooser.threads;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Calendar;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.beanie.imagechooser.api.ChosenImage;
-import com.beanie.imagechooser.api.FileUtils;
-import com.beanie.imagechooser.api.config.Config;
 
 public class ImageProcessorThread extends MediaProcessorThread {
 
@@ -58,7 +48,7 @@ public class ImageProcessorThread extends MediaProcessorThread {
     @Override
     public void run() {
         try {
-            manageDiretoryCache(MAX_DIRECTORY_SIZE, MAX_THRESHOLD_DAYS);
+            manageDiretoryCache(MAX_DIRECTORY_SIZE, MAX_THRESHOLD_DAYS, "jpg");
             processImage();
         } catch (IOException e) {
             e.printStackTrace();
@@ -76,12 +66,12 @@ public class ImageProcessorThread extends MediaProcessorThread {
         } else if (filePath.startsWith("http")) {
             downloadAndProcess(filePath);
         } else if (filePath.startsWith("content://com.google.android.gallery3d")) {
-            processPicasaImage(filePath);
+            processPicasaMedia(filePath, ".jpg");
         } else {
             process();
         }
     }
-    
+
     @Override
     protected void process() throws IOException {
         super.process();
@@ -101,32 +91,6 @@ public class ImageProcessorThread extends MediaProcessorThread {
             image.setFileThumbnail(thumbnail);
             image.setFileThumbnailSmall(thunbnailSmall);
             listener.onProcessedImage(image);
-        }
-    }
-
-    private void processPicasaImage(String filePath) throws IOException {
-        if (Config.DEBUG) {
-            Log.i(TAG, "Picasa Started");
-        }
-        String imageUri = filePath;
-        try {
-            Bitmap tempBitmap = BitmapFactory.decodeStream(context.getContentResolver()
-                    .openInputStream(Uri.parse(imageUri)));
-
-            this.filePath = FileUtils.getDirectory(foldername) + File.separator
-                    + Calendar.getInstance().getTimeInMillis() + ".jpg";
-
-            FileOutputStream stream = new FileOutputStream(this.filePath);
-            tempBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-            tempBitmap.recycle();
-
-            process();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            throw e;
-        }
-        if (Config.DEBUG) {
-            Log.i(TAG, "Picasa Done");
         }
     }
 }

@@ -225,28 +225,4 @@ public class ImageChooserManager extends BChooser implements ImageProcessorListe
             listener.onError(reason);
         }
     }
-
-    private String getAbsoluteImagePathFromUri(Uri imageUri) {
-        String[] proj = {
-                MediaColumns.DATA, MediaColumns.DISPLAY_NAME
-        };
-
-        if (imageUri.toString().startsWith("content://com.android.gallery3d.provider")) {
-            imageUri = Uri.parse(imageUri.toString().replace("com.android.gallery3d",
-                    "com.google.android.gallery3d"));
-        }
-        Cursor cursor = activity.getContentResolver().query(imageUri, proj, null, null, null);
-
-        cursor.moveToFirst();
-
-        String filePath = "";
-        if (imageUri.toString().startsWith("content://com.google.android.gallery3d")) {
-            filePath = imageUri.toString();
-        } else {
-            filePath = cursor.getString(cursor.getColumnIndexOrThrow(MediaColumns.DATA));
-        }
-        cursor.close();
-
-        return filePath;
-    }
 }

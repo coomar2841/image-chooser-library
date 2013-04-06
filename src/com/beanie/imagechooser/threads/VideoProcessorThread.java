@@ -39,7 +39,7 @@ public class VideoProcessorThread extends MediaProcessorThread {
     @Override
     public void run() {
         try {
-            manageDiretoryCache(MAX_DIRECTORY_SIZE, MAX_THRESHOLD_DAYS);
+            manageDiretoryCache(MAX_DIRECTORY_SIZE, MAX_THRESHOLD_DAYS, "mp4");
             processVideo();
         } catch (IOException e) {
             e.printStackTrace();
@@ -57,7 +57,7 @@ public class VideoProcessorThread extends MediaProcessorThread {
         } else if (filePath.startsWith("http")) {
             downloadAndProcess(filePath);
         } else if (filePath.startsWith("content://com.google.android.gallery3d")) {
-            // processPicasaImage(filePath);
+            processPicasaMedia(filePath, ".mp4");
         } else {
             process();
         }

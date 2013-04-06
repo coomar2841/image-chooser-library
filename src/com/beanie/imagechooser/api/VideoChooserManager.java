@@ -8,7 +8,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.text.TextUtils;
+import android.util.Log;
 
+import com.beanie.imagechooser.api.config.Config;
 import com.beanie.imagechooser.threads.VideoProcessorListener;
 import com.beanie.imagechooser.threads.VideoProcessorThread;
 
@@ -86,8 +89,32 @@ public class VideoChooserManager extends BChooser implements VideoProcessorListe
         }
     }
 
-    private void processVideoFromGallery(Intent intent) {
-
+    private void processVideoFromGallery(Intent data) {
+        if (data != null && data.getDataString() != null) {
+            String uri = data.getData().toString();
+            if (Config.DEBUG) {
+                Log.i(TAG, "Got : " + uri);
+            }
+            if (uri.startsWith("content:")) {
+                filePathOriginal = getAbsoluteImagePathFromUri(Uri.parse(data.getDataString()));
+            }
+            if (uri.startsWith("file://")) {
+                filePathOriginal = data.getDataString().substring(7);
+            }
+            if (filePathOriginal == null || TextUtils.isEmpty(filePathOriginal)) {
+                onError("File path was null");
+            } else {
+                if (Config.DEBUG) {
+                    Log.i(TAG, "File: " + filePathOriginal);
+                }
+                String path = filePathOriginal;
+                VideoProcessorThread thread = new VideoProcessorThread(path, foldername,
+                        shouldCreateThumbnails);
+                thread.setListener(this);
+                thread.setContext(activity.getApplicationContext());
+                thread.start();
+            }
+        }
     }
 
     private void processCameraVideo(Intent intent) {

@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
+import java.util.Locale;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -196,7 +197,8 @@ public abstract class MediaProcessorThread extends Thread {
         return localFilePath;
     }
 
-    protected void manageDiretoryCache(final int maxDirectorySize, final int maxThresholdDays) {
+    protected void manageDiretoryCache(final int maxDirectorySize, final int maxThresholdDays,
+            final String extension) {
         File directory = null;
         directory = new File(FileUtils.getDirectory(foldername));
         File[] files = directory.listFiles();
@@ -214,8 +216,9 @@ public abstract class MediaProcessorThread extends Thread {
 
                 @Override
                 public boolean accept(File pathname) {
-                    System.out.println(today - pathname.lastModified() + " , " + maxThresholdDays);
-                    if (today - pathname.lastModified() > maxThresholdDays) {
+                    if (today - pathname.lastModified() > maxThresholdDays
+                            && pathname.getAbsolutePath().toUpperCase(Locale.ENGLISH)
+                                    .endsWith(extension.toUpperCase(Locale.ENGLISH))) {
                         return true;
                     } else {
                         return false;
@@ -231,4 +234,33 @@ public abstract class MediaProcessorThread extends Thread {
     }
 
     protected abstract void processingDone(String file, String thumbnail, String thumbnailSmall);
+
+    protected void processPicasaMedia(String path, String extension) throws IOException {
+        if (Config.DEBUG) {
+            Log.i(TAG, "Picasa Started");
+        }
+        try {
+            InputStream inputStream = context.getContentResolver().openInputStream(Uri.parse(path));
+
+            filePath = FileUtils.getDirectory(foldername) + File.separator
+                    + Calendar.getInstance().getTimeInMillis() + extension;
+
+            BufferedOutputStream outStream = new BufferedOutputStream(
+                    new FileOutputStream(filePath));
+            byte[] buf = new byte[2048];
+            int len;
+            while ((len = inputStream.read(buf)) > 0) {
+                outStream.write(buf, 0, len);
+            }
+            inputStream.close();
+            outStream.close();
+            process();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            throw e;
+        }
+        if (Config.DEBUG) {
+            Log.i(TAG, "Picasa Done");
+        }
+    }
 }
