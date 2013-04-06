@@ -27,16 +27,12 @@
 1. Your app should have internet permission.
 2. WRITE_EXTERNAL_STORAGE and READ_EXTERNAL_STORAGE permissions are required.
 
-### Future releases
-1. Manage cache files from within your app.
-2. Use your own directory for the cache files.
-
-### Integration with your apps
+### Integration with your apps (2 options)
 1. Clone this repository and add this as a dependency to your Android project. This is a library project.
 2. Download the jar file, and add it to your Android project's build path
 
-### Usage:
-
+## Usage:
+------------------------------------------------------------------------------------------------------------
 __For choosing an image from gallery__
 ```java
 imageChooserManager = new ImageChooserManager(this, ChooserType.REQUEST_PICK_PICTURE);
