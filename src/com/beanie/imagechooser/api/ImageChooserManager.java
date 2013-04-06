@@ -38,22 +38,12 @@ import com.beanie.imagechooser.threads.ImageProcessorThread;
  * 
  * @author Beanie
  */
-public class ImageChooserManager implements ImageProcessorListener {
+public class ImageChooserManager extends BChooser implements ImageProcessorListener {
     private final static String TAG = "ImageChooserManager";
 
     private final static String DIRECTORY = "bimagechooser";
 
-    private String filePathOriginal;
-
     private ImageChooserListener listener;
-
-    private Activity activity;
-
-    private int type;
-
-    private String foldername;
-
-    private boolean shouldCreateThumbnails;
 
     /**
      * Simplest constructor. Specify the type
@@ -64,10 +54,7 @@ public class ImageChooserManager implements ImageProcessorListener {
      * @param type
      */
     public ImageChooserManager(Activity activity, int type) {
-        this.activity = activity;
-        this.type = type;
-        this.foldername = DIRECTORY;
-        this.shouldCreateThumbnails = true;
+        super(activity, type, DIRECTORY, true);
     }
 
     /**
@@ -83,10 +70,7 @@ public class ImageChooserManager implements ImageProcessorListener {
      * @param foldername
      */
     public ImageChooserManager(Activity activity, int type, String foldername) {
-        this.activity = activity;
-        this.type = type;
-        this.foldername = foldername;
-        this.shouldCreateThumbnails = true;
+        super(activity, type, foldername, true);
     }
 
     /**
@@ -102,10 +86,7 @@ public class ImageChooserManager implements ImageProcessorListener {
      * @param shouldCreateThumbnails
      */
     public ImageChooserManager(Activity activity, int type, boolean shouldCreateThumbnails) {
-        this.activity = activity;
-        this.type = type;
-        this.foldername = DIRECTORY;
-        this.shouldCreateThumbnails = shouldCreateThumbnails;
+        super(activity, type, DIRECTORY, shouldCreateThumbnails);
     }
 
     /**
@@ -123,10 +104,7 @@ public class ImageChooserManager implements ImageProcessorListener {
      */
     public ImageChooserManager(Activity activity, int type, String foldername,
             boolean shouldCreateThumbnails) {
-        this.activity = activity;
-        this.type = type;
-        this.foldername = foldername;
-        this.shouldCreateThumbnails = shouldCreateThumbnails;
+        super(activity, type, foldername, shouldCreateThumbnails);
     }
 
     /**
@@ -175,18 +153,6 @@ public class ImageChooserManager implements ImageProcessorListener {
                 Uri.fromFile(new File(FileUtils.getDirectory(foldername) + File.separator
                         + Calendar.getInstance().getTimeInMillis() + ".jpg")));
         startActivity(intent);
-    }
-
-    private void startActivity(Intent intent) {
-        activity.startActivityForResult(intent, type);
-    }
-
-    private void checkDirectory() {
-        File directory = null;
-        directory = new File(FileUtils.getDirectory(foldername));
-        if (!directory.exists()) {
-            directory.mkdir();
-        }
     }
 
     /**

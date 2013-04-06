@@ -1,18 +1,22 @@
+## Version 1.2
+1. Added choosing video from gallery.
+2. Added taking a video using camera.
+
 ## Version 1.1
 
-1. Added optional output folder configuration
+1. Added optional output folder configuration.
 2. Added folder cache limit and auto delete old files.
-3. Added an optional flag to control thumbnail generation
+3. Added an optional flag to control thumbnail generation.
 
 ## Version 1.0
-1. Supports adding images by using the device's camera
-2. Supports adding pictures from the Camera folder of your gallery
-3. Supports adding pictures from your synced Picasa folders on your phone
-4. Supports 3 types of image output sizes (Original, Thumbnail and Thumbnail smaller)
+1. Supports adding images by using the device's camera.
+2. Supports adding pictures from the Camera folder of your gallery.
+3. Supports adding pictures from your synced Picasa folders on your phone.
+4. Supports 3 types of image output sizes (Original, Thumbnail and Thumbnail smaller).
 
 ### Pre-Requisites:
 1. Your app should have internet permission.
-2. WRITE_EXTERNAL_STORAGE and READ_EXTERNAL_STORAGE permissions are required
+2. WRITE_EXTERNAL_STORAGE and READ_EXTERNAL_STORAGE permissions are required.
 
 ### Future releases
 1. Manage cache files from within your app.
