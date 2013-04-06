@@ -123,18 +123,20 @@ public class ImageChooserManager extends BChooser implements ImageProcessorListe
      * 
      * @throws IllegalAccessException
      */
-    public void choose() throws IllegalAccessException {
+    public void choose() throws IllegalArgumentException {
         if (listener == null) {
             throw new IllegalArgumentException(
                     "ImageChooserListener cannot be null. Forgot to set ImageChooserListener???");
         }
         switch (type) {
-            case ChooserType.REQUEST_CHOOSE_IMAGE:
+            case ChooserType.REQUEST_PICK_IMAGE:
                 choosePicture();
                 break;
-            case ChooserType.REQUEST_TAKE_PICTURE:
+            case ChooserType.REQUEST_CAPTURE_PICTURE:
                 takePicture();
                 break;
+            default:
+                throw new IllegalArgumentException("Cannot choose a video in ImageChooserManager");
         }
     }
 
@@ -148,10 +150,9 @@ public class ImageChooserManager extends BChooser implements ImageProcessorListe
     private void takePicture() {
         checkDirectory();
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(
-                MediaStore.EXTRA_OUTPUT,
-                Uri.fromFile(new File(FileUtils.getDirectory(foldername) + File.separator
-                        + Calendar.getInstance().getTimeInMillis() + ".jpg")));
+        filePathOriginal = FileUtils.getDirectory(foldername) + File.separator
+                + Calendar.getInstance().getTimeInMillis() + ".jpg";
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(filePathOriginal)));
         startActivity(intent);
     }
 
@@ -165,10 +166,10 @@ public class ImageChooserManager extends BChooser implements ImageProcessorListe
      */
     public void submit(int requestCode, Intent data) {
         switch (type) {
-            case ChooserType.REQUEST_CHOOSE_IMAGE:
+            case ChooserType.REQUEST_PICK_IMAGE:
                 processImageFromGallery(data);
                 break;
-            case ChooserType.REQUEST_TAKE_PICTURE:
+            case ChooserType.REQUEST_CAPTURE_PICTURE:
                 processCameraImage();
                 break;
         }

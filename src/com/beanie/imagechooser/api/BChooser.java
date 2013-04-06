@@ -24,7 +24,7 @@ public abstract class BChooser {
         this.shouldCreateThumbnails = shouldCreateThumbnails;
     }
 
-    public abstract void choose() throws IllegalAccessException;
+    public abstract void choose() throws IllegalArgumentException;
     public abstract void submit(int requestCode, Intent data);
 
     protected void checkDirectory() {
