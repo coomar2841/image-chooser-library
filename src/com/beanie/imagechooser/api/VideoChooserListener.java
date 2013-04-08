@@ -17,7 +17,18 @@
 package com.beanie.imagechooser.api;
 
 public interface VideoChooserListener {
-    public void onChosenVideo(ChosenVideo video);
+	/**
+	 * When the processing is complete, you will receive this callback with
+	 * {@link ChosenVideo}
+	 * 
+	 * @param video
+	 */
+	public void onChosenVideo(ChosenVideo video);
 
-    public void onError(String reason);
+	/**
+	 * Handle any error conditions if at all, when you receieve this callback
+	 * 
+	 * @param reason
+	 */
+	public void onError(String reason);
 }

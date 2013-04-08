@@ -21,10 +21,8 @@ import java.util.Calendar;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.provider.MediaStore.MediaColumns;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -47,8 +45,8 @@ public class ImageChooserManager extends BChooser implements ImageProcessorListe
 
     /**
      * Simplest constructor. Specify the type
-     * {@link ChooserType.REQUEST_CHOOSE_IMAGE} or
-     * {@link ChooserType.REQUEST_TAKE_PICTURE}
+     * {@link ChooserType.REQUEST_PICK_PICTURE} or
+     * {@link ChooserType.REQUEST_CAPTURE_PICTURE}
      * 
      * @param activity
      * @param type
@@ -58,8 +56,8 @@ public class ImageChooserManager extends BChooser implements ImageProcessorListe
     }
 
     /**
-     * Specify the type {@link ChooserType.REQUEST_CHOOSE_IMAGE} or
-     * {@link ChooserType.REQUEST_TAKE_PICTURE}
+     * Specify the type {@link ChooserType.REQUEST_PICK_PICTURE} or
+     * {@link ChooserType.REQUEST_CAPTURE_PICTURE}
      * <p>
      * Optionally, you can control where the exported images with their
      * thumbnails would be stored.
@@ -74,8 +72,8 @@ public class ImageChooserManager extends BChooser implements ImageProcessorListe
     }
 
     /**
-     * Specify the type {@link ChooserType.REQUEST_CHOOSE_IMAGE} or
-     * {@link ChooserType.REQUEST_TAKE_PICTURE}
+     * Specify the type {@link ChooserType.REQUEST_PICK_PICTURE} or
+     * {@link ChooserType.REQUEST_CAPTURE_PICTURE}
      * <p>
      * Optionally, you can set whether you need thumbnail generation or not. If
      * not, you would get the original image for the thumbnails as well
@@ -90,8 +88,8 @@ public class ImageChooserManager extends BChooser implements ImageProcessorListe
     }
 
     /**
-     * Specify the type {@link ChooserType.REQUEST_CHOOSE_IMAGE} or
-     * {@link ChooserType.REQUEST_TAKE_PICTURE}
+     * Specify the type {@link ChooserType.REQUEST_PICK_PICTURE} or
+     * {@link ChooserType.REQUEST_CAPTURE_PICTURE}
      * <p>
      * Specify your own foldername and whether you want the generated thumbnails
      * or not
@@ -117,12 +115,7 @@ public class ImageChooserManager extends BChooser implements ImageProcessorListe
         this.listener = listener;
     }
 
-    /**
-     * Call this method, to start the chooser, i.e, The camera app or the
-     * gallery depending upon the type
-     * 
-     * @throws IllegalAccessException
-     */
+    @Override
     public void choose() throws IllegalArgumentException {
         if (listener == null) {
             throw new IllegalArgumentException(
@@ -156,14 +149,7 @@ public class ImageChooserManager extends BChooser implements ImageProcessorListe
         startActivity(intent);
     }
 
-    /**
-     * Call this method to process the result from within your onActivityResult
-     * method. You don't need to do any processing at all. Just pass in the
-     * request code and the data, and everything else will be taken care of.
-     * 
-     * @param requestCode
-     * @param data
-     */
+    @Override
     public void submit(int requestCode, Intent data) {
         switch (type) {
             case ChooserType.REQUEST_PICK_PICTURE:
