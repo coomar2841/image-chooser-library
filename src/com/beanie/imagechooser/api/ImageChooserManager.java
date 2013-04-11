@@ -179,7 +179,6 @@ public class ImageChooserManager extends BChooser implements ImageProcessorListe
             if (uri.startsWith("file://")) {
                 filePathOriginal = data.getDataString().substring(7);
             }
-            
             if (filePathOriginal == null || TextUtils.isEmpty(filePathOriginal)) {
                 onError("File path was null");
             } else {
