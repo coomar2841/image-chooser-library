@@ -167,12 +167,19 @@ public class ImageChooserManager extends BChooser implements ImageProcessorListe
             if (Config.DEBUG) {
                 Log.i(TAG, "Got : " + uri);
             }
+            // Picasa on Android >= 3.0
             if (uri.startsWith("content:")) {
                 filePathOriginal = getAbsoluteImagePathFromUri(Uri.parse(data.getDataString()));
             }
+            // Picasa on Android < 3.0
+            if (uri.matches("https?://\\w+\\.googleusercontent\\.com/.+")) {
+                filePathOriginal = uri;
+            }
+            // Local storage
             if (uri.startsWith("file://")) {
                 filePathOriginal = data.getDataString().substring(7);
             }
+            
             if (filePathOriginal == null || TextUtils.isEmpty(filePathOriginal)) {
                 onError("File path was null");
             } else {
