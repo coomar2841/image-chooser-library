@@ -1,3 +1,6 @@
+## Version 1.2.1
+1. Bug Fix for versions <3.0 [Pull Request:Juan Andrés](https://github.com/coomar2841/image-chooser-library/pull/1)
+
 ## Version 1.2
 1. Added choosing video from gallery (supports both locally stored videos and your picasa videos).
 2. Added taking a video using camera.
