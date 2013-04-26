@@ -37,7 +37,7 @@ public class VideoProcessorThread extends MediaProcessorThread {
 
     private final static int MAX_DIRECTORY_SIZE = 5 * 1024 * 1024;
 
-    private final static int MAX_THRESHOLD_DAYS = (int) (0.5 * 24 * 60 * 60 * 1000);
+    private final static int MAX_THRESHOLD_DAYS = (int)(0.5 * 24 * 60 * 60 * 1000);
 
     public VideoProcessorThread(String filePath, String foldername, boolean shouldCreateThumbnails) {
         super(filePath, foldername, shouldCreateThumbnails);
@@ -61,10 +61,15 @@ public class VideoProcessorThread extends MediaProcessorThread {
             if (listener != null) {
                 listener.onError(e.getMessage());
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (listener != null) {
+                listener.onError(e.getMessage());
+            }
         }
     }
 
-    private void processVideo() throws IOException {
+    private void processVideo() throws Exception {
         if (filePath == null || TextUtils.isEmpty(filePath)) {
             if (listener != null) {
                 listener.onError("Coulnd't process a null file");
@@ -79,7 +84,7 @@ public class VideoProcessorThread extends MediaProcessorThread {
     }
 
     @Override
-    protected void process() throws IOException {
+    protected void process() throws Exception {
         super.process();
         if (shouldCreateThumnails) {
             String[] thumbnails = createThumbnails(createThumbnailOfVideo());
