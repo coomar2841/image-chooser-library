@@ -49,7 +49,7 @@ public abstract class BChooser {
 	 * 
 	 * @throws IllegalArgumentException
 	 */
-	public abstract void choose() throws IllegalArgumentException;
+	public abstract String choose() throws IllegalArgumentException;
 
 	/**
 	 * Call this method to process the result from within your onActivityResult
