@@ -1,6 +1,7 @@
 ## Version 1.2.2
-1. Bug fix: For some files, when you get FNFException, fixed a null pointer exception.
-2. Feature: Send back the filepath, to the caller while using camera for video/image
+1. Bug fix: For some files, when you get FileNotFoundException, fixed a null pointer exception.
+2. Feature: Send back the filepath, to the caller while using camera for video/image. This should be used when you want to support
+orientation changes.
 
 ## Version 1.2.1
 1. Bug Fix for versions <3.0 [Pull Request:Juan Andrés](https://github.com/coomar2841/image-chooser-library/pull/1)
