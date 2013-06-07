@@ -65,39 +65,39 @@ public abstract class MediaProcessorThread extends Thread {
         this.shouldCreateThumnails = shouldCreateThumbnails;
     }
 
-    protected void downloadAndProcess(String url) throws IOException {
+    protected void downloadAndProcess(String url) throws Exception {
         filePath = downloadFile(url);
         process();
     }
 
-    protected void process() throws IOException {
+    protected void process() throws IOException, Exception {
         if (!filePath.contains(foldername)) {
             copyFileToDir();
         }
     }
 
-    protected String[] createThumbnails(String image) {
+    protected String[] createThumbnails(String image) throws Exception {
         String[] images = new String[2];
         images[0] = getThumnailPath(image);
         images[1] = getThumbnailSmallPath(image);
         return images;
     }
 
-    private String getThumnailPath(String file) {
+    private String getThumnailPath(String file) throws Exception {
         if (Config.DEBUG) {
             Log.i(TAG, "Compressing ... THUMBNAIL");
         }
         return compressAndSaveImage(file, THUMBNAIL_BIG);
     }
 
-    private String getThumbnailSmallPath(String file) {
+    private String getThumbnailSmallPath(String file) throws Exception {
         if (Config.DEBUG) {
             Log.i(TAG, "Compressing ... THUMBNAIL SMALL");
         }
         return compressAndSaveImage(file, THUMBNAIL_SMALL);
     }
 
-    private String compressAndSaveImage(String fileImage, int scale) {
+    private String compressAndSaveImage(String fileImage, int scale) throws Exception {
         try {
             ExifInterface exif = new ExifInterface(fileImage);
             String width = exif.getAttribute(ExifInterface.TAG_IMAGE_WIDTH);
@@ -145,10 +145,12 @@ public abstract class MediaProcessorThread extends Thread {
             return file.getAbsolutePath();
 
         } catch (IOException e) {
-
             e.printStackTrace();
+            throw e;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
         }
-        return null;
     }
 
     private void copyFileToDir() throws IOException {
@@ -250,7 +252,7 @@ public abstract class MediaProcessorThread extends Thread {
 
     protected abstract void processingDone(String file, String thumbnail, String thumbnailSmall);
 
-    protected void processPicasaMedia(String path, String extension) throws IOException {
+    protected void processPicasaMedia(String path, String extension) throws Exception {
         if (Config.DEBUG) {
             Log.i(TAG, "Picasa Started");
         }
@@ -271,6 +273,9 @@ public abstract class MediaProcessorThread extends Thread {
             outStream.close();
             process();
         } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            throw e;
+        } catch (Exception e) {
             e.printStackTrace();
             throw e;
         }

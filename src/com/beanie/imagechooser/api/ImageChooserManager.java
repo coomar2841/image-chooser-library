@@ -116,7 +116,8 @@ public class ImageChooserManager extends BChooser implements ImageProcessorListe
     }
 
     @Override
-    public void choose() throws IllegalArgumentException {
+    public String choose() throws IllegalArgumentException {
+        String path = null;
         if (listener == null) {
             throw new IllegalArgumentException(
                     "ImageChooserListener cannot be null. Forgot to set ImageChooserListener???");
@@ -126,11 +127,12 @@ public class ImageChooserManager extends BChooser implements ImageProcessorListe
                 choosePicture();
                 break;
             case ChooserType.REQUEST_CAPTURE_PICTURE:
-                takePicture();
+                path = takePicture();
                 break;
             default:
                 throw new IllegalArgumentException("Cannot choose a video in ImageChooserManager");
         }
+        return path;
     }
 
     private void choosePicture() {
@@ -140,13 +142,14 @@ public class ImageChooserManager extends BChooser implements ImageProcessorListe
         startActivity(intent);
     }
 
-    private void takePicture() {
+    private String takePicture() {
         checkDirectory();
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         filePathOriginal = FileUtils.getDirectory(foldername) + File.separator
                 + Calendar.getInstance().getTimeInMillis() + ".jpg";
         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(filePathOriginal)));
         startActivity(intent);
+        return filePathOriginal;
     }
 
     @Override
