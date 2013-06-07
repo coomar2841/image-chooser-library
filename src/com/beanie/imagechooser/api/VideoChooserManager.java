@@ -81,14 +81,15 @@ public class VideoChooserManager extends BChooser implements
 	}
 
 	@Override
-	public void choose() throws IllegalArgumentException {
+	public String choose() throws IllegalArgumentException {
+	    String path = null;
 		if (listener == null) {
 			throw new IllegalArgumentException(
 					"ImageChooserListener cannot be null. Forgot to set ImageChooserListener???");
 		}
 		switch (type) {
 		case ChooserType.REQUEST_CAPTURE_VIDEO:
-			captureVideo();
+			path = captureVideo();
 			break;
 		case ChooserType.REQUEST_PICK_VIDEO:
 			pickVideo();
@@ -97,9 +98,10 @@ public class VideoChooserManager extends BChooser implements
 			throw new IllegalArgumentException(
 					"Cannot choose an image in VideoChooserManager");
 		}
+		return path;
 	}
 
-	private void captureVideo() {
+	private String captureVideo() {
 		checkDirectory();
 		Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
 		filePathOriginal = FileUtils.getDirectory(foldername) + File.separator
@@ -107,6 +109,7 @@ public class VideoChooserManager extends BChooser implements
 		intent.putExtra(MediaStore.EXTRA_OUTPUT,
 				Uri.fromFile(new File(filePathOriginal)));
 		startActivity(intent);
+		return filePathOriginal;
 	}
 
 	private void pickVideo() {
