@@ -23,79 +23,110 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore.MediaColumns;
+import android.support.v4.app.Fragment;
 
 public abstract class BChooser {
-	protected Activity activity;
+    protected Activity activity;
 
-	protected int type;
+    protected Fragment fragment;
 
-	protected String foldername;
+    protected android.app.Fragment appFragment;
 
-	protected boolean shouldCreateThumbnails;
+    protected int type;
 
-	protected String filePathOriginal;
+    protected String foldername;
 
-	public BChooser(Activity activity, int type, String foldername,
-			boolean shouldCreateThumbnails) {
-		this.activity = activity;
-		this.type = type;
-		this.foldername = foldername;
-		this.shouldCreateThumbnails = shouldCreateThumbnails;
-	}
+    protected boolean shouldCreateThumbnails;
 
-	/**
-	 * Call this method, to start the chooser, i.e, The camera app or the
-	 * gallery depending upon the type
-	 * 
-	 * @throws IllegalArgumentException
-	 */
-	public abstract String choose() throws IllegalArgumentException;
+    protected String filePathOriginal;
 
-	/**
-	 * Call this method to process the result from within your onActivityResult
-	 * method. You don't need to do any processing at all. Just pass in the
-	 * request code and the data, and everything else will be taken care of.
-	 * 
-	 * @param requestCode
-	 * @param data
-	 */
-	public abstract void submit(int requestCode, Intent data);
+    public BChooser(Activity activity, int type, String foldername, boolean shouldCreateThumbnails) {
+        this.activity = activity;
+        this.type = type;
+        this.foldername = foldername;
+        this.shouldCreateThumbnails = shouldCreateThumbnails;
+    }
 
-	protected void checkDirectory() {
-		File directory = null;
-		directory = new File(FileUtils.getDirectory(foldername));
-		if (!directory.exists()) {
-			directory.mkdir();
-		}
-	}
+    public BChooser(Fragment fragment, int type, String foldername, boolean shouldCreateThumbnails) {
+        this.fragment = fragment;
+        this.type = type;
+        this.foldername = foldername;
+        this.shouldCreateThumbnails = shouldCreateThumbnails;
+    }
 
-	protected void startActivity(Intent intent) {
-		activity.startActivityForResult(intent, type);
-	}
+    public BChooser(android.app.Fragment fragment, int type, String foldername,
+            boolean shouldCreateThumbnails) {
+        this.appFragment = fragment;
+        this.type = type;
+        this.foldername = foldername;
+        this.shouldCreateThumbnails = shouldCreateThumbnails;
+    }
 
-	protected String getAbsoluteImagePathFromUri(Uri imageUri) {
-		String[] proj = { MediaColumns.DATA, MediaColumns.DISPLAY_NAME };
+    /**
+     * Call this method, to start the chooser, i.e, The camera app or the
+     * gallery depending upon the type
+     * 
+     * @throws IllegalArgumentException
+     */
+    public abstract String choose() throws IllegalArgumentException;
 
-		if (imageUri.toString().startsWith(
-				"content://com.android.gallery3d.provider")) {
-			imageUri = Uri.parse(imageUri.toString().replace(
-					"com.android.gallery3d", "com.google.android.gallery3d"));
-		}
-		Cursor cursor = activity.getContentResolver().query(imageUri, proj,
-				null, null, null);
+    /**
+     * Call this method to process the result from within your onActivityResult
+     * method. You don't need to do any processing at all. Just pass in the
+     * request code and the data, and everything else will be taken care of.
+     * 
+     * @param requestCode
+     * @param data
+     */
+    public abstract void submit(int requestCode, Intent data);
 
-		cursor.moveToFirst();
+    protected void checkDirectory() {
+        File directory = null;
+        directory = new File(FileUtils.getDirectory(foldername));
+        if (!directory.exists()) {
+            directory.mkdir();
+        }
+    }
 
-		String filePath = "";
-		if (imageUri.toString().startsWith(
-				"content://com.google.android.gallery3d")) {
-			filePath = imageUri.toString();
-		} else {
-			filePath = cursor.getString(cursor
-					.getColumnIndexOrThrow(MediaColumns.DATA));
-		}
-		cursor.close();
+    protected void startActivity(Intent intent) {
+        if (activity != null) {
+            activity.startActivityForResult(intent, type);
+        } else if (fragment != null) {
+            fragment.startActivityForResult(intent, type);
+        } else if (appFragment != null) {
+            appFragment.startActivityForResult(intent, type);
+        }
+    }
 
-		return filePath;
-	}
+    protected String getAbsoluteImagePathFromUri(Uri imageUri) {
+        String[] proj = {
+                MediaColumns.DATA, MediaColumns.DISPLAY_NAME
+        };
+
+        if (imageUri.toString().startsWith("content://com.android.gallery3d.provider")) {
+            imageUri = Uri.parse(imageUri.toString().replace("com.android.gallery3d",
+                    "com.google.android.gallery3d"));
+        }
+        Cursor cursor = null;
+        if (activity != null) {
+            cursor = activity.getContentResolver().query(imageUri, proj, null, null, null);
+        } else if (fragment != null) {
+            cursor = fragment.getActivity().getContentResolver()
+                    .query(imageUri, proj, null, null, null);
+        } else if (appFragment != null) {
+            cursor = appFragment.getActivity().getContentResolver()
+                    .query(imageUri, proj, null, null, null);
+        }
+        cursor.moveToFirst();
+
+        String filePath = "";
+        if (imageUri.toString().startsWith("content://com.google.android.gallery3d")) {
+            filePath = imageUri.toString();
+        } else {
+            filePath = cursor.getString(cursor.getColumnIndexOrThrow(MediaColumns.DATA));
+        }
+        cursor.close();
+
+        return filePath;
+    }
 }

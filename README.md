@@ -1,3 +1,7 @@
+## Version 1.2.3
+1. Added support to integrate from Fragments (Support library).
+2. Added support to integrate from Fragments.
+
 ## Version 1.2.2
 1. Bug fix: For some files, when you get FileNotFoundException, fixed a null pointer exception.
 2. Feature: Send back the filepath, to the caller while using camera for video/image. This should be used when you want to support

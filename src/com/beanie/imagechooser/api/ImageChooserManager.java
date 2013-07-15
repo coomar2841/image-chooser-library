@@ -23,6 +23,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -55,6 +56,14 @@ public class ImageChooserManager extends BChooser implements ImageProcessorListe
         super(activity, type, DIRECTORY, true);
     }
 
+    public ImageChooserManager(Fragment fragment, int type) {
+        super(fragment, type, DIRECTORY, true);
+    }
+    
+    public ImageChooserManager(android.app.Fragment fragment, int type) {
+        super(fragment, type, DIRECTORY, true);
+    }
+
     /**
      * Specify the type {@link ChooserType.REQUEST_PICK_PICTURE} or
      * {@link ChooserType.REQUEST_CAPTURE_PICTURE}
@@ -69,6 +78,14 @@ public class ImageChooserManager extends BChooser implements ImageProcessorListe
      */
     public ImageChooserManager(Activity activity, int type, String foldername) {
         super(activity, type, foldername, true);
+    }
+
+    public ImageChooserManager(Fragment fragment, int type, String foldername) {
+        super(fragment, type, foldername, true);
+    }
+    
+    public ImageChooserManager(android.app.Fragment fragment, int type, String foldername) {
+        super(fragment, type, foldername, true);
     }
 
     /**
@@ -87,6 +104,14 @@ public class ImageChooserManager extends BChooser implements ImageProcessorListe
         super(activity, type, DIRECTORY, shouldCreateThumbnails);
     }
 
+    public ImageChooserManager(Fragment fragment, int type, boolean shouldCreateThumbnails) {
+        super(fragment, type, DIRECTORY, shouldCreateThumbnails);
+    }
+    
+    public ImageChooserManager(android.app.Fragment fragment, int type, boolean shouldCreateThumbnails) {
+        super(fragment, type, DIRECTORY, shouldCreateThumbnails);
+    }
+
     /**
      * Specify the type {@link ChooserType.REQUEST_PICK_PICTURE} or
      * {@link ChooserType.REQUEST_CAPTURE_PICTURE}
@@ -103,6 +128,16 @@ public class ImageChooserManager extends BChooser implements ImageProcessorListe
     public ImageChooserManager(Activity activity, int type, String foldername,
             boolean shouldCreateThumbnails) {
         super(activity, type, foldername, shouldCreateThumbnails);
+    }
+
+    public ImageChooserManager(Fragment fragment, int type, String foldername,
+            boolean shouldCreateThumbnails) {
+        super(fragment, type, foldername, shouldCreateThumbnails);
+    }
+    
+    public ImageChooserManager(android.app.Fragment fragment, int type, String foldername,
+            boolean shouldCreateThumbnails) {
+        super(fragment, type, foldername, shouldCreateThumbnails);
     }
 
     /**
@@ -192,7 +227,13 @@ public class ImageChooserManager extends BChooser implements ImageProcessorListe
                 ImageProcessorThread thread = new ImageProcessorThread(path, foldername,
                         shouldCreateThumbnails);
                 thread.setListener(this);
-                thread.setContext(activity.getApplicationContext());
+                if (activity != null) {
+                    thread.setContext(activity.getApplicationContext());
+                } else if (fragment != null) {
+                    thread.setContext(fragment.getActivity().getApplicationContext());
+                } else if(appFragment !=null){
+                    thread.setContext(appFragment.getActivity().getApplicationContext());
+                }
                 thread.start();
             }
         }
