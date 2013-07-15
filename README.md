@@ -3,6 +3,7 @@
 2. Added support to integrate from Fragments.
 
 [Link to image-chooser-library v1.2.3](https://dl.dropboxusercontent.com/u/6696191/image-chooser-library/v1.2.3/image-chooser-library-1.2.3.jar)
+
 [Link to Sample app with v1.2](https://dl.dropbox.com/u/6696191/image-chooser-library/v1.2/image-chooser-app_v1.2.apk)
 
 ## Version 1.2.2
