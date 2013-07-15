@@ -2,6 +2,9 @@
 1. Added support to integrate from Fragments (Support library).
 2. Added support to integrate from Fragments.
 
+[Link to image-chooser-library v1.2.3]{https://dl.dropboxusercontent.com/u/6696191/image-chooser-library/v1.2.3/image-chooser-library-1.2.3.jar)
+[Link to Sample app with v1.2](https://dl.dropbox.com/u/6696191/image-chooser-library/v1.2/image-chooser-app_v1.2.apk)
+
 ## Version 1.2.2
 1. Bug fix: For some files, when you get FileNotFoundException, fixed a null pointer exception.
 2. Feature: Send back the filepath, to the caller while using camera for video/image. This should be used when you want to support
@@ -14,12 +17,6 @@ orientation changes.
 1. Added choosing video from gallery (supports both locally stored videos and your picasa videos).
 2. Added taking a video using camera.
 3. Gives back the actual video path, and two thumbnails.
-
-**Sample App using the library v1.2**
-
-[Link to Sample app with v1.2](https://dl.dropbox.com/u/6696191/image-chooser-library/v1.2/image-chooser-app_v1.2.apk)
-
-[Link to image-chooser-library v1.2](https://dl.dropbox.com/u/6696191/image-chooser-library/v1.2/image-chooser-library-1.2.jar)
 
 ## Version 1.1
 
