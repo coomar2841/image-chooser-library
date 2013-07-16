@@ -6,8 +6,6 @@
 
 [Link to Sample app with v1.2](https://dl.dropbox.com/u/6696191/image-chooser-library/v1.2/image-chooser-app_v1.2.apk)
 
-[Link to Sample app on Google Play Store](https://play.google.com/store/apps/details?id=com.beanie.imagechooserapp)
-
 <a href="https://play.google.com/store/apps/details?id=com.beanie.imagechooserapp">
   <img alt="Get it on Google Play"
        src="https://developer.android.com/images/brand/en_generic_rgb_wo_45.png" />
