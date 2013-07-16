@@ -6,6 +6,13 @@
 
 [Link to Sample app with v1.2](https://dl.dropbox.com/u/6696191/image-chooser-library/v1.2/image-chooser-app_v1.2.apk)
 
+[Link to Sample app on Google Play Store](https://play.google.com/store/apps/details?id=com.beanie.imagechooserapp)
+
+<a href="https://play.google.com/store/apps/details?id=com.beanie.imagechooserapp">
+  <img alt="Get it on Google Play"
+       src="https://developer.android.com/images/brand/en_generic_rgb_wo_45.png" />
+</a>
+
 ## Version 1.2.2
 1. Bug fix: For some files, when you get FileNotFoundException, fixed a null pointer exception.
 2. Feature: Send back the filepath, to the caller while using camera for video/image. This should be used when you want to support
