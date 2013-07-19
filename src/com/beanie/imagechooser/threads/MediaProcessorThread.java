@@ -220,6 +220,9 @@ public abstract class MediaProcessorThread extends Thread {
         directory = new File(FileUtils.getDirectory(foldername));
         File[] files = directory.listFiles();
         long count = 0;
+        if (files == null) {
+            return;
+        }
         for (File file : files) {
             count = count + file.length();
         }
