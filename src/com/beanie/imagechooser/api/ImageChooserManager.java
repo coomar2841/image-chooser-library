@@ -189,14 +189,19 @@ public class ImageChooserManager extends BChooser implements ImageProcessorListe
 
     @Override
     public void submit(int requestCode, Intent data) {
-        switch (type) {
-            case ChooserType.REQUEST_PICK_PICTURE:
-                processImageFromGallery(data);
-                break;
-            case ChooserType.REQUEST_CAPTURE_PICTURE:
-                processCameraImage();
-                break;
-        }
+    	if(requestCode != type){
+    		 onError("onActivityResult requestCode is different from the type the chooser was initialized with.");
+    	}
+    	else{
+	        switch (requestCode) {
+	            case ChooserType.REQUEST_PICK_PICTURE:
+	                processImageFromGallery(data);
+	                break;
+	            case ChooserType.REQUEST_CAPTURE_PICTURE:
+	                processCameraImage();
+	                break;
+	        }
+    	}
     }
 
     private void processImageFromGallery(Intent data) {
@@ -231,9 +236,7 @@ public class ImageChooserManager extends BChooser implements ImageProcessorListe
                     thread.setContext(activity.getApplicationContext());
                 } else if (fragment != null) {
                     thread.setContext(fragment.getActivity().getApplicationContext());
-                } else if(appFragment !=null){
-                    thread.setContext(appFragment.getActivity().getApplicationContext());
-                }
+                } 
                 thread.start();
             }
         }
