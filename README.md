@@ -1,3 +1,7 @@
+## Version 1.2.4
+1. Bug fix: While using a configured folder, the folder wasn't being created.
+2. Added support for getting image details like width, height, file extension etc.
+
 ## Version 1.2.3
 1. Added support to integrate from Fragments (Support library).
 2. Added support to integrate from Fragments.

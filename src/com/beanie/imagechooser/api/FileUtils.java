@@ -25,7 +25,20 @@ public class FileUtils {
         File directory = null;
         directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
                 + File.separator + foldername);
+        if (!directory.exists()) {
+            directory.mkdir();
+        }
         return directory.getAbsolutePath();
+    }
+
+    public static String getFileExtension(String filename) {
+        String extension = "";
+        try {
+            extension = filename.substring(filename.lastIndexOf(".") + 1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return extension;
     }
 
 }

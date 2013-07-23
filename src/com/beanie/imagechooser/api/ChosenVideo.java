@@ -47,4 +47,8 @@ public class ChosenVideo {
         this.thumbnailSmallPath = thumbnailSmallPath;
     }
 
+    public String getFileExtension() {
+        return FileUtils.getFileExtension(videoFilePath);
+    }
+
 }
