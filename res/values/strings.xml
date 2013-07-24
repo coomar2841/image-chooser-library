@@ -1,5 +1,10 @@
 <resources>
 
     <string name="app_name">Image Chooser LIbrary</string>
-
+	<string name="lab_choose_option">Choose option</string>
+	<string name="lab_choose_from_gallery">Choose from Gallery</string>
+	<string name="lab_take_picture">Take a Picture</string>
+	<string name="lab_capture_video">Capture Video</string>
+	<string name="lab_ok">OK</string>
+	<string name="lab_cancel">Cancel</string>
 </resources>
