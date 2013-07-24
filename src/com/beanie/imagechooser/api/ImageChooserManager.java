@@ -203,42 +203,53 @@ public class ImageChooserManager extends BChooser implements ImageProcessorListe
 	        }
     	}
     }
+    
+    public void processImageUri(String _uri)
+    {
+    	if(_uri != null)
+    	{
+	         if (Config.DEBUG) {
+	             Log.i(TAG, "Got : " + _uri);
+	         }
+	         // Picasa on Android >= 3.0
+	         if (_uri.startsWith("content:")) {
+	             filePathOriginal = getAbsoluteImagePathFromUri(Uri.parse(_uri));
+	         }
+	         // Picasa on Android < 3.0
+	         if (_uri.matches("https?://\\w+\\.googleusercontent\\.com/.+")) {
+	             filePathOriginal = _uri;
+	         }
+	         // Local storage
+	         if (_uri.startsWith("file://")) {
+	             filePathOriginal = _uri.substring(7);
+	         }
+	         if (filePathOriginal == null || TextUtils.isEmpty(filePathOriginal)) {
+	             onError("File path was null");
+	         } else {
+	             if (Config.DEBUG) {
+	                 Log.i(TAG, "File: " + filePathOriginal);
+	             }
+	             String path = filePathOriginal;
+	             ImageProcessorThread thread = new ImageProcessorThread(path, foldername,
+	                     shouldCreateThumbnails);
+	             thread.setListener(this);
+	             if (activity != null) {
+	                 thread.setContext(activity.getApplicationContext());
+	             } else if (fragment != null) {
+	                 thread.setContext(fragment.getActivity().getApplicationContext());
+	             } 
+	             thread.start();
+	         }
+    	}
+    	else{
+    		 onError("Image Uri was null!");
+    	}
+    }
 
     private void processImageFromGallery(Intent data) {
         if (data != null && data.getDataString() != null) {
             String uri = data.getData().toString();
-            if (Config.DEBUG) {
-                Log.i(TAG, "Got : " + uri);
-            }
-            // Picasa on Android >= 3.0
-            if (uri.startsWith("content:")) {
-                filePathOriginal = getAbsoluteImagePathFromUri(Uri.parse(data.getDataString()));
-            }
-            // Picasa on Android < 3.0
-            if (uri.matches("https?://\\w+\\.googleusercontent\\.com/.+")) {
-                filePathOriginal = uri;
-            }
-            // Local storage
-            if (uri.startsWith("file://")) {
-                filePathOriginal = data.getDataString().substring(7);
-            }
-            if (filePathOriginal == null || TextUtils.isEmpty(filePathOriginal)) {
-                onError("File path was null");
-            } else {
-                if (Config.DEBUG) {
-                    Log.i(TAG, "File: " + filePathOriginal);
-                }
-                String path = filePathOriginal;
-                ImageProcessorThread thread = new ImageProcessorThread(path, foldername,
-                        shouldCreateThumbnails);
-                thread.setListener(this);
-                if (activity != null) {
-                    thread.setContext(activity.getApplicationContext());
-                } else if (fragment != null) {
-                    thread.setContext(fragment.getActivity().getApplicationContext());
-                } 
-                thread.start();
-            }
+            processImageUri(uri);
         }
 
     }
