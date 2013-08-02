@@ -2,6 +2,14 @@
 1. Updated the support library
 2. Some bug fixes and error handling
 
+[Link to image-chooser-library v1.2.3](https://dl.dropboxusercontent.com/u/6696191/image-chooser-library/v1.2.5/image-chooser-library-1.2.5.jar)
+
+<a href="https://play.google.com/store/apps/details?id=com.beanie.imagechooserapp">
+  <img alt="Get it on Google Play"
+       src="https://developer.android.com/images/brand/en_generic_rgb_wo_45.png" />
+</a>
+
+
 ## Version 1.2.4
 1. Bug fix: While using a configured folder, the folder wasn't being created.
 2. Added support for getting image details like width, height, file extension etc.
@@ -9,15 +17,6 @@
 ## Version 1.2.3
 1. Added support to integrate from Fragments (Support library).
 2. Added support to integrate from Fragments.
-
-[Link to image-chooser-library v1.2.3](https://dl.dropboxusercontent.com/u/6696191/image-chooser-library/v1.2.3/image-chooser-library-1.2.3.jar)
-
-[Link to Sample app with v1.2](https://dl.dropbox.com/u/6696191/image-chooser-library/v1.2/image-chooser-app_v1.2.apk)
-
-<a href="https://play.google.com/store/apps/details?id=com.beanie.imagechooserapp">
-  <img alt="Get it on Google Play"
-       src="https://developer.android.com/images/brand/en_generic_rgb_wo_45.png" />
-</a>
 
 ## Version 1.2.2
 1. Bug fix: For some files, when you get FileNotFoundException, fixed a null pointer exception.
@@ -37,8 +36,6 @@ orientation changes.
 1. Added optional output folder configuration.
 2. Added folder cache limit and auto delete old files.
 3. Added an optional flag to control thumbnail generation.
-
-[Link to image-chooser-library v1.1](https://dl.dropbox.com/u/6696191/image-chooser-library/v1.1/image-chooser-library-1.1.jar)
 
 ## Version 1.0
 1. Supports adding images by using the device's camera.
