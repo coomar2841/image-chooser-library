@@ -2,7 +2,7 @@
 1. Updated the support library
 2. Some bug fixes and error handling
 
-[Link to image-chooser-library v1.2.3](https://dl.dropboxusercontent.com/u/6696191/image-chooser-library/v1.2.5/image-chooser-library-1.2.5.jar)
+[Link to image-chooser-library v1.2.5](https://dl.dropboxusercontent.com/u/6696191/image-chooser-library/v1.2.5/image-chooser-library-1.2.5.jar)
 
 <a href="https://play.google.com/store/apps/details?id=com.beanie.imagechooserapp">
   <img alt="Get it on Google Play"
