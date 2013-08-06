@@ -1,3 +1,8 @@
+## Version 1.2.6
+1. Fix problems with images which don't have EXIF Data. Get their actual width and height.
+2. Get the video preview image (Big Thumbnail)
+3. Get the actual width and height of video files
+
 ## Version 1.2.5
 1. Updated the support library
 2. Some bug fixes and error handling
