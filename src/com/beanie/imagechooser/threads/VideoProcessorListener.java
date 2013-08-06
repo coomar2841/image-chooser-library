@@ -16,10 +16,10 @@
 
 package com.beanie.imagechooser.threads;
 
-import com.beanie.imagechooser.api.ChosenVideo;
+import com.beanie.imagechooser.api.ChosenMedia;
 
 public interface VideoProcessorListener {
-    public void onProcessedVideo(ChosenVideo video);
+    public void onProcessedVideo(ChosenMedia video);
 
     public void onError(String reason);
 }

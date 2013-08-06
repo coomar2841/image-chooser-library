@@ -23,7 +23,7 @@ public interface VideoChooserListener {
 	 * 
 	 * @param video
 	 */
-	public void onChosenVideo(ChosenVideo video);
+	public void onChosenVideo(ChosenMedia video);
 
 	/**
 	 * Handle any error conditions if at all, when you receieve this callback

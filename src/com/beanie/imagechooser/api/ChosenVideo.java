@@ -16,23 +16,15 @@
 
 package com.beanie.imagechooser.api;
 
-public class ChosenVideo {
-    
-    private String videoPreviewImage;
-    
-    private String videoFilePath;
+public class ChosenVideo extends ChosenMedia {
+
+    String videoPreviewImage;
+
+    String videoFilePath;
 
     private String thumbnailPath;
 
     private String thumbnailSmallPath;
-    
-    public int getVideoHeight(){
-        return 0;
-    }
-    
-    public int getVideoWidth(){
-        return 0;
-    }
 
     public String getVideoFilePath() {
         return videoFilePath;
@@ -58,16 +50,22 @@ public class ChosenVideo {
         this.thumbnailSmallPath = thumbnailSmallPath;
     }
 
-    public String getFileExtension() {
-        return FileUtils.getFileExtension(videoFilePath);
-    }
-
     public String getVideoPreviewImage() {
         return videoPreviewImage;
     }
 
     public void setVideoPreviewImage(String videoPreviewImage) {
         this.videoPreviewImage = videoPreviewImage;
+    }
+
+    @Override
+    public String getMediaHeight() {
+        return getHeight(videoPreviewImage);
+    }
+
+    @Override
+    public String getMediaWidth() {
+        return getWidth(videoPreviewImage);
     }
 
 }
