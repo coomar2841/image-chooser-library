@@ -212,9 +212,9 @@ public class VideoChooserManager extends BChooser implements VideoProcessorListe
     }
 
     @Override
-    public void onProcessedVideo(ChosenMedia video) {
+    public void onProcessedVideo(ChosenVideo video) {
         if (listener != null) {
-            listener.onChosenVideo(video);
+            listener.onVideoChosen(video);
         }
     }
 

@@ -57,5 +57,9 @@ public class ChosenImage extends ChosenMedia {
     public String getMediaWidth() {
        return getWidth(filePathOriginal);
     }
+    
+    public String getExtension(){
+        return getFileExtension(filePathOriginal);
+    }
 
 }
