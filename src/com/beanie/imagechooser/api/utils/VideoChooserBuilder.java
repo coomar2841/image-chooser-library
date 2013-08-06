@@ -40,7 +40,7 @@ public class VideoChooserBuilder extends Builder {
             public void onClick(DialogInterface dialog, int which) {
                 if (which == 0) {
                     listener.onClick(dialog, ChooserType.REQUEST_PICK_VIDEO);
-                } else if (which == 0) {
+                } else if (which == 1) {
                     listener.onClick(dialog, ChooserType.REQUEST_CAPTURE_VIDEO);
                 }
             }

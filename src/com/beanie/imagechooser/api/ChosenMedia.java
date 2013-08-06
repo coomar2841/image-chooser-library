@@ -35,7 +35,7 @@ public abstract class ChosenMedia {
             ExifInterface exif = new ExifInterface(path);
             width = exif.getAttribute(ExifInterface.TAG_IMAGE_WIDTH);
             if (width.equals("0")) {
-                width = Integer.toString(getBitmap(path).get().getHeight());
+                width = Integer.toString(getBitmap(path).get().getWidth());
             }
         } catch (IOException e) {
             e.printStackTrace();
