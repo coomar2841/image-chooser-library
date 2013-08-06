@@ -16,8 +16,14 @@
 
 package com.beanie.imagechooser.api;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.ref.SoftReference;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.ExifInterface;
 
 public class ChosenImage {
@@ -56,10 +62,25 @@ public class ChosenImage {
         try {
             ExifInterface exif = new ExifInterface(filePathOriginal);
             height = exif.getAttribute(ExifInterface.TAG_IMAGE_LENGTH);
+            if (height.equals("0")) {
+                height = Integer.toString(getBitmap().get().getHeight());
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
         return height;
+    }
+
+    private SoftReference<Bitmap> getBitmap() {
+        SoftReference<Bitmap> bitmap = null;
+        try {
+            bitmap = new SoftReference<Bitmap>(BitmapFactory.decodeStream(new FileInputStream(
+                    new File(filePathOriginal))));
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
     }
 
     public String getOriginalImageWidth() {
@@ -67,6 +88,9 @@ public class ChosenImage {
         try {
             ExifInterface exif = new ExifInterface(filePathOriginal);
             width = exif.getAttribute(ExifInterface.TAG_IMAGE_WIDTH);
+            if (width.equals("0")) {
+                width = Integer.toString(getBitmap().get().getWidth());
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
