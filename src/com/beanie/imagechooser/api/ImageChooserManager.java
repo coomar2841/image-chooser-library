@@ -59,7 +59,7 @@ public class ImageChooserManager extends BChooser implements ImageProcessorListe
     public ImageChooserManager(Fragment fragment, int type) {
         super(fragment, type, DIRECTORY, true);
     }
-    
+
     public ImageChooserManager(android.app.Fragment fragment, int type) {
         super(fragment, type, DIRECTORY, true);
     }
@@ -83,7 +83,7 @@ public class ImageChooserManager extends BChooser implements ImageProcessorListe
     public ImageChooserManager(Fragment fragment, int type, String foldername) {
         super(fragment, type, foldername, true);
     }
-    
+
     public ImageChooserManager(android.app.Fragment fragment, int type, String foldername) {
         super(fragment, type, foldername, true);
     }
@@ -107,8 +107,9 @@ public class ImageChooserManager extends BChooser implements ImageProcessorListe
     public ImageChooserManager(Fragment fragment, int type, boolean shouldCreateThumbnails) {
         super(fragment, type, DIRECTORY, shouldCreateThumbnails);
     }
-    
-    public ImageChooserManager(android.app.Fragment fragment, int type, boolean shouldCreateThumbnails) {
+
+    public ImageChooserManager(android.app.Fragment fragment, int type,
+            boolean shouldCreateThumbnails) {
         super(fragment, type, DIRECTORY, shouldCreateThumbnails);
     }
 
@@ -134,7 +135,7 @@ public class ImageChooserManager extends BChooser implements ImageProcessorListe
             boolean shouldCreateThumbnails) {
         super(fragment, type, foldername, shouldCreateThumbnails);
     }
-    
+
     public ImageChooserManager(android.app.Fragment fragment, int type, String foldername,
             boolean shouldCreateThumbnails) {
         super(fragment, type, foldername, shouldCreateThumbnails);
@@ -189,61 +190,57 @@ public class ImageChooserManager extends BChooser implements ImageProcessorListe
 
     @Override
     public void submit(int requestCode, Intent data) {
-    	if(requestCode != type){
-    		 onError("onActivityResult requestCode is different from the type the chooser was initialized with.");
-    	}
-    	else{
-	        switch (requestCode) {
-	            case ChooserType.REQUEST_PICK_PICTURE:
-	                processImageFromGallery(data);
-	                break;
-	            case ChooserType.REQUEST_CAPTURE_PICTURE:
-	                processCameraImage();
-	                break;
-	        }
-    	}
+        if (requestCode != type) {
+            onError("onActivityResult requestCode is different from the type the chooser was initialized with.");
+        } else {
+            switch (requestCode) {
+                case ChooserType.REQUEST_PICK_PICTURE:
+                    processImageFromGallery(data);
+                    break;
+                case ChooserType.REQUEST_CAPTURE_PICTURE:
+                    processCameraImage();
+                    break;
+            }
+        }
     }
-    
-    public void processImageUri(String _uri)
-    {
-    	if(_uri != null)
-    	{
-	         if (Config.DEBUG) {
-	             Log.i(TAG, "Got : " + _uri);
-	         }
-	         // Picasa on Android >= 3.0
-	         if (_uri.startsWith("content:")) {
-	             filePathOriginal = getAbsoluteImagePathFromUri(Uri.parse(_uri));
-	         }
-	         // Picasa on Android < 3.0
-	         if (_uri.matches("https?://\\w+\\.googleusercontent\\.com/.+")) {
-	             filePathOriginal = _uri;
-	         }
-	         // Local storage
-	         if (_uri.startsWith("file://")) {
-	             filePathOriginal = _uri.substring(7);
-	         }
-	         if (filePathOriginal == null || TextUtils.isEmpty(filePathOriginal)) {
-	             onError("File path was null");
-	         } else {
-	             if (Config.DEBUG) {
-	                 Log.i(TAG, "File: " + filePathOriginal);
-	             }
-	             String path = filePathOriginal;
-	             ImageProcessorThread thread = new ImageProcessorThread(path, foldername,
-	                     shouldCreateThumbnails);
-	             thread.setListener(this);
-	             if (activity != null) {
-	                 thread.setContext(activity.getApplicationContext());
-	             } else if (fragment != null) {
-	                 thread.setContext(fragment.getActivity().getApplicationContext());
-	             } 
-	             thread.start();
-	         }
-    	}
-    	else{
-    		 onError("Image Uri was null!");
-    	}
+
+    public void processImageUri(String _uri) {
+        if (_uri != null) {
+            if (Config.DEBUG) {
+                Log.i(TAG, "Got : " + _uri);
+            }
+            // Picasa on Android >= 3.0
+            if (_uri.startsWith("content:")) {
+                filePathOriginal = getAbsoluteImagePathFromUri(Uri.parse(_uri));
+            }
+            // Picasa on Android < 3.0
+            if (_uri.matches("https?://\\w+\\.googleusercontent\\.com/.+")) {
+                filePathOriginal = _uri;
+            }
+            // Local storage
+            if (_uri.startsWith("file://")) {
+                filePathOriginal = _uri.substring(7);
+            }
+            if (filePathOriginal == null || TextUtils.isEmpty(filePathOriginal)) {
+                onError("File path was null");
+            } else {
+                if (Config.DEBUG) {
+                    Log.i(TAG, "File: " + filePathOriginal);
+                }
+                String path = filePathOriginal;
+                ImageProcessorThread thread = new ImageProcessorThread(path, foldername,
+                        shouldCreateThumbnails);
+                thread.setListener(this);
+                if (activity != null) {
+                    thread.setContext(activity.getApplicationContext());
+                } else if (fragment != null) {
+                    thread.setContext(fragment.getActivity().getApplicationContext());
+                }
+                thread.start();
+            }
+        } else {
+            onError("Image Uri was null!");
+        }
     }
 
     private void processImageFromGallery(Intent data) {
