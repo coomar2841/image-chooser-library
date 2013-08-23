@@ -2,7 +2,7 @@
 1. Fix problems with images which don't have EXIF Data. Get their actual width and height.
 2. Get the video preview image (Big Thumbnail)
 3. Get the actual width and height of video files
-4. Changed the folder structure so that the thumbnails don't apear in your gallery
+4. Changed the folder structure so that the thumbnails don't appear in your gallery
 
 ## Version 1.2.5
 1. Updated the support library
