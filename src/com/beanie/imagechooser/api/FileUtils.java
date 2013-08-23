@@ -22,6 +22,9 @@ import android.os.Environment;
 
 public class FileUtils {
     public static String getDirectory(String foldername) {
+        if (!foldername.startsWith(".")) {
+            foldername = "." + foldername;
+        }
         File directory = null;
         directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
                 + File.separator + foldername);
