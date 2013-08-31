@@ -3,10 +3,7 @@
 2. Get the video preview image (Big Thumbnail)
 3. Get the actual width and height of video files
 4. Changed the folder structure so that the thumbnails don't appear in your gallery
-
-## Version 1.2.5
-1. Updated the support library
-2. Some bug fixes and error handling
+5. Added source code for the sample app
 
 [Link to image-chooser-library v1.2.5](https://dl.dropboxusercontent.com/u/6696191/image-chooser-library/v1.2.5/image-chooser-library-1.2.5.jar)
 
@@ -15,6 +12,9 @@
        src="https://developer.android.com/images/brand/en_generic_rgb_wo_45.png" />
 </a>
 
+## Version 1.2.5
+1. Updated the support library
+2. Some bug fixes and error handling
 
 ## Version 1.2.4
 1. Bug fix: While using a configured folder, the folder wasn't being created.
