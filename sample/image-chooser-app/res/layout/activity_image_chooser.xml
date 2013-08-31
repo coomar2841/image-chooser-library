@@ -1,0 +1,88 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context=".ImageChooserActivity" >
+
+    <ImageView
+        android:id="@+id/imageViewThumb"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/image_border"
+        android:padding="10dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_launcher" />
+
+    <ImageView
+        android:id="@+id/imageViewThumbSmall"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/imageViewThumb"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/image_border"
+        android:padding="10dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_launcher" />
+
+    <TextView
+        android:id="@+id/textViewFile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imageViewThumbSmall"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="Chose an option" />
+
+    <LinearLayout
+        android:id="@+id/layoutButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewFile"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" >
+
+        <Button
+            android:id="@+id/buttonTakePicture"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Take Picture" />
+
+        <Button
+            android:id="@+id/buttonChooseImage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Choose Image" />
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_below="@id/layoutButtons"
+        android:layout_centerHorizontal="true" />
+
+    <com.google.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
+        ads:adSize="BANNER"
+        ads:adUnitId="a151e43f37ee7e0"
+        ads:loadAdOnCreate="true" >
+    </com.google.ads.AdView>
+
+</RelativeLayout>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Image Choose App</string>
+	<string name="image_chooser">Image Chooser</string>
+	<string name="video_chooser">Video Chooser</string>
+</resources>

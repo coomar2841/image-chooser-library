@@ -1,0 +1,42 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+    android:id="@+id/mainLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/buttonImageChooser"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:onClick="gotoImageChooser"
+        android:text="@string/image_chooser" />
+
+    <Button
+        android:id="@+id/buttonVideoChooser"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/buttonImageChooser"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:onClick="gotoVideoChooser"
+        android:text="@string/video_chooser" />
+
+    <com.google.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
+        ads:adSize="BANNER"
+        ads:adUnitId="a151e43f37ee7e0"
+        ads:loadAdOnCreate="true" >
+
+    </com.google.ads.AdView>
+
+</RelativeLayout>
