@@ -51,6 +51,10 @@ public class ImageChooserActivity extends Activity implements ImageChooserListen
 
     private AdView adView;
 
+    private String filePath;
+
+    private int chooserType;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,24 +94,26 @@ public class ImageChooserActivity extends Activity implements ImageChooserListen
     }
 
     private void chooseImage() {
+        chooserType = ChooserType.REQUEST_PICK_PICTURE;
         imageChooserManager = new ImageChooserManager(this, ChooserType.REQUEST_PICK_PICTURE,
                 "myfolder", true);
         imageChooserManager.setImageChooserListener(this);
         try {
             pbar.setVisibility(View.VISIBLE);
-            imageChooserManager.choose();
+            filePath = imageChooserManager.choose();
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
     }
 
     private void takePicture() {
+        chooserType = ChooserType.REQUEST_CAPTURE_PICTURE;
         imageChooserManager = new ImageChooserManager(this, ChooserType.REQUEST_CAPTURE_PICTURE,
                 "myfolder", true);
         imageChooserManager.setImageChooserListener(this);
         try {
             pbar.setVisibility(View.VISIBLE);
-            imageChooserManager.choose();
+            filePath = imageChooserManager.choose();
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
@@ -117,6 +123,9 @@ public class ImageChooserActivity extends Activity implements ImageChooserListen
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK
                 && (requestCode == ChooserType.REQUEST_PICK_PICTURE || requestCode == ChooserType.REQUEST_CAPTURE_PICTURE)) {
+            if (imageChooserManager == null) {
+                reinitializeImageChooser();
+            }
             imageChooserManager.submit(requestCode, data);
         } else {
             pbar.setVisibility(View.GONE);
@@ -159,5 +168,19 @@ public class ImageChooserActivity extends Activity implements ImageChooserListen
             adView.destroy();
         }
         super.onDestroy();
+    }
+
+    // Should be called if for some reason the ImageChooserManager is null (Due
+    // to destroying of activity for low memory situations)
+    private void reinitializeImageChooser() {
+        imageChooserManager = new ImageChooserManager(this, chooserType, "myfolder", true);
+        imageChooserManager.setImageChooserListener(this);
+        imageChooserManager.reinitialize(filePath);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        imageChooserManager = null;
     }
 }

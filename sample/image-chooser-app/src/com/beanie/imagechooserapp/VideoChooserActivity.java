@@ -47,6 +47,10 @@ public class VideoChooserActivity extends Activity implements VideoChooserListen
     private VideoView videoView;
 
     private AdView adView;
+    
+    private String filePath;
+    
+    private int chooserType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,17 +75,19 @@ public class VideoChooserActivity extends Activity implements VideoChooserListen
     }
 
     public void captureVideo(View view) {
+        chooserType = ChooserType.REQUEST_CAPTURE_VIDEO;
         videoChooserManager = new VideoChooserManager(this, ChooserType.REQUEST_CAPTURE_VIDEO);
         videoChooserManager.setVideoChooserListener(this);
         try {
             pbar.setVisibility(View.VISIBLE);
-            videoChooserManager.choose();
+            filePath = videoChooserManager.choose();
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
     }
 
     public void pickVideo(View view) {
+        chooserType = ChooserType.REQUEST_PICK_VIDEO;
         videoChooserManager = new VideoChooserManager(this, ChooserType.REQUEST_PICK_VIDEO);
         videoChooserManager.setVideoChooserListener(this);
         try {
@@ -127,6 +133,9 @@ public class VideoChooserActivity extends Activity implements VideoChooserListen
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK
                 && (requestCode == ChooserType.REQUEST_CAPTURE_VIDEO || requestCode == ChooserType.REQUEST_PICK_VIDEO)) {
+            if(videoChooserManager == null){
+                reinitializeVideoChooser();
+            }
             videoChooserManager.submit(requestCode, data);
         } else {
             pbar.setVisibility(View.GONE);
@@ -139,5 +148,13 @@ public class VideoChooserActivity extends Activity implements VideoChooserListen
             adView.destroy();
         }
         super.onDestroy();
+    }
+    
+    // Should be called if for some reason the VideoChooserManager is null (Due
+    // to destroying of activity for low memory situations)
+    private void reinitializeVideoChooser() {
+        videoChooserManager = new VideoChooserManager(this, chooserType, "myfolder", true);
+        videoChooserManager.setVideoChooserListener(this);
+        videoChooserManager.reinitialize(filePath);
     }
 }

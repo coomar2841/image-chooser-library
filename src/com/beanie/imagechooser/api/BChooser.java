@@ -129,4 +129,8 @@ public abstract class BChooser {
 
         return filePath;
     }
+    
+    public void reinitialize(String path){
+        filePathOriginal = path;
+    }
 }
