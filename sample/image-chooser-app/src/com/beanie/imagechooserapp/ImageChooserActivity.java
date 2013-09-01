@@ -177,10 +177,4 @@ public class ImageChooserActivity extends Activity implements ImageChooserListen
         imageChooserManager.setImageChooserListener(this);
         imageChooserManager.reinitialize(filePath);
     }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        imageChooserManager = null;
-    }
 }

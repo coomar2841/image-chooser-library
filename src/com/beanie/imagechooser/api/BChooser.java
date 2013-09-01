@@ -64,7 +64,16 @@ public abstract class BChooser {
 
     /**
      * Call this method, to start the chooser, i.e, The camera app or the
-     * gallery depending upon the type
+     * gallery depending upon the type.
+     * <p>
+     * Returns the path, in case, a capture is requested. You will need to save
+     * this path, so that, in case, the ChooserManager is destoryed due to
+     * activity lifecycle, you will use this information to create the
+     * ChooserManager instance again
+     * </p>
+     * <p>
+     * In case of picking a video or image, null would be returned.
+     * </p>
      * 
      * @throws IllegalArgumentException
      */
@@ -129,8 +138,8 @@ public abstract class BChooser {
 
         return filePath;
     }
-    
-    public void reinitialize(String path){
+
+    public void reinitialize(String path) {
         filePathOriginal = path;
     }
 }
