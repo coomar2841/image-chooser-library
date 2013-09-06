@@ -5,13 +5,16 @@
        src="https://developer.android.com/images/brand/en_generic_rgb_wo_45.png" />
 </a>
 
-**Makes it easy and simple to integrate "Attach that photo/video" feature into your apps.**
-*Forget about various devices/os variations*
+**Makes it easy and simple to integrate "Attach that photo/video" feature into your android apps.**
+
+> Don't worry about various devices/OS variations.
+> Don't worry about out-of-memory errors.
+> Don't worry about creating thumbnails to show a preview.
 
 ## Code less for capturing  images/videos
 1. Supports picking up images/videos from phone gallery.
 2. Supports capturing images/videos using the phone camera.
-3. Generates thumbnails for the any chosen media.
+3. Generates thumb-nails for the any chosen media.
 4. Works on most(99%) of the phones/os versions.
 5. Similar code base to implement irrespective of Android version of device.
 
