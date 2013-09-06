@@ -5,6 +5,16 @@
        src="https://developer.android.com/images/brand/en_generic_rgb_wo_45.png" />
 </a>
 
+**Makes it easy and simple to integrate "Attach that photo/video" feature into your apps.**
+*Forget about various devices/os variations*
+
+## Code less for capturing  images/videos
+1. Supports picking up images/videos from phone gallery.
+2. Supports capturing images/videos using the phone camera.
+3. Generates thumbnails for the any chosen media.
+4. Works on most(99%) of the phones/os versions.
+5. Similar code base to implement irrespective of Android version of device.
+
 ## Version 1.2.6
 1. Fix problems with images which don't have EXIF Data. Get their actual width and height.
 2. Get the video preview image (Big Thumbnail)
@@ -20,35 +30,6 @@
 ## Version 1.2.4
 1. Bug fix: While using a configured folder, the folder wasn't being created.
 2. Added support for getting image details like width, height, file extension etc.
-
-## Version 1.2.3
-1. Added support to integrate from Fragments (Support library).
-2. Added support to integrate from Fragments.
-
-## Version 1.2.2
-1. Bug fix: For some files, when you get FileNotFoundException, fixed a null pointer exception.
-2. Feature: Send back the filepath, to the caller while using camera for video/image. This should be used when you want to support
-orientation changes.
-
-## Version 1.2.1
-1. Bug Fix for versions <3.0 [Pull Request:Juan Andrés](https://github.com/coomar2841/image-chooser-library/pull/1)
-
-## Version 1.2
-1. Added choosing video from gallery (supports both locally stored videos and your picasa videos).
-2. Added taking a video using camera.
-3. Gives back the actual video path, and two thumbnails.
-
-## Version 1.1
-
-1. Added optional output folder configuration.
-2. Added folder cache limit and auto delete old files.
-3. Added an optional flag to control thumbnail generation.
-
-## Version 1.0
-1. Supports adding images by using the device's camera.
-2. Supports adding pictures from the Camera folder of your gallery.
-3. Supports adding pictures from your synced Picasa folders on your phone.
-4. Supports 3 types of image output sizes (Original, Thumbnail and Thumbnail smaller).
 
 ### Pre-Requisites:
 1. Your app should have internet permission.
