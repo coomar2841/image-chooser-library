@@ -1,16 +1,17 @@
-## Version 1.2.6
-1. Fix problems with images which don't have EXIF Data. Get their actual width and height.
-2. Get the video preview image (Big Thumbnail)
-3. Get the actual width and height of video files
-4. Changed the folder structure so that the thumbnails don't appear in your gallery
-5. Added source code for the sample app
-
 [Link to image-chooser-library v1.2.5](https://dl.dropboxusercontent.com/u/6696191/image-chooser-library/v1.2.5/image-chooser-library-1.2.5.jar)
 
 <a href="https://play.google.com/store/apps/details?id=com.beanie.imagechooserapp">
   <img alt="Get it on Google Play"
        src="https://developer.android.com/images/brand/en_generic_rgb_wo_45.png" />
 </a>
+
+## Version 1.2.6
+1. Fix problems with images which don't have EXIF Data. Get their actual width and height.
+2. Get the video preview image (Big Thumbnail)
+3. Get the actual width and height of video files
+4. Changed the folder structure so that the thumbnails don't appear in your gallery
+5. Added source code for the sample app
+6. Added functionality to handle activity destroyals for a few devices.
 
 ## Version 1.2.5
 1. Updated the support library

@@ -35,126 +35,153 @@ import com.beanie.imagechooser.api.VideoChooserManager;
 import com.google.ads.AdRequest;
 import com.google.ads.AdView;
 
-public class VideoChooserActivity extends Activity implements VideoChooserListener {
-    private VideoChooserManager videoChooserManager;
+public class VideoChooserActivity extends Activity implements
+		VideoChooserListener {
+	private VideoChooserManager videoChooserManager;
 
-    private ProgressBar pbar;
+	private ProgressBar pbar;
 
-    private ImageView imageViewThumb;
+	private ImageView imageViewThumb;
 
-    private ImageView imageViewThumbSmall;
+	private ImageView imageViewThumbSmall;
 
-    private VideoView videoView;
+	private VideoView videoView;
 
-    private AdView adView;
-    
-    private String filePath;
-    
-    private int chooserType;
+	private AdView adView;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_video_chooser);
+	private String filePath;
 
-        pbar = (ProgressBar) findViewById(R.id.pBar);
-        pbar.setVisibility(View.GONE);
+	private int chooserType;
 
-        imageViewThumb = (ImageView) findViewById(R.id.imageViewThumbnail);
-        imageViewThumbSmall = (ImageView) findViewById(R.id.imageViewThumbnailSmall);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_video_chooser);
 
-        videoView = (VideoView) findViewById(R.id.videoView);
-        
-        adView = (AdView) findViewById(R.id.adView);
+		pbar = (ProgressBar) findViewById(R.id.pBar);
+		pbar.setVisibility(View.GONE);
 
-        AdRequest request = new AdRequest();
-        request.addTestDevice(AdRequest.TEST_EMULATOR);
-        request.addTestDevice(Config.TEST_DEVICE_ID_1);
-        request.addTestDevice(Config.TEST_DEVICE_ID_2);
-        adView.loadAd(request);
-    }
+		imageViewThumb = (ImageView) findViewById(R.id.imageViewThumbnail);
+		imageViewThumbSmall = (ImageView) findViewById(R.id.imageViewThumbnailSmall);
 
-    public void captureVideo(View view) {
-        chooserType = ChooserType.REQUEST_CAPTURE_VIDEO;
-        videoChooserManager = new VideoChooserManager(this, ChooserType.REQUEST_CAPTURE_VIDEO);
-        videoChooserManager.setVideoChooserListener(this);
-        try {
-            pbar.setVisibility(View.VISIBLE);
-            filePath = videoChooserManager.choose();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-    }
+		videoView = (VideoView) findViewById(R.id.videoView);
 
-    public void pickVideo(View view) {
-        chooserType = ChooserType.REQUEST_PICK_VIDEO;
-        videoChooserManager = new VideoChooserManager(this, ChooserType.REQUEST_PICK_VIDEO);
-        videoChooserManager.setVideoChooserListener(this);
-        try {
-            pbar.setVisibility(View.VISIBLE);
-            videoChooserManager.choose();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-    }
+		adView = (AdView) findViewById(R.id.adView);
 
-    @Override
-    public void onVideoChosen(final ChosenVideo video) {
-        runOnUiThread(new Runnable() {
+		AdRequest request = new AdRequest();
+		request.addTestDevice(AdRequest.TEST_EMULATOR);
+		request.addTestDevice(Config.TEST_DEVICE_ID_1);
+		request.addTestDevice(Config.TEST_DEVICE_ID_2);
+		adView.loadAd(request);
+	}
 
-            @Override
-            public void run() {
-                pbar.setVisibility(View.GONE);
-                if (video != null) {
-                    videoView.setVideoURI(Uri.parse(new File(video.getVideoFilePath()).toString()));
-                    videoView.start();
-                    imageViewThumb.setImageURI(Uri.parse(new File(video.getThumbnailPath())
-                            .toString()));
-                    imageViewThumbSmall.setImageURI(Uri.parse(new File(video
-                            .getThumbnailSmallPath()).toString()));
-                }
-            }
-        });
-    }
+	public void captureVideo(View view) {
+		chooserType = ChooserType.REQUEST_CAPTURE_VIDEO;
+		videoChooserManager = new VideoChooserManager(this,
+				ChooserType.REQUEST_CAPTURE_VIDEO);
+		videoChooserManager.setVideoChooserListener(this);
+		try {
+			pbar.setVisibility(View.VISIBLE);
+			filePath = videoChooserManager.choose();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		}
+	}
 
-    @Override
-    public void onError(final String reason) {
-        runOnUiThread(new Runnable() {
+	public void pickVideo(View view) {
+		chooserType = ChooserType.REQUEST_PICK_VIDEO;
+		videoChooserManager = new VideoChooserManager(this,
+				ChooserType.REQUEST_PICK_VIDEO);
+		videoChooserManager.setVideoChooserListener(this);
+		try {
+			pbar.setVisibility(View.VISIBLE);
+			videoChooserManager.choose();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		}
+	}
 
-            @Override
-            public void run() {
-                pbar.setVisibility(View.GONE);
-                Toast.makeText(VideoChooserActivity.this, reason, Toast.LENGTH_LONG).show();
-            }
-        });
-    }
+	@Override
+	public void onVideoChosen(final ChosenVideo video) {
+		runOnUiThread(new Runnable() {
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK
-                && (requestCode == ChooserType.REQUEST_CAPTURE_VIDEO || requestCode == ChooserType.REQUEST_PICK_VIDEO)) {
-            if(videoChooserManager == null){
-                reinitializeVideoChooser();
-            }
-            videoChooserManager.submit(requestCode, data);
-        } else {
-            pbar.setVisibility(View.GONE);
-        }
-    }
-    
-    @Override
-    public void onDestroy() {
-        if (adView != null) {
-            adView.destroy();
-        }
-        super.onDestroy();
-    }
-    
-    // Should be called if for some reason the VideoChooserManager is null (Due
-    // to destroying of activity for low memory situations)
-    private void reinitializeVideoChooser() {
-        videoChooserManager = new VideoChooserManager(this, chooserType, "myfolder", true);
-        videoChooserManager.setVideoChooserListener(this);
-        videoChooserManager.reinitialize(filePath);
-    }
+			@Override
+			public void run() {
+				pbar.setVisibility(View.GONE);
+				if (video != null) {
+					videoView.setVideoURI(Uri.parse(new File(video
+							.getVideoFilePath()).toString()));
+					videoView.start();
+					imageViewThumb.setImageURI(Uri.parse(new File(video
+							.getThumbnailPath()).toString()));
+					imageViewThumbSmall.setImageURI(Uri.parse(new File(video
+							.getThumbnailSmallPath()).toString()));
+				}
+			}
+		});
+	}
+
+	@Override
+	public void onError(final String reason) {
+		runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				pbar.setVisibility(View.GONE);
+				Toast.makeText(VideoChooserActivity.this, reason,
+						Toast.LENGTH_LONG).show();
+			}
+		});
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode == RESULT_OK
+				&& (requestCode == ChooserType.REQUEST_CAPTURE_VIDEO || requestCode == ChooserType.REQUEST_PICK_VIDEO)) {
+			if (videoChooserManager == null) {
+				reinitializeVideoChooser();
+			}
+			videoChooserManager.submit(requestCode, data);
+		} else {
+			pbar.setVisibility(View.GONE);
+		}
+	}
+
+	@Override
+	public void onDestroy() {
+		if (adView != null) {
+			adView.destroy();
+		}
+		super.onDestroy();
+	}
+
+	// Should be called if for some reason the VideoChooserManager is null (Due
+	// to destroying of activity for low memory situations)
+	private void reinitializeVideoChooser() {
+		videoChooserManager = new VideoChooserManager(this, chooserType,
+				"myfolder", true);
+		videoChooserManager.setVideoChooserListener(this);
+		videoChooserManager.reinitialize(filePath);
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		outState.putInt("chooser_type", chooserType);
+		outState.putString("media_path", filePath);
+		super.onSaveInstanceState(outState);
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		if (savedInstanceState != null) {
+			if (savedInstanceState.containsKey("chooser_type")) {
+				chooserType = savedInstanceState.getInt("chooser_type");
+			}
+
+			if (savedInstanceState.containsKey("media_path")) {
+				filePath = savedInstanceState.getString("media_path");
+			}
+		}
+		super.onRestoreInstanceState(savedInstanceState);
+	}
 }
