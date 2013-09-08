@@ -22,6 +22,7 @@ import java.util.Calendar;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -135,6 +136,15 @@ public class VideoChooserManager extends BChooser implements VideoProcessorListe
     }
 
     private String captureVideo() {
+        int sdk = Build.VERSION.SDK_INT;
+        if (sdk >= Build.VERSION_CODES.GINGERBREAD && sdk <= Build.VERSION_CODES.GINGERBREAD_MR1) {
+            return captureVideoPatchedMethodForGingerbread();
+        } else {
+            return captureVideoCurrent();
+        }
+    }
+
+    private String captureVideoCurrent() {
         checkDirectory();
         Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
         filePathOriginal = FileUtils.getDirectory(foldername) + File.separator
@@ -142,6 +152,12 @@ public class VideoChooserManager extends BChooser implements VideoProcessorListe
         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(filePathOriginal)));
         startActivity(intent);
         return filePathOriginal;
+    }
+
+    private String captureVideoPatchedMethodForGingerbread() {
+        Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+        startActivity(intent);
+        return null;
     }
 
     private void pickVideo() {
@@ -204,10 +220,23 @@ public class VideoChooserManager extends BChooser implements VideoProcessorListe
     }
 
     private void processCameraVideo(Intent intent) {
-        String path = filePathOriginal;
+        String path = null;
+        int sdk = Build.VERSION.SDK_INT;
+        if (sdk >= Build.VERSION_CODES.GINGERBREAD && sdk <= Build.VERSION_CODES.GINGERBREAD_MR1) {
+            path = intent.getDataString();
+        } else {
+            path = filePathOriginal;
+        }
         VideoProcessorThread thread = new VideoProcessorThread(path, foldername,
                 shouldCreateThumbnails);
         thread.setListener(this);
+        if (activity != null) {
+            thread.setContext(activity.getApplicationContext());
+        } else if (fragment != null) {
+            thread.setContext(fragment.getActivity().getApplicationContext());
+        } else if (appFragment != null) {
+            thread.setContext(appFragment.getActivity().getApplicationContext());
+        }
         thread.start();
     }
 

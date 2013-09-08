@@ -288,4 +288,36 @@ public abstract class MediaProcessorThread extends Thread {
             Log.i(TAG, "Picasa Done");
         }
     }
+    
+    protected void processContentProviderMedia(String path, String extension) throws Exception {
+        if (Config.DEBUG) {
+            Log.i(TAG, "ContentProvider Started");
+        }
+        try {
+            InputStream inputStream = context.getContentResolver().openInputStream(Uri.parse(path));
+
+            filePath = FileUtils.getDirectory(foldername) + File.separator
+                    + Calendar.getInstance().getTimeInMillis() + extension;
+
+            BufferedOutputStream outStream = new BufferedOutputStream(
+                    new FileOutputStream(filePath));
+            byte[] buf = new byte[2048];
+            int len;
+            while ((len = inputStream.read(buf)) > 0) {
+                outStream.write(buf, 0, len);
+            }
+            inputStream.close();
+            outStream.close();
+            process();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            throw e;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+        if (Config.DEBUG) {
+            Log.i(TAG, "ContentProvider Done");
+        }
+    }
 }

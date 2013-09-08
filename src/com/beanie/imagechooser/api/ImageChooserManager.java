@@ -235,6 +235,8 @@ public class ImageChooserManager extends BChooser implements ImageProcessorListe
                     thread.setContext(activity.getApplicationContext());
                 } else if (fragment != null) {
                     thread.setContext(fragment.getActivity().getApplicationContext());
+                } else if(appFragment != null){
+                    thread.setContext(appFragment.getActivity().getApplicationContext());
                 }
                 thread.start();
             }

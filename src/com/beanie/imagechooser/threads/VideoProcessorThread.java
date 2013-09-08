@@ -17,7 +17,6 @@
 package com.beanie.imagechooser.threads;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
@@ -38,7 +37,7 @@ public class VideoProcessorThread extends MediaProcessorThread {
 
     private final static int MAX_DIRECTORY_SIZE = 5 * 1024 * 1024;
 
-    private final static int MAX_THRESHOLD_DAYS = (int)(0.5 * 24 * 60 * 60 * 1000);
+    private final static int MAX_THRESHOLD_DAYS = (int) (0.5 * 24 * 60 * 60 * 1000);
 
     private String previewImage;
 
@@ -81,6 +80,8 @@ public class VideoProcessorThread extends MediaProcessorThread {
             downloadAndProcess(filePath);
         } else if (filePath.startsWith("content://com.google.android.gallery3d")) {
             processPicasaMedia(filePath, ".mp4");
+        } else if (filePath.startsWith("content://media/external/video")) {
+            processContentProviderMedia(filePath, ".mp4");
         } else {
             process();
         }
