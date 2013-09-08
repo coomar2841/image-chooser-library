@@ -27,6 +27,7 @@
 4. Changed the folder structure so that the thumbnails don't appear in your gallery
 5. Added source code for the sample app
 6. Added functionality to handle activity destroyals for a few devices.
+6. Fixed issue: https://github.com/coomar2841/image-chooser-library/issues/7
 
 ## Version 1.2.5
 1. Updated the support library
