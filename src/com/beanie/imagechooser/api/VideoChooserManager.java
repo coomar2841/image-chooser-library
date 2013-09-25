@@ -20,6 +20,7 @@ import java.io.File;
 import java.util.Calendar;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -116,7 +117,7 @@ public class VideoChooserManager extends BChooser implements VideoProcessorListe
     }
 
     @Override
-    public String choose() throws IllegalArgumentException {
+    public String choose() throws Exception {
         String path = null;
         if (listener == null) {
             throw new IllegalArgumentException(
@@ -135,7 +136,7 @@ public class VideoChooserManager extends BChooser implements VideoProcessorListe
         return path;
     }
 
-    private String captureVideo() {
+    private String captureVideo() throws Exception {
         int sdk = Build.VERSION.SDK_INT;
         if (sdk >= Build.VERSION_CODES.GINGERBREAD && sdk <= Build.VERSION_CODES.GINGERBREAD_MR1) {
             return captureVideoPatchedMethodForGingerbread();
@@ -144,27 +145,40 @@ public class VideoChooserManager extends BChooser implements VideoProcessorListe
         }
     }
 
-    private String captureVideoCurrent() {
+    private String captureVideoCurrent() throws Exception {
         checkDirectory();
-        Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-        filePathOriginal = FileUtils.getDirectory(foldername) + File.separator
-                + Calendar.getInstance().getTimeInMillis() + ".mp4";
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(filePathOriginal)));
-        startActivity(intent);
+        try {
+            Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+            filePathOriginal = FileUtils.getDirectory(foldername) + File.separator
+                    + Calendar.getInstance().getTimeInMillis() + ".mp4";
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(filePathOriginal)));
+            startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            throw new Exception("Activity not found");
+        }
         return filePathOriginal;
     }
 
-    private String captureVideoPatchedMethodForGingerbread() {
-        Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-        startActivity(intent);
+    private String captureVideoPatchedMethodForGingerbread() throws Exception {
+        try {
+            Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+            startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            throw new Exception("Activity not found");
+        }
         return null;
     }
 
-    private void pickVideo() {
+    private void pickVideo() throws Exception {
         checkDirectory();
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        intent.setType("video/*");
-        startActivity(intent);
+        try {
+            Intent intent = new Intent(Intent.ACTION_PICK,
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            intent.setType("video/*");
+            startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            throw new Exception("Activity not found");
+        }
     }
 
     @Override

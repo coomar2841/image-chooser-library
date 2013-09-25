@@ -76,8 +76,9 @@ public abstract class BChooser {
      * </p>
      * 
      * @throws IllegalArgumentException
+     * @throws Exception 
      */
-    public abstract String choose() throws IllegalArgumentException;
+    public abstract String choose() throws IllegalArgumentException, Exception;
 
     /**
      * Call this method to process the result from within your onActivityResult

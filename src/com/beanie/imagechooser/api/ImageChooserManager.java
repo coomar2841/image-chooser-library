@@ -20,6 +20,7 @@ import java.io.File;
 import java.util.Calendar;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -152,7 +153,7 @@ public class ImageChooserManager extends BChooser implements ImageProcessorListe
     }
 
     @Override
-    public String choose() throws IllegalArgumentException {
+    public String choose() throws Exception {
         String path = null;
         if (listener == null) {
             throw new IllegalArgumentException(
@@ -171,20 +172,29 @@ public class ImageChooserManager extends BChooser implements ImageProcessorListe
         return path;
     }
 
-    private void choosePicture() {
+    private void choosePicture() throws Exception {
         checkDirectory();
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        intent.setType("image/*");
-        startActivity(intent);
+        try {
+            Intent intent = new Intent(Intent.ACTION_PICK,
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            intent.setType("image/*");
+            startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            throw new Exception("Activity not found");
+        }
     }
 
-    private String takePicture() {
+    private String takePicture() throws Exception {
         checkDirectory();
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        filePathOriginal = FileUtils.getDirectory(foldername) + File.separator
-                + Calendar.getInstance().getTimeInMillis() + ".jpg";
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(filePathOriginal)));
-        startActivity(intent);
+        try {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            filePathOriginal = FileUtils.getDirectory(foldername) + File.separator
+                    + Calendar.getInstance().getTimeInMillis() + ".jpg";
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(filePathOriginal)));
+            startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            throw new Exception("Activity not found");
+        }
         return filePathOriginal;
     }
 
@@ -235,7 +245,7 @@ public class ImageChooserManager extends BChooser implements ImageProcessorListe
                     thread.setContext(activity.getApplicationContext());
                 } else if (fragment != null) {
                     thread.setContext(fragment.getActivity().getApplicationContext());
-                } else if(appFragment != null){
+                } else if (appFragment != null) {
                     thread.setContext(appFragment.getActivity().getApplicationContext());
                 }
                 thread.start();
