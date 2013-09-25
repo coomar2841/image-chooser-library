@@ -20,6 +20,9 @@
 4. Works on most(99%) of the phones/os versions.
 5. Similar code base to implement irrespective of Android version of device.
 
+## Version 1.2.7
+1. Added exception when Activity not found
+
 ## Version 1.2.6
 1. Fix problems with images which don't have EXIF Data. Get their actual width and height.
 2. Get the video preview image (Big Thumbnail)
