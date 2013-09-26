@@ -85,6 +85,8 @@ public class VideoChooserActivity extends Activity implements
 			filePath = videoChooserManager.choose();
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -97,6 +99,8 @@ public class VideoChooserActivity extends Activity implements
 			pbar.setVisibility(View.VISIBLE);
 			videoChooserManager.choose();
 		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

@@ -104,6 +104,8 @@ public class ImageChooserActivity extends Activity implements
 			filePath = imageChooserManager.choose();
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -116,6 +118,8 @@ public class ImageChooserActivity extends Activity implements
 			pbar.setVisibility(View.VISIBLE);
 			filePath = imageChooserManager.choose();
 		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
