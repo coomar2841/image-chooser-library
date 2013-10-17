@@ -19,6 +19,7 @@ package com.beanie.imagechooser.api;
 import java.io.File;
 import java.util.Calendar;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -175,8 +176,8 @@ public class ImageChooserManager extends BChooser implements ImageProcessorListe
     private void choosePicture() throws Exception {
         checkDirectory();
         try {
-            Intent intent = new Intent(Intent.ACTION_PICK,
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+			Intent intent = new Intent(Intent.ACTION_PICK,
+					MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             intent.setType("image/*");
             startActivity(intent);
         } catch (ActivityNotFoundException e) {
@@ -214,7 +215,8 @@ public class ImageChooserManager extends BChooser implements ImageProcessorListe
         }
     }
 
-    public void processImageUri(String _uri) {
+    @SuppressLint("NewApi")
+	public void processImageUri(String _uri) {
         if (_uri != null) {
             if (Config.DEBUG) {
                 Log.i(TAG, "Got : " + _uri);
