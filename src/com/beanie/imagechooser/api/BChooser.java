@@ -17,7 +17,7 @@
 package com.beanie.imagechooser.api;
 
 import java.io.File;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -26,121 +26,130 @@ import android.provider.MediaStore.MediaColumns;
 import android.support.v4.app.Fragment;
 
 public abstract class BChooser {
-    protected Activity activity;
+	protected Activity activity;
 
-    protected Fragment fragment;
+	protected Fragment fragment;
 
-    protected android.app.Fragment appFragment;
+	protected android.app.Fragment appFragment;
 
-    protected int type;
+	protected int type;
 
-    protected String foldername;
+	protected String foldername;
 
-    protected boolean shouldCreateThumbnails;
+	protected boolean shouldCreateThumbnails;
 
-    protected String filePathOriginal;
+	protected String filePathOriginal;
 
-    public BChooser(Activity activity, int type, String foldername, boolean shouldCreateThumbnails) {
-        this.activity = activity;
-        this.type = type;
-        this.foldername = foldername;
-        this.shouldCreateThumbnails = shouldCreateThumbnails;
-    }
+	public BChooser(Activity activity, int type, String foldername,
+			boolean shouldCreateThumbnails) {
+		this.activity = activity;
+		this.type = type;
+		this.foldername = foldername;
+		this.shouldCreateThumbnails = shouldCreateThumbnails;
+	}
 
-    public BChooser(Fragment fragment, int type, String foldername, boolean shouldCreateThumbnails) {
-        this.fragment = fragment;
-        this.type = type;
-        this.foldername = foldername;
-        this.shouldCreateThumbnails = shouldCreateThumbnails;
-    }
+	public BChooser(Fragment fragment, int type, String foldername,
+			boolean shouldCreateThumbnails) {
+		this.fragment = fragment;
+		this.type = type;
+		this.foldername = foldername;
+		this.shouldCreateThumbnails = shouldCreateThumbnails;
+	}
 
-    public BChooser(android.app.Fragment fragment, int type, String foldername,
-            boolean shouldCreateThumbnails) {
-        this.appFragment = fragment;
-        this.type = type;
-        this.foldername = foldername;
-        this.shouldCreateThumbnails = shouldCreateThumbnails;
-    }
+	public BChooser(android.app.Fragment fragment, int type, String foldername,
+			boolean shouldCreateThumbnails) {
+		this.appFragment = fragment;
+		this.type = type;
+		this.foldername = foldername;
+		this.shouldCreateThumbnails = shouldCreateThumbnails;
+	}
 
-    /**
-     * Call this method, to start the chooser, i.e, The camera app or the
-     * gallery depending upon the type.
-     * <p>
-     * Returns the path, in case, a capture is requested. You will need to save
-     * this path, so that, in case, the ChooserManager is destoryed due to
-     * activity lifecycle, you will use this information to create the
-     * ChooserManager instance again
-     * </p>
-     * <p>
-     * In case of picking a video or image, null would be returned.
-     * </p>
-     * 
-     * @throws IllegalArgumentException
-     * @throws Exception 
-     */
-    public abstract String choose() throws IllegalArgumentException, Exception;
+	/**
+	 * Call this method, to start the chooser, i.e, The camera app or the
+	 * gallery depending upon the type.
+	 * <p>
+	 * Returns the path, in case, a capture is requested. You will need to save
+	 * this path, so that, in case, the ChooserManager is destoryed due to
+	 * activity lifecycle, you will use this information to create the
+	 * ChooserManager instance again
+	 * </p>
+	 * <p>
+	 * In case of picking a video or image, null would be returned.
+	 * </p>
+	 * 
+	 * @throws IllegalArgumentException
+	 * @throws Exception
+	 */
+	public abstract String choose() throws IllegalArgumentException, Exception;
 
-    /**
-     * Call this method to process the result from within your onActivityResult
-     * method. You don't need to do any processing at all. Just pass in the
-     * request code and the data, and everything else will be taken care of.
-     * 
-     * @param requestCode
-     * @param data
-     */
-    public abstract void submit(int requestCode, Intent data);
+	/**
+	 * Call this method to process the result from within your onActivityResult
+	 * method. You don't need to do any processing at all. Just pass in the
+	 * request code and the data, and everything else will be taken care of.
+	 * 
+	 * @param requestCode
+	 * @param data
+	 */
+	public abstract void submit(int requestCode, Intent data);
 
-    protected void checkDirectory() {
-        File directory = null;
-        directory = new File(FileUtils.getDirectory(foldername));
-        if (!directory.exists()) {
-            directory.mkdir();
-        }
-    }
+	protected void checkDirectory() {
+		File directory = null;
+		directory = new File(FileUtils.getDirectory(foldername));
+		if (!directory.exists()) {
+			directory.mkdir();
+		}
+	}
 
-    protected void startActivity(Intent intent) {
-        if (activity != null) {
-            activity.startActivityForResult(intent, type);
-        } else if (fragment != null) {
-            fragment.startActivityForResult(intent, type);
-        } else if (appFragment != null) {
-            appFragment.startActivityForResult(intent, type);
-        }
-    }
+	@SuppressLint("NewApi")
+	protected void startActivity(Intent intent) {
+		if (activity != null) {
+			activity.startActivityForResult(intent, type);
+		} else if (fragment != null) {
+			fragment.startActivityForResult(intent, type);
+		} else if (appFragment != null) {
+			appFragment.startActivityForResult(intent, type);
+		}
+	}
 
-    protected String getAbsoluteImagePathFromUri(Uri imageUri) {
-        String[] proj = {
-                MediaColumns.DATA, MediaColumns.DISPLAY_NAME
-        };
+	@SuppressLint("NewApi")
+	protected String getAbsoluteImagePathFromUri(Uri imageUri) {
+		String[] proj = { MediaColumns.DATA, MediaColumns.DISPLAY_NAME };
 
-        if (imageUri.toString().startsWith("content://com.android.gallery3d.provider")) {
-            imageUri = Uri.parse(imageUri.toString().replace("com.android.gallery3d",
-                    "com.google.android.gallery3d"));
-        }
-        Cursor cursor = null;
-        if (activity != null) {
-            cursor = activity.getContentResolver().query(imageUri, proj, null, null, null);
-        } else if (fragment != null) {
-            cursor = fragment.getActivity().getContentResolver()
-                    .query(imageUri, proj, null, null, null);
-        } else if (appFragment != null) {
-            cursor = appFragment.getActivity().getContentResolver()
-                    .query(imageUri, proj, null, null, null);
-        }
-        cursor.moveToFirst();
+		if (imageUri.toString().startsWith(
+				"content://com.android.gallery3d.provider")) {
+			imageUri = Uri.parse(imageUri.toString().replace(
+					"com.android.gallery3d", "com.google.android.gallery3d"));
+		}
+		Cursor cursor = null;
+		if (activity != null) {
+			cursor = activity.getContentResolver().query(imageUri, proj, null,
+					null, null);
+		} else if (fragment != null) {
+			cursor = fragment.getActivity().getContentResolver()
+					.query(imageUri, proj, null, null, null);
+		} else if (appFragment != null) {
+			cursor = appFragment.getActivity().getContentResolver()
+					.query(imageUri, proj, null, null, null);
+		}
+		cursor.moveToFirst();
 
-        String filePath = "";
-        if (imageUri.toString().startsWith("content://com.google.android.gallery3d")) {
-            filePath = imageUri.toString();
-        } else {
-            filePath = cursor.getString(cursor.getColumnIndexOrThrow(MediaColumns.DATA));
-        }
-        cursor.close();
+		String filePath = "";
+		if (imageUri.toString().startsWith(
+				"content://com.google.android.gallery3d")) {
+			filePath = imageUri.toString();
+		} else if (imageUri.toString().startsWith(
+				"content://com.google.android.apps.photos.content")) {
+			filePath = imageUri.toString();
+		} else {
+			filePath = cursor.getString(cursor
+					.getColumnIndexOrThrow(MediaColumns.DATA));
+		}
+		cursor.close();
 
-        return filePath;
-    }
+		return filePath;
+	}
 
-    public void reinitialize(String path) {
-        filePathOriginal = path;
-    }
+	public void reinitialize(String path) {
+		filePathOriginal = path;
+	}
 }

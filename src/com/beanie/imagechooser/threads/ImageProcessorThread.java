@@ -35,6 +35,7 @@ public class ImageProcessorThread extends MediaProcessorThread {
 
     public ImageProcessorThread(String filePath, String foldername, boolean shouldCreateThumbnails) {
         super(filePath, foldername, shouldCreateThumbnails);
+        setMediaExtension("jpg");
     }
 
     public void setListener(ImageProcessorListener listener) {
