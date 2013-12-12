@@ -81,10 +81,11 @@ public class VideoProcessorThread extends MediaProcessorThread {
 		} else if (filePath.startsWith("http")) {
 			downloadAndProcess(filePath);
 		} else if (filePath
-				.startsWith("content://com.google.android.gallery3d")
-				|| filePath
-						.startsWith("content://com.google.android.apps.photos.content")) {
+				.startsWith("content://com.google.android.gallery3d")) {
 			processPicasaMedia(filePath, ".mp4");
+		} else if (filePath
+				.startsWith("content://com.google.android.apps.photos.content")) {
+			processGooglePhotosMedia(filePath, ".mp4");
 		} else if (filePath.startsWith("content://media/external/video")) {
 			processContentProviderMedia(filePath, ".mp4");
 		} else {
