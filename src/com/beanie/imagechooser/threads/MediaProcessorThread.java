@@ -25,7 +25,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -43,6 +42,7 @@ import android.graphics.BitmapFactory.Options;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.provider.OpenableColumns;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.beanie.imagechooser.api.FileUtils;
@@ -321,7 +321,10 @@ public abstract class MediaProcessorThread extends Thread {
 			Log.i(TAG, "URI: " + path);
 			Log.i(TAG, "Extension: " + extension);
 		}
-		dumpImageMetaData(Uri.parse(path));
+		String retrievedExtension = checkExtension(Uri.parse(path));
+		if(retrievedExtension!=null&&!TextUtils.isEmpty(retrievedExtension)){
+			extension = "."+retrievedExtension;
+		}
 		try {
 			InputStream inputStream = context.getContentResolver()
 					.openInputStream(Uri.parse(path));
@@ -354,8 +357,10 @@ public abstract class MediaProcessorThread extends Thread {
 		}
 	}
 
-	public void dumpImageMetaData(Uri uri) {
+	public String checkExtension(Uri uri) {
 
+		String extension = "";
+		
 		// The query, since it only applies to a single document, will only
 		// return
 		// one row. There's no need to filter, sort, or select fields, since we
@@ -375,6 +380,8 @@ public abstract class MediaProcessorThread extends Thread {
 				// name.
 				String displayName = cursor.getString(cursor
 						.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+				int position = displayName.indexOf(".");
+				extension = displayName.substring(position+1);
 				Log.i(TAG, "Display Name: " + displayName);
 
 				int sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE);
@@ -401,6 +408,7 @@ public abstract class MediaProcessorThread extends Thread {
 		} finally {
 			cursor.close();
 		}
+		return extension;
 	}
 
 	protected void processContentProviderMedia(String path, String extension)
@@ -408,7 +416,7 @@ public abstract class MediaProcessorThread extends Thread {
 		if (Config.DEBUG) {
 			Log.i(TAG, "ContentProvider Started");
 		}
-		dumpImageMetaData(Uri.parse(path));
+		checkExtension(Uri.parse(path));
 		try {
 			InputStream inputStream = context.getContentResolver()
 					.openInputStream(Uri.parse(path));

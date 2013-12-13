@@ -78,7 +78,7 @@ public class VideoChooserActivity extends Activity implements
 	public void captureVideo(View view) {
 		chooserType = ChooserType.REQUEST_CAPTURE_VIDEO;
 		videoChooserManager = new VideoChooserManager(this,
-				ChooserType.REQUEST_CAPTURE_VIDEO);
+				ChooserType.REQUEST_CAPTURE_VIDEO, "myvideofolder");
 		videoChooserManager.setVideoChooserListener(this);
 		try {
 			pbar.setVisibility(View.VISIBLE);
