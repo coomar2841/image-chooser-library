@@ -24,6 +24,7 @@ import java.util.Calendar;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
+import android.net.Uri;
 import android.provider.MediaStore.Video.Thumbnails;
 import android.text.TextUtils;
 
@@ -74,6 +75,10 @@ public class VideoProcessorThread extends MediaProcessorThread {
 	}
 
 	private void processVideo() throws Exception {
+		// Picasa on Android >= 3.0
+		if (filePath != null && filePath.startsWith("content:")) {
+			filePath = getAbsoluteImagePathFromUri(Uri.parse(filePath));
+		}
 		if (filePath == null || TextUtils.isEmpty(filePath)) {
 			if (listener != null) {
 				listener.onError("Coulnd't process a null file");

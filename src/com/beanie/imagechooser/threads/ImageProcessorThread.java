@@ -19,6 +19,7 @@ package com.beanie.imagechooser.threads;
 import java.io.IOException;
 
 import android.content.Context;
+import android.net.Uri;
 import android.text.TextUtils;
 
 import com.beanie.imagechooser.api.ChosenImage;
@@ -66,6 +67,10 @@ public class ImageProcessorThread extends MediaProcessorThread {
 	}
 
 	private void processImage() throws Exception {
+		// Picasa on Android >= 3.0
+		if (filePath != null && filePath.startsWith("content:")) {
+			filePath = getAbsoluteImagePathFromUri(Uri.parse(filePath));
+		}
 		if (filePath == null || TextUtils.isEmpty(filePath)) {
 			if (listener != null) {
 				listener.onError("Couldn't process a null file");

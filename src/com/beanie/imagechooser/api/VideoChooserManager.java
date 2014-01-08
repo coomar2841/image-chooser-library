@@ -18,6 +18,7 @@ package com.beanie.imagechooser.api;
 
 import java.io.File;
 import java.util.Calendar;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -28,6 +29,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
+
 import com.beanie.imagechooser.api.config.Config;
 import com.beanie.imagechooser.threads.VideoProcessorListener;
 import com.beanie.imagechooser.threads.VideoProcessorThread;
@@ -203,22 +205,7 @@ public class VideoChooserManager extends BChooser implements
 	private void processVideoFromGallery(Intent data) {
 		if (data != null && data.getDataString() != null) {
 			String uri = data.getData().toString();
-			if (Config.DEBUG) {
-				Log.i(TAG, "Got : " + uri);
-			}
-			// Picasa on Android >= 3.0
-			if (uri.startsWith("content:")) {
-				filePathOriginal = getAbsoluteImagePathFromUri(Uri.parse(data
-						.getDataString()));
-			}
-			// Picasa on Android < 3.0
-			if (uri.matches("https?://\\w+\\.googleusercontent\\.com/.+")) {
-				filePathOriginal = uri;
-			}
-			// Local storage
-			if (uri.startsWith("file://")) {
-				filePathOriginal = data.getDataString().substring(7);
-			}
+			sanitizeURI(uri);
 			if (filePathOriginal == null || TextUtils.isEmpty(filePathOriginal)) {
 				onError("File path was null");
 			} else {

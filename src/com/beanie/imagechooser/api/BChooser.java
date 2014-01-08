@@ -17,12 +17,10 @@
 package com.beanie.imagechooser.api;
 
 import java.io.File;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
-import android.provider.MediaStore.MediaColumns;
 import android.support.v4.app.Fragment;
 
 public abstract class BChooser {
@@ -111,45 +109,21 @@ public abstract class BChooser {
 		}
 	}
 
-	@SuppressLint("NewApi")
-	protected String getAbsoluteImagePathFromUri(Uri imageUri) {
-		String[] proj = { MediaColumns.DATA, MediaColumns.DISPLAY_NAME };
-
-		if (imageUri.toString().startsWith(
-				"content://com.android.gallery3d.provider")) {
-			imageUri = Uri.parse(imageUri.toString().replace(
-					"com.android.gallery3d", "com.google.android.gallery3d"));
-		}
-		Cursor cursor = null;
-		if (activity != null) {
-			cursor = activity.getContentResolver().query(imageUri, proj, null,
-					null, null);
-		} else if (fragment != null) {
-			cursor = fragment.getActivity().getContentResolver()
-					.query(imageUri, proj, null, null, null);
-		} else if (appFragment != null) {
-			cursor = appFragment.getActivity().getContentResolver()
-					.query(imageUri, proj, null, null, null);
-		}
-		cursor.moveToFirst();
-
-		String filePath = "";
-		if (imageUri.toString().startsWith(
-				"content://com.google.android.gallery3d")) {
-			filePath = imageUri.toString();
-		} else if (imageUri.toString().startsWith(
-				"content://com.google.android.apps.photos.content")) {
-			filePath = imageUri.toString();
-		} else {
-			filePath = cursor.getString(cursor
-					.getColumnIndexOrThrow(MediaColumns.DATA));
-		}
-		cursor.close();
-
-		return filePath;
-	}
-
 	public void reinitialize(String path) {
 		filePathOriginal = path;
+	}
+
+	// Change the URI only when the returned string contains "file:/" prefix.
+	// For all the other situations the URI doesn't need to be changed
+	protected void sanitizeURI(String uri) {
+		filePathOriginal = uri;
+		// Picasa on Android < 3.0
+		if (uri.matches("https?://\\w+\\.googleusercontent\\.com/.+")) {
+			filePathOriginal = uri;
+		}
+		// Local storage
+		if (uri.startsWith("file://")) {
+			filePathOriginal = uri.substring(7);
+		}
 	}
 }

@@ -19,6 +19,7 @@ package com.beanie.imagechooser.threads;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileDescriptor;
 import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -34,6 +35,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -41,7 +43,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.ParcelFileDescriptor;
 import android.provider.OpenableColumns;
+import android.provider.MediaStore.MediaColumns;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -322,15 +326,23 @@ public abstract class MediaProcessorThread extends Thread {
 			Log.i(TAG, "Extension: " + extension);
 		}
 		String retrievedExtension = checkExtension(Uri.parse(path));
-		if(retrievedExtension!=null&&!TextUtils.isEmpty(retrievedExtension)){
-			extension = "."+retrievedExtension;
+		if (retrievedExtension != null
+				&& !TextUtils.isEmpty(retrievedExtension)) {
+			extension = "." + retrievedExtension;
 		}
 		try {
-			InputStream inputStream = context.getContentResolver()
-					.openInputStream(Uri.parse(path));
 
 			filePath = FileUtils.getDirectory(foldername) + File.separator
 					+ Calendar.getInstance().getTimeInMillis() + extension;
+
+			ParcelFileDescriptor parcelFileDescriptor = context
+					.getContentResolver().openFileDescriptor(Uri.parse(path),
+							"r");
+
+			FileDescriptor fileDescriptor = parcelFileDescriptor
+					.getFileDescriptor();
+
+			InputStream inputStream = new FileInputStream(fileDescriptor);
 
 			BufferedInputStream reader = new BufferedInputStream(inputStream);
 
@@ -360,7 +372,7 @@ public abstract class MediaProcessorThread extends Thread {
 	public String checkExtension(Uri uri) {
 
 		String extension = "";
-		
+
 		// The query, since it only applies to a single document, will only
 		// return
 		// one row. There's no need to filter, sort, or select fields, since we
@@ -381,7 +393,7 @@ public abstract class MediaProcessorThread extends Thread {
 				String displayName = cursor.getString(cursor
 						.getColumnIndex(OpenableColumns.DISPLAY_NAME));
 				int position = displayName.indexOf(".");
-				extension = displayName.substring(position+1);
+				extension = displayName.substring(position + 1);
 				Log.i(TAG, "Display Name: " + displayName);
 
 				int sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE);
@@ -444,5 +456,33 @@ public abstract class MediaProcessorThread extends Thread {
 		if (Config.DEBUG) {
 			Log.i(TAG, "ContentProvider Done");
 		}
+	}
+	
+	@SuppressLint("NewApi")
+	protected String getAbsoluteImagePathFromUri(Uri imageUri) {
+		String[] proj = { MediaColumns.DATA, MediaColumns.DISPLAY_NAME };
+
+		if (imageUri.toString().startsWith(
+				"content://com.android.gallery3d.provider")) {
+			imageUri = Uri.parse(imageUri.toString().replace(
+					"com.android.gallery3d", "com.google.android.gallery3d"));
+		}
+		Cursor cursor = context.getContentResolver().query(imageUri, proj, null, null, null);
+		cursor.moveToFirst();
+
+		String filePath = "";
+		if (imageUri.toString().startsWith(
+				"content://com.google.android.gallery3d")) {
+			filePath = imageUri.toString();
+		} else if (imageUri.toString().startsWith(
+				"content://com.google.android.apps.photos.content")) {
+			filePath = imageUri.toString();
+		} else {
+			filePath = cursor.getString(cursor
+					.getColumnIndexOrThrow(MediaColumns.DATA));
+		}
+		cursor.close();
+
+		return filePath;
 	}
 }
