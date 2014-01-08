@@ -41,6 +41,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
+import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
@@ -113,20 +114,34 @@ public abstract class MediaProcessorThread extends Thread {
 	}
 
 	private String compressAndSaveImage(String fileImage, int scale)
-			throws Exception {
+    throws Exception {
 		try {
 			ExifInterface exif = new ExifInterface(fileImage);
 			String width = exif.getAttribute(ExifInterface.TAG_IMAGE_WIDTH);
 			String length = exif.getAttribute(ExifInterface.TAG_IMAGE_LENGTH);
+			int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+			int rotate = 0;
 			if (Config.DEBUG) {
 				Log.i(TAG, "Before: " + width + "x" + length);
 			}
-
+			
+			switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_270 :
+                    rotate = -90;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180 :
+                    rotate = 180;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_90 :
+                    rotate = 90;
+                    break;
+			}
+            
 			int w = Integer.parseInt(width);
 			int l = Integer.parseInt(length);
-
+            
 			int what = w > l ? w : l;
-
+            
 			Options options = new Options();
 			if (what > 1500) {
 				options.inSampleSize = scale * 4;
@@ -139,22 +154,28 @@ public abstract class MediaProcessorThread extends Thread {
 			}
 			if (Config.DEBUG) {
 				Log.i(TAG, "Scale: " + (what / options.inSampleSize));
+				Log.i(TAG, "Rotate: " + rotate);
 			}
 			Bitmap bitmap = BitmapFactory.decodeFile(fileImage, options);
 			File original = new File(fileImage);
 			File file = new File(
-					(original.getParent() + File.separator + original.getName()
-							.replace(".", "_fact_" + scale + ".")));
+                                 (original.getParent() + File.separator + original.getName()
+                                  .replace(".", "_fact_" + scale + ".")));
 			FileOutputStream stream = new FileOutputStream(file);
+			if (rotate != 0) {
+                Matrix matrix = new Matrix();
+                matrix.setRotate(rotate);
+                bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, false);
+            }
 			bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-
+			
 			if (Config.DEBUG) {
 				ExifInterface exifAfter = new ExifInterface(
-						file.getAbsolutePath());
+                                                            file.getAbsolutePath());
 				String widthAfter = exifAfter
-						.getAttribute(ExifInterface.TAG_IMAGE_WIDTH);
+                .getAttribute(ExifInterface.TAG_IMAGE_WIDTH);
 				String lengthAfter = exifAfter
-						.getAttribute(ExifInterface.TAG_IMAGE_LENGTH);
+                .getAttribute(ExifInterface.TAG_IMAGE_LENGTH);
 				if (Config.DEBUG) {
 					Log.i(TAG, "After: " + widthAfter + "x" + lengthAfter);
 				}
@@ -162,7 +183,7 @@ public abstract class MediaProcessorThread extends Thread {
 			stream.flush();
 			stream.close();
 			return file.getAbsolutePath();
-
+            
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw e;
