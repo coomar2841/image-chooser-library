@@ -22,6 +22,8 @@
 
 ## Version 1.2.7
 1. Added exception when Activity not found
+2. Fixed problems with fetching uncached photos/videos from Google photos app
+3. Switched from ACTION_PICK to ACTION_GET_CONTENT (Gives you more options like Dropbox, File Browser etc)
 
 ## Version 1.2.6
 1. Fix problems with images which don't have EXIF Data. Get their actual width and height.
