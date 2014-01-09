@@ -14,8 +14,21 @@
  * limitations under the License.
  *******************************************************************************/
 
-package com.beanie.imagechooser.api.config;
+package com.kbeanie.imagechooser.api;
 
-public interface Config {
-    public final static boolean DEBUG = false;
+public interface VideoChooserListener {
+	/**
+	 * When the processing is complete, you will receive this callback with
+	 * {@link ChosenVideo}
+	 * 
+	 * @param video
+	 */
+	public void onVideoChosen(ChosenVideo video);
+
+	/**
+	 * Handle any error conditions if at all, when you receieve this callback
+	 * 
+	 * @param reason
+	 */
+	public void onError(String reason);
 }

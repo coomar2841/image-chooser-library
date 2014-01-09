@@ -14,7 +14,7 @@
  * limitations under the License.
  *******************************************************************************/
 
-package com.beanie.imagechooser.threads;
+package com.kbeanie.imagechooser.threads;
 
 import java.io.IOException;
 
@@ -22,7 +22,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import com.beanie.imagechooser.api.ChosenImage;
+import com.kbeanie.imagechooser.api.ChosenImage;
 
 public class ImageProcessorThread extends MediaProcessorThread {
 

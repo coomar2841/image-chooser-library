@@ -14,7 +14,7 @@
  * limitations under the License.
  *******************************************************************************/
 
-package com.beanie.imagechooser.threads;
+package com.kbeanie.imagechooser.threads;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -45,13 +45,13 @@ import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
-import android.provider.OpenableColumns;
 import android.provider.MediaStore.MediaColumns;
+import android.provider.OpenableColumns;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.beanie.imagechooser.api.FileUtils;
-import com.beanie.imagechooser.api.config.Config;
+import com.kbeanie.imagechooser.api.FileUtils;
+import com.kbeanie.imagechooser.api.config.Config;
 
 public abstract class MediaProcessorThread extends Thread {
 	private final static String TAG = "MediaProcessorThread";

@@ -30,12 +30,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.beanie.imagechooser.api.ChooserType;
-import com.beanie.imagechooser.api.ChosenImage;
-import com.beanie.imagechooser.api.ImageChooserListener;
-import com.beanie.imagechooser.api.ImageChooserManager;
 import com.google.ads.AdRequest;
 import com.google.ads.AdView;
+import com.kbeanie.imagechooser.api.ChooserType;
+import com.kbeanie.imagechooser.api.ChosenImage;
+import com.kbeanie.imagechooser.api.ImageChooserListener;
+import com.kbeanie.imagechooser.api.ImageChooserManager;
 
 public class ImageChooserActivity extends Activity implements
 		ImageChooserListener {

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.beanie.imagechooser.api;
+package com.kbeanie.imagechooser.api;
 
 public interface ChooserType {
     public final static int REQUEST_PICK_PICTURE = 291;

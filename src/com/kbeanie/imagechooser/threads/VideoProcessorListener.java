@@ -14,12 +14,12 @@
  * limitations under the License.
  *******************************************************************************/
 
-package com.beanie.imagechooser.threads;
+package com.kbeanie.imagechooser.threads;
 
-import com.beanie.imagechooser.api.ChosenImage;
+import com.kbeanie.imagechooser.api.ChosenVideo;
 
-public interface ImageProcessorListener {
-    public void onProcessedImage(ChosenImage image);
+public interface VideoProcessorListener {
+    public void onProcessedVideo(ChosenVideo video);
 
     public void onError(String reason);
 }

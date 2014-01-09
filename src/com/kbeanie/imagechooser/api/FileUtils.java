@@ -14,7 +14,7 @@
  * limitations under the License.
  *******************************************************************************/
 
-package com.beanie.imagechooser.api;
+package com.kbeanie.imagechooser.api;
 
 import java.io.File;
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  *******************************************************************************/
 
-package com.beanie.imagechooser.api;
+package com.kbeanie.imagechooser.api;
 
 import java.io.File;
 import java.util.Calendar;
@@ -29,9 +29,9 @@ import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.beanie.imagechooser.api.config.Config;
-import com.beanie.imagechooser.threads.ImageProcessorListener;
-import com.beanie.imagechooser.threads.ImageProcessorThread;
+import com.kbeanie.imagechooser.api.config.Config;
+import com.kbeanie.imagechooser.threads.ImageProcessorListener;
+import com.kbeanie.imagechooser.threads.ImageProcessorThread;
 
 /**
  * Easy Image Chooser Library for Android Apps. Forget about coding workarounds

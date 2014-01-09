@@ -14,7 +14,7 @@
  * limitations under the License.
  *******************************************************************************/
 
-package com.beanie.imagechooser.api;
+package com.kbeanie.imagechooser.api;
 
 public interface ImageChooserListener {
     /**

@@ -14,7 +14,7 @@
  * limitations under the License.
  *******************************************************************************/
 
-package com.beanie.imagechooser.threads;
+package com.kbeanie.imagechooser.threads;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -28,8 +28,8 @@ import android.net.Uri;
 import android.provider.MediaStore.Video.Thumbnails;
 import android.text.TextUtils;
 
-import com.beanie.imagechooser.api.ChosenVideo;
-import com.beanie.imagechooser.api.FileUtils;
+import com.kbeanie.imagechooser.api.ChosenVideo;
+import com.kbeanie.imagechooser.api.FileUtils;
 
 public class VideoProcessorThread extends MediaProcessorThread {
 	private final static String TAG = "VideoProcessorThread";

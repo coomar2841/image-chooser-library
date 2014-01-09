@@ -28,12 +28,12 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.widget.VideoView;
 
-import com.beanie.imagechooser.api.ChooserType;
-import com.beanie.imagechooser.api.ChosenVideo;
-import com.beanie.imagechooser.api.VideoChooserListener;
-import com.beanie.imagechooser.api.VideoChooserManager;
 import com.google.ads.AdRequest;
 import com.google.ads.AdView;
+import com.kbeanie.imagechooser.api.ChooserType;
+import com.kbeanie.imagechooser.api.ChosenVideo;
+import com.kbeanie.imagechooser.api.VideoChooserListener;
+import com.kbeanie.imagechooser.api.VideoChooserManager;
 
 public class VideoChooserActivity extends Activity implements
 		VideoChooserListener {

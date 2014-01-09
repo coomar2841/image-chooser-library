@@ -1,20 +1,22 @@
 
-package com.beanie.imagechooser.api.utils;
+package com.kbeanie.imagechooser.api.utils;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 
-import com.beanie.imagechooser.R;
-import com.beanie.imagechooser.api.ChooserType;
+import com.kbeanie.imagechooser.R;
+import com.kbeanie.imagechooser.api.ChooserType;
 
 public class VideoChooserBuilder extends Builder {
     private OnClickListener listener;
 
     private Context context;
 
-    public VideoChooserBuilder(Context context, int theme, OnClickListener listener) {
+    @SuppressLint("NewApi")
+	public VideoChooserBuilder(Context context, int theme, OnClickListener listener) {
         super(context, theme);
         this.listener = listener;
         this.context = context;
