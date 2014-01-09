@@ -446,9 +446,6 @@ public abstract class MediaProcessorThread extends Thread {
 
 	protected void processContentProviderMedia(String path, String extension)
 			throws Exception {
-		if (Config.DEBUG) {
-			Log.i(TAG, "ContentProvider Started");
-		}
 		checkExtension(Uri.parse(path));
 		try {
 			InputStream inputStream = context.getContentResolver()
@@ -473,9 +470,6 @@ public abstract class MediaProcessorThread extends Thread {
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
-		}
-		if (Config.DEBUG) {
-			Log.i(TAG, "ContentProvider Done");
 		}
 	}
 	
