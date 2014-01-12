@@ -467,13 +467,10 @@ public abstract class MediaProcessorThread extends Thread {
         cursor.moveToFirst();
 
         String filePath = "";
-        if (imageUri.toString().startsWith("content://com.google.android.gallery3d")) {
-            filePath = imageUri.toString();
-        } else if (imageUri.toString().startsWith(
-                "content://com.google.android.apps.photos.content")) {
-            filePath = imageUri.toString();
-        } else if (imageUri.toString()
-                .startsWith("content://com.android.providers.media.documents")) {
+        String imageUriString = imageUri.toString();
+        if (imageUriString.startsWith("content://com.google.android.gallery3d")
+                || imageUriString.startsWith("content://com.google.android.apps.photos.content")
+                || imageUriString.startsWith("content://com.android.providers.media.documents")) {
             filePath = imageUri.toString();
         } else {
             filePath = cursor.getString(cursor.getColumnIndexOrThrow(MediaColumns.DATA));
