@@ -72,6 +72,7 @@ public class VideoChooserActivity extends Activity implements
 		request.addTestDevice(AdRequest.TEST_EMULATOR);
 		request.addTestDevice(Config.TEST_DEVICE_ID_1);
 		request.addTestDevice(Config.TEST_DEVICE_ID_2);
+		request.addTestDevice(Config.TEST_GALAXY_NEXUS);
 		adView.loadAd(request);
 	}
 
