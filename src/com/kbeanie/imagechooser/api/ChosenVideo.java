@@ -69,6 +69,6 @@ public class ChosenVideo extends ChosenMedia {
     }
 
     public String getExtension() {
-        return getFileExtension(videoPreviewImage);
+        return getFileExtension(videoFilePath);
     }
 }
