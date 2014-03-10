@@ -13,16 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+
 package com.kbeanie.imagechooser.api;
 
-public interface ChooserType {
-    public final static int REQUEST_PICK_PICTURE = 291;
-    
-    public final static int REQUEST_CAPTURE_PICTURE = 294;
-    
-    public final static int REQUEST_CAPTURE_VIDEO = 292;
-    
-    public final static int REQUEST_PICK_VIDEO = 295;
-    
-    public final static int REQUEST_PICK_PICTURE_OR_VIDEO = 300;
+public interface MediaChooserListener extends ImageChooserListener, VideoChooserListener {
 }

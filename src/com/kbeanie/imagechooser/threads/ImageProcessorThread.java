@@ -18,7 +18,6 @@ package com.kbeanie.imagechooser.threads;
 
 import java.io.IOException;
 
-import android.content.Context;
 import android.net.Uri;
 import android.text.TextUtils;
 
@@ -41,10 +40,6 @@ public class ImageProcessorThread extends MediaProcessorThread {
 
     public void setListener(ImageProcessorListener listener) {
         this.listener = listener;
-    }
-
-    public void setContext(Context context) {
-        this.context = context;
     }
 
     @Override

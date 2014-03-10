@@ -21,7 +21,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
@@ -49,10 +48,6 @@ public class VideoProcessorThread extends MediaProcessorThread {
 
     public void setListener(VideoProcessorListener listener) {
         this.listener = listener;
-    }
-
-    public void setContext(Context context) {
-        this.context = context;
     }
 
     @Override

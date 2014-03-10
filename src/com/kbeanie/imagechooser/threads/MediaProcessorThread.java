@@ -76,6 +76,10 @@ public abstract class MediaProcessorThread extends Thread {
         this.shouldCreateThumnails = shouldCreateThumbnails;
     }
 
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
     public void setMediaExtension(String extension) {
         this.mediaExtension = extension;
     }
