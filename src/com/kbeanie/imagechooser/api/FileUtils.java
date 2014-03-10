@@ -29,7 +29,7 @@ public class FileUtils {
         directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
                 + File.separator + foldername);
         if (!directory.exists()) {
-            directory.mkdir();
+            directory.mkdirs();
         }
         return directory.getAbsolutePath();
     }

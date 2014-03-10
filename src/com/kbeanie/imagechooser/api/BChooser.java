@@ -20,6 +20,8 @@ import java.io.File;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 
@@ -94,7 +96,7 @@ public abstract class BChooser {
 		File directory = null;
 		directory = new File(FileUtils.getDirectory(foldername));
 		if (!directory.exists()) {
-			directory.mkdir();
+			directory.mkdirs();
 		}
 	}
 
@@ -125,5 +127,39 @@ public abstract class BChooser {
 		if (uri.startsWith("file://")) {
 			filePathOriginal = uri.substring(7);
 		}
+	}
+	
+	@SuppressLint("NewApi")
+    protected Context getContext() {
+		if (activity != null) {
+			return activity.getApplicationContext();
+		} else if (fragment != null) {
+			return fragment.getActivity().getApplicationContext();
+		} else if (appFragment != null) {
+			return appFragment.getActivity().getApplicationContext();
+		}
+
+		return null;
+    }
+	
+	protected boolean wasVideoSelected(Intent data) {
+		if (data == null)
+		{
+			return false;
+		}
+		
+		if (data.getType() != null && data.getType().startsWith("video"))
+		{
+			return true;
+		}
+		
+		ContentResolver cR = getContext().getContentResolver();
+		String type = cR.getType(data.getData());
+		if (type != null && type.startsWith("video"))
+		{
+			return true;
+		}
+
+		return false;
 	}
 }
