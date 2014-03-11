@@ -36,6 +36,9 @@
         <activity
             android:name="com.beanie.imagechooserapp.VideoChooserActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="com.beanie.imagechooserapp.MediaChooserActivity"
+            android:screenOrientation="portrait" />
         
         <activity android:name="com.google.ads.AdActivity"
               android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>

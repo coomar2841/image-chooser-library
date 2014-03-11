@@ -26,40 +26,46 @@ import com.google.ads.AdRequest;
 import com.google.ads.AdView;
 
 public class HomeActivity extends Activity {
-    private AdView adView;
+	private AdView adView;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_home);
 
-        adView = (AdView) findViewById(R.id.adView);
+		adView = (AdView) findViewById(R.id.adView);
 
-        AdRequest request = new AdRequest();
-        request.addTestDevice(AdRequest.TEST_EMULATOR);
-        request.addTestDevice(Config.TEST_DEVICE_ID_1);
-        request.addTestDevice(Config.TEST_DEVICE_ID_2);
-        request.addTestDevice(Config.TEST_GALAXY_NEXUS);
-        adView.loadAd(request);
-        
-        Crittercism.initialize(getApplicationContext(), "521c86ce8b2e3339cd000007");
-    }
+		AdRequest request = new AdRequest();
+		request.addTestDevice(AdRequest.TEST_EMULATOR);
+		request.addTestDevice(Config.TEST_DEVICE_ID_1);
+		request.addTestDevice(Config.TEST_DEVICE_ID_2);
+		request.addTestDevice(Config.TEST_GALAXY_NEXUS);
+		adView.loadAd(request);
 
-    public void gotoImageChooser(View view) {
-        Intent intent = new Intent(this, ImageChooserActivity.class);
-        startActivity(intent);
-    }
+		Crittercism.initialize(getApplicationContext(),
+				"521c86ce8b2e3339cd000007");
+	}
 
-    public void gotoVideoChooser(View view) {
-        Intent intent = new Intent(this, VideoChooserActivity.class);
-        startActivity(intent);
-    }
+	public void gotoImageChooser(View view) {
+		Intent intent = new Intent(this, ImageChooserActivity.class);
+		startActivity(intent);
+	}
 
-    @Override
-    public void onDestroy() {
-        if (adView != null) {
-            adView.destroy();
-        }
-        super.onDestroy();
-    }
+	public void gotoVideoChooser(View view) {
+		Intent intent = new Intent(this, VideoChooserActivity.class);
+		startActivity(intent);
+	}
+
+	public void gotoMediaChooser(View view) {
+		Intent intent = new Intent(this, MediaChooserActivity.class);
+		startActivity(intent);
+	}
+
+	@Override
+	public void onDestroy() {
+		if (adView != null) {
+			adView.destroy();
+		}
+		super.onDestroy();
+	}
 }
