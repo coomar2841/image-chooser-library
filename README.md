@@ -1,4 +1,4 @@
-[Link to image-chooser-library v1.2.8](https://dl.dropboxusercontent.com/u/6696191/image-chooser-library/v1.2.8/image-chooser-library-1.2.8.jar)
+[Link to image-chooser-library v1.2.9](https://dl.dropboxusercontent.com/u/6696191/image-chooser-library/v1.2.8/image-chooser-library-1.2.9.jar)
 
 <a href="https://play.google.com/store/apps/details?id=com.beanie.imagechooserapp">
   <img alt="Get it on Google Play"
@@ -19,6 +19,9 @@
 3. Generates thumb-nails for the any chosen media.
 4. Works on most(99%) of the phones/os versions.
 5. Similar code base to implement irrespective of Android version of device.
+
+## Version 1.2.9
+1. Added MediaChooserManager: To pick either a video or an image
 
 ## Version 1.2.7
 1. Added exception when Activity not found
