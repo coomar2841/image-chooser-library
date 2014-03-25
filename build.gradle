@@ -9,17 +9,18 @@ buildscript {
 apply plugin: 'android-library'
 
 dependencies {
-compile 'com.android.support:support-v4:13.0.0'
+    compile 'com.android.support:support-v4:13.0.0'
 }
 
 android {
     compileSdkVersion 17
-    buildToolsVersion "17"
+    buildToolsVersion '19.0.3'
 
     defaultConfig {
         minSdkVersion 8
         targetSdkVersion 17
     }
+
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -32,5 +33,9 @@ android {
         }
 
         instrumentTest.setRoot('tests')
+    }
+
+    lintOptions {
+        abortOnError false
     }
 }
