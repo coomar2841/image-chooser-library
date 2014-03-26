@@ -164,7 +164,7 @@ public class VideoChooserActivity extends Activity implements
 	// to destroying of activity for low memory situations)
 	private void reinitializeVideoChooser() {
 		videoChooserManager = new VideoChooserManager(this, chooserType,
-				"myfolder", true);
+				"myvideofolder", true);
 		videoChooserManager.setVideoChooserListener(this);
 		videoChooserManager.reinitialize(filePath);
 	}
