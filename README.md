@@ -22,6 +22,7 @@
 
 ## Version 1.2.9
 1. Added MediaChooserManager: To pick either a video or an image
+2. Fixed image pickup from the Drive app
 
 ## Version 1.2.7
 1. Added exception when Activity not found
@@ -41,10 +42,6 @@
 ## Version 1.2.5
 1. Updated the support library
 2. Some bug fixes and error handling
-
-## Version 1.2.4
-1. Bug fix: While using a configured folder, the folder wasn't being created.
-2. Added support for getting image details like width, height, file extension etc.
 
 ### License
 -----------------------------------------------------------------------------------

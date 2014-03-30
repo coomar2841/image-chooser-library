@@ -4,6 +4,6 @@
     <string name="app_name">Image Chooser App</string>
 	<string name="image_chooser">Image Chooser</string>
 	<string name="video_chooser">Video Chooser</string>
-	<string name="lab_version_string">Version 1.2.8</string>
 	<string name="pick_media">Pick Video or Image</string>
+	<string name="lab_version_string">Version 1.2.9</string>
 </resources>
