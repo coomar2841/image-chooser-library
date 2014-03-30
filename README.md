@@ -20,6 +20,8 @@
 4. Works on most(99%) of the phones/os versions.
 5. Similar code base to implement irrespective of Android version of device.
 
+## Version 1.3.0
+
 ## Version 1.2.9
 1. Added MediaChooserManager: To pick either a video or an image (Not fully Tested)
 2. Fixed image pickup from the Drive app
