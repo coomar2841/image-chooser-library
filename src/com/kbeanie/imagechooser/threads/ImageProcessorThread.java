@@ -21,8 +21,10 @@ import java.io.IOException;
 import android.content.Context;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.kbeanie.imagechooser.api.ChosenImage;
+import com.kbeanie.imagechooser.api.config.Config;
 
 public class ImageProcessorThread extends MediaProcessorThread {
 
@@ -67,6 +69,11 @@ public class ImageProcessorThread extends MediaProcessorThread {
 	}
 
 	private void processImage() throws Exception {
+
+		if (Config.DEBUG) {
+			Log.i(TAG, "Processing Image File: " + filePath);
+		}
+
 		// Picasa on Android >= 3.0
 		if (filePath != null && filePath.startsWith("content:")) {
 			filePath = getAbsoluteImagePathFromUri(Uri.parse(filePath));
@@ -78,7 +85,9 @@ public class ImageProcessorThread extends MediaProcessorThread {
 		} else if (filePath.startsWith("http")) {
 			downloadAndProcess(filePath);
 		} else if (filePath
-				.startsWith("content://com.google.android.gallery3d")) {
+				.startsWith("content://com.google.android.gallery3d")
+				|| filePath
+						.startsWith("content://com.microsoft.skydrive.content.external")) {
 			processPicasaMedia(filePath, ".jpg");
 		} else if (filePath
 				.startsWith("content://com.google.android.apps.photos.content")

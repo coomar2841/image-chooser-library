@@ -77,13 +77,13 @@ public abstract class MediaProcessorThread extends Thread {
 		this.shouldCreateThumnails = shouldCreateThumbnails;
 	}
 
-    public void setContext(Context context) {
-        this.context = context;
-    }
+	public void setContext(Context context) {
+		this.context = context;
+	}
 
-    public void setMediaExtension(String extension) {
-        this.mediaExtension = extension;
-    }
+	public void setMediaExtension(String extension) {
+		this.mediaExtension = extension;
+	}
 
 	protected void downloadAndProcess(String url) throws Exception {
 		filePath = downloadFile(url);
@@ -484,6 +484,10 @@ public abstract class MediaProcessorThread extends Thread {
 	protected String getAbsoluteImagePathFromUri(Uri imageUri) {
 		String[] proj = { MediaColumns.DATA, MediaColumns.DISPLAY_NAME };
 
+		if (Config.DEBUG) {
+			Log.i(TAG, "Image Uri: " + imageUri.toString());
+		}
+
 		if (imageUri.toString().startsWith(
 				"content://com.android.gallery3d.provider")) {
 			imageUri = Uri.parse(imageUri.toString().replace(
@@ -498,7 +502,9 @@ public abstract class MediaProcessorThread extends Thread {
 				|| imageUriString
 						.startsWith("content://com.android.providers.media.documents")
 				|| imageUriString
-						.startsWith("content://com.google.android.apps.docs.storage")) {
+						.startsWith("content://com.google.android.apps.docs.storage")
+				|| imageUriString
+						.startsWith("content://com.microsoft.skydrive.content.external")) {
 			filePath = imageUri.toString();
 		} else {
 			Cursor cursor = context.getContentResolver().query(imageUri, proj,

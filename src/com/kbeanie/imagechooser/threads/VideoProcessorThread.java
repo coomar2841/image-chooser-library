@@ -27,9 +27,11 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.provider.MediaStore.Video.Thumbnails;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.kbeanie.imagechooser.api.ChosenVideo;
 import com.kbeanie.imagechooser.api.FileUtils;
+import com.kbeanie.imagechooser.api.config.Config;
 
 public class VideoProcessorThread extends MediaProcessorThread {
 	private final static String TAG = "VideoProcessorThread";
@@ -75,6 +77,11 @@ public class VideoProcessorThread extends MediaProcessorThread {
 	}
 
 	private void processVideo() throws Exception {
+		
+		if(Config.DEBUG){
+			Log.i(TAG, "Processing Video file: " + filePath);
+		}
+		
 		// Picasa on Android >= 3.0
 		if (filePath != null && filePath.startsWith("content:")) {
 			filePath = getAbsoluteImagePathFromUri(Uri.parse(filePath));
@@ -86,7 +93,9 @@ public class VideoProcessorThread extends MediaProcessorThread {
 		} else if (filePath.startsWith("http")) {
 			downloadAndProcess(filePath);
 		} else if (filePath
-				.startsWith("content://com.google.android.gallery3d")) {
+				.startsWith("content://com.google.android.gallery3d")
+				|| filePath
+						.startsWith("content://com.microsoft.skydrive.content.external")) {
 			processPicasaMedia(filePath, ".mp4");
 		} else if (filePath
 				.startsWith("content://com.google.android.apps.photos.content")
