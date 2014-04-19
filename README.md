@@ -20,6 +20,9 @@
 4. Works on most(99%) of the phones/os versions.
 5. Similar code base to implement irrespective of Android version of device.
 
+## Version 1.3.1
+
+
 ## Version 1.3.0
 1. Added support for Microsoft's OneDrive app (Images and Videos)
 
