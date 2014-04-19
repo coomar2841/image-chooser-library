@@ -1,4 +1,4 @@
-[Link to image-chooser-library v1.3.0](https://dl.dropboxusercontent.com/u/6696191/image-chooser-library/v1.2.9/image-chooser-library-1.3.0.jar)
+[Link to image-chooser-library v1.3.0](https://dl.dropboxusercontent.com/u/6696191/image-chooser-library/v1.3.0/image-chooser-library-1.3.0.jar)
 
 <a href="https://play.google.com/store/apps/details?id=com.beanie.imagechooserapp">
   <img alt="Get it on Google Play"
