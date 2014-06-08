@@ -23,6 +23,7 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 public abstract class BChooser {
@@ -39,6 +40,8 @@ public abstract class BChooser {
 	protected boolean shouldCreateThumbnails;
 
 	protected String filePathOriginal;
+	
+	protected Bundle extras;
 
 	public BChooser(Activity activity, int type, String foldername,
 			boolean shouldCreateThumbnails) {
@@ -161,5 +164,9 @@ public abstract class BChooser {
 		}
 
 		return false;
+	}
+	
+	public void setExtras(Bundle extras){
+		this.extras = extras;
 	}
 }

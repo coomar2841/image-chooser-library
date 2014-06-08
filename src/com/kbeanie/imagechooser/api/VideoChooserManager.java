@@ -161,6 +161,9 @@ public class VideoChooserManager extends BChooser implements
 					+ ".mp4";
 			intent.putExtra(MediaStore.EXTRA_OUTPUT,
 					Uri.fromFile(new File(filePathOriginal)));
+			if (extras != null) {
+				intent.putExtras(extras);
+			}
 			startActivity(intent);
 		} catch (ActivityNotFoundException e) {
 			throw new Exception("Activity not found");
@@ -171,6 +174,9 @@ public class VideoChooserManager extends BChooser implements
 	private String captureVideoPatchedMethodForGingerbread() throws Exception {
 		try {
 			Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+			if (extras != null) {
+				intent.putExtras(extras);
+			}
 			startActivity(intent);
 		} catch (ActivityNotFoundException e) {
 			throw new Exception("Activity not found");
@@ -182,6 +188,9 @@ public class VideoChooserManager extends BChooser implements
 		checkDirectory();
 		try {
 			Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+			if (extras != null) {
+				intent.putExtras(extras);
+			}
 			intent.setType("video/*");
 			startActivity(intent);
 		} catch (ActivityNotFoundException e) {
