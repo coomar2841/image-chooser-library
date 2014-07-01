@@ -183,6 +183,9 @@ public class ImageChooserManager extends BChooser implements
 		try {
 			Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 			intent.setType("image/*");
+			if (extras != null) {
+				intent.putExtras(extras);
+			}
 			startActivity(intent);
 		} catch (ActivityNotFoundException e) {
 			throw new Exception("Activity not found");
@@ -198,6 +201,9 @@ public class ImageChooserManager extends BChooser implements
 					+ ".jpg";
 			intent.putExtra(MediaStore.EXTRA_OUTPUT,
 					Uri.fromFile(new File(filePathOriginal)));
+			if (extras != null) {
+				intent.putExtras(extras);
+			}
 			startActivity(intent);
 		} catch (ActivityNotFoundException e) {
 			throw new Exception("Activity not found");
