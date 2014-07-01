@@ -168,7 +168,8 @@ public class MediaChooserManager extends BChooser implements
 			break;
 		default:
 			throw new IllegalArgumentException(
-					"This chooser type is unappropriate with MediaChooserManager: " + type);
+					"This chooser type is unappropriate with MediaChooserManager: "
+							+ type);
 		}
 		return path;
 	}
@@ -177,6 +178,9 @@ public class MediaChooserManager extends BChooser implements
 		checkDirectory();
 		try {
 			Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+			if (extras != null) {
+				intent.putExtras(extras);
+			}
 			intent.setType("video/*, images/*");
 			startActivity(intent);
 		} catch (ActivityNotFoundException e) {
@@ -210,20 +214,17 @@ public class MediaChooserManager extends BChooser implements
 				}
 				String path = filePathOriginal;
 				MediaProcessorThread thread = null;
-				
-				if (!wasVideoSelected(data))
-				{
-					thread = new ImageProcessorThread(path,
-							foldername, shouldCreateThumbnails);
-					((ImageProcessorThread)thread).setListener(this);
+
+				if (!wasVideoSelected(data)) {
+					thread = new ImageProcessorThread(path, foldername,
+							shouldCreateThumbnails);
+					((ImageProcessorThread) thread).setListener(this);
+				} else {
+					thread = new VideoProcessorThread(path, foldername,
+							shouldCreateThumbnails);
+					((VideoProcessorThread) thread).setListener(this);
 				}
-				else
-				{
-					thread = new VideoProcessorThread(path,
-							foldername, shouldCreateThumbnails);
-					((VideoProcessorThread)thread).setListener(this);
-				}
-				
+
 				if (activity != null) {
 					thread.setContext(activity.getApplicationContext());
 				} else if (fragment != null) {
