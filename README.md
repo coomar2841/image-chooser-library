@@ -28,7 +28,6 @@
 
 ## Version 1.2.9
 1. Added MediaChooserManager: To pick either a video or an image (Not fully Tested)
->>>>>>> origin
 2. Fixed image pickup from the Drive app
 
 ## Version 1.2.7
