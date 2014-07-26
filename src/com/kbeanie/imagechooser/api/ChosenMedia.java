@@ -59,6 +59,5 @@ public abstract class ChosenMedia {
 
     public abstract String getMediaHeight();
     
-    public abstract String getMediaWidth();
-
+    public abstract String getMediaWidth();   
 }
