@@ -1,0 +1,24 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.kbeanie</groupId>
+  <artifactId>image-chooser-library-android</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>Image Chooser Library for Android</name>
+  <description>Makes it easy and simple to integrate "Attach that photo/video" feature into your android apps.</description>
+  <build>
+    <sourceDirectory>src</sourceDirectory>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.1</version>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <scm>
+  	<url>scm:git:git@github.com:coomar2841/image-chooser-library.git</url>
+  </scm>
+</project>
