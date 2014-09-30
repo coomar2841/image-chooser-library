@@ -21,8 +21,8 @@
 5. Similar code base to implement irrespective of Android version of device.
 
 ## version 1.3.1
-1. Added suport sending extras (#34)
-2. Imports of com.kbeanie.imagechooser.R should be removed (#38)
+1. Added suport sending extras [Issue #34](https://github.com/coomar2841/image-chooser-library/issues/34)
+2. Imports of com.kbeanie.imagechooser.R should be removed [Issue #38](https://github.com/coomar2841/image-chooser-library/issues/38)
 
 ## Version 1.3.0
 1. Added support for Microsoft's OneDrive app (Images and Videos)
