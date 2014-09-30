@@ -21,7 +21,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.crittercism.app.Crittercism;
+import com.crashlytics.android.Crashlytics;
 import com.google.ads.AdRequest;
 import com.google.ads.AdView;
 
@@ -31,6 +31,7 @@ public class HomeActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Crashlytics.start(this);
 		setContentView(R.layout.activity_home);
 
 		adView = (AdView) findViewById(R.id.adView);
@@ -41,9 +42,6 @@ public class HomeActivity extends Activity {
 		request.addTestDevice(Config.TEST_DEVICE_ID_2);
 		request.addTestDevice(Config.TEST_GALAXY_NEXUS);
 		adView.loadAd(request);
-
-		Crittercism.initialize(getApplicationContext(),
-				"521c86ce8b2e3339cd000007");
 	}
 
 	public void gotoImageChooser(View view) {

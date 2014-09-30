@@ -1,3 +1,5 @@
 bin
 gen
 .settings
+crashlytics.properties
+res/values/com_crashlytics_export_strings.xml

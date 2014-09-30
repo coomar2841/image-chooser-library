@@ -45,6 +45,7 @@
         <activity
             android:name="com.google.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
+        <meta-data android:name="com.crashlytics.ApiKey" android:value="ccbe3957847c84647fbf4938cf6adb0da0a5583e"/>
     </application>
 
 </manifest>
