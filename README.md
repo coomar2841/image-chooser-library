@@ -1,4 +1,4 @@
-[Link to image-chooser-library v1.3.0](https://dl.dropboxusercontent.com/u/6696191/image-chooser-library/v1.3.0/image-chooser-library-1.3.0.jar)
+[Link to image-chooser-library v1.3.1](https://dl.dropboxusercontent.com/u/6696191/image-chooser-library/v1.3.1/image-chooser-library-1.3.1.jar)
 
 <a href="https://play.google.com/store/apps/details?id=com.beanie.imagechooserapp">
   <img alt="Get it on Google Play"
@@ -21,7 +21,8 @@
 5. Similar code base to implement irrespective of Android version of device.
 
 ## version 1.3.1
-1. Added suport sending extras (Issue #34)
+1. Added suport sending extras (#34)
+2. Imports of com.kbeanie.imagechooser.R should be removed (#38)
 
 ## Version 1.3.0
 1. Added support for Microsoft's OneDrive app (Images and Videos)
