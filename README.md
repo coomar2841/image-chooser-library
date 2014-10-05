@@ -24,6 +24,7 @@
 1. Added suport sending extras [Issue #34](https://github.com/coomar2841/image-chooser-library/issues/34)
 2. Imports of com.kbeanie.imagechooser.R should be removed [Issue #38](https://github.com/coomar2841/image-chooser-library/issues/38)
 3. Switching to Android Studio/Gradle.
+4. Added maven support (com.kbeanie:image-chooser-library:1.3.1@aar)
 
 ## Version 1.3.0
 1. Added support for Microsoft's OneDrive app (Images and Videos)
@@ -46,10 +47,6 @@
 5. Added source code for the sample app
 6. Added functionality to handle activity destroyals for a few devices.
 6. Fixed issue: https://github.com/coomar2841/image-chooser-library/issues/7
-
-## Version 1.2.5
-1. Updated the support library
-2. Some bug fixes and error handling
 
 ### License
 -----------------------------------------------------------------------------------
