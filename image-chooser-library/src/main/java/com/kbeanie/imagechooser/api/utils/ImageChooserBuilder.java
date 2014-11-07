@@ -1,11 +1,14 @@
 package com.kbeanie.imagechooser.api.utils;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.os.Build;
+import android.support.annotation.NonNull;
 
 import com.kbeanie.imagechooser.api.ChooserType;
 
@@ -26,63 +29,65 @@ public class ImageChooserBuilder extends Builder {
 		super(context, theme);
 		this.listener = listener;
 		this.context = context;
-		init();
+        init();
 	}
 
-	public ImageChooserBuilder(Context context, OnClickListener listener) {
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public ImageChooserBuilder(Context context, OnClickListener listener) {
 		super(context);
 		this.listener = listener;
 		this.context = context;
-		init();
+        init();
 	}
 
-	public void setDialogTitle(String title) {
+	public Builder setDialogTitle(String title) {
 		this.title = title;
+        return this;
 	}
 
-	public void setDialogTitle(int resId) {
+	public Builder setDialogTitle(int resId) {
 		this.title = context.getString(resId);
+        return this;
 	}
 
-	public void setTitleGalleryOption(String titleGalleryOption) {
+	public Builder setTitleGalleryOption(String titleGalleryOption) {
 		this.titleGalleryOption = titleGalleryOption;
+        return this;
 	}
 
-	public void setTitleGalleryOption(int resId) {
+	public Builder setTitleGalleryOption(int resId) {
 		this.titleGalleryOption = context.getString(resId);
+        return this;
 	}
 
-	public void setTitleTakePictureOption(String titleTakePictureOption) {
+	public Builder setTitleTakePictureOption(String titleTakePictureOption) {
 		this.titleTakePictureOption = titleTakePictureOption;
+        return this;
 	}
 
-	public void setTitleTakePictureOption(int resId) {
+	public Builder setTitleTakePictureOption(int resId) {
 		this.titleTakePictureOption = context.getString(resId);
+        return this;
 	}
 
 	private void init() {
 		title = "Choose an option";
 		titleGalleryOption = "Choose from Gallery";
 		titleTakePictureOption = "Take a picture";
+        setTitle(title);
+        CharSequence[] titles = { titleGalleryOption, titleTakePictureOption };
+        setItems(titles, new OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == 0) {
+                    listener.onClick(dialog, ChooserType.REQUEST_PICK_PICTURE);
+                } else if (which == 1) {
+                    listener.onClick(dialog,
+                            ChooserType.REQUEST_CAPTURE_PICTURE);
+                }
+            }
+        });
+        create();
 	}
-
-	@Override
-	public AlertDialog show() {
-		setTitle(title);
-		CharSequence[] titles = { titleGalleryOption, titleTakePictureOption };
-		setItems(titles, new OnClickListener() {
-
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				if (which == 0) {
-					listener.onClick(dialog, ChooserType.REQUEST_PICK_PICTURE);
-				} else if (which == 1) {
-					listener.onClick(dialog,
-							ChooserType.REQUEST_CAPTURE_PICTURE);
-				}
-			}
-		});
-		return super.show();
-	}
-
 }
