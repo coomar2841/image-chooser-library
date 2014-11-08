@@ -90,7 +90,7 @@ public class VideoChooserBuilder extends Builder {
             }
         });
 
-        AlertDialog d = create();
+        AlertDialog d = super.create();
         return d;
     }
 }

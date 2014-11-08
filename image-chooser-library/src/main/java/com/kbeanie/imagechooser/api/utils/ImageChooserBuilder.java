@@ -93,7 +93,7 @@ public class ImageChooserBuilder extends Builder {
                 }
             }
         });
-        AlertDialog d = create();
+        AlertDialog d = super.create();
         return d;
     }
 }

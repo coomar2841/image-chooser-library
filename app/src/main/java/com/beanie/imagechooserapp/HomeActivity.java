@@ -17,15 +17,12 @@
 package com.beanie.imagechooserapp;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.kbeanie.imagechooser.api.utils.ImageChooserBuilder;
 
 public class HomeActivity extends Activity {
     private AdView adView;
@@ -47,18 +44,8 @@ public class HomeActivity extends Activity {
     }
 
     public void gotoImageChooser(View view) {
-        AlertDialog.Builder b= new ImageChooserBuilder(this, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-            }
-        });
-
-        AlertDialog d = b.create();
-        d.show();
-
-//		Intent intent = new Intent(this, ImageChooserActivity.class);
-//		startActivity(intent);
+		Intent intent = new Intent(this, ImageChooserActivity.class);
+		startActivity(intent);
     }
 
     public void gotoVideoChooser(View view) {
