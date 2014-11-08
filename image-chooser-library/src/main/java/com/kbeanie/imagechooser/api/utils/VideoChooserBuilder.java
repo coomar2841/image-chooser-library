@@ -6,6 +6,7 @@ import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.support.annotation.NonNull;
 
 import com.kbeanie.imagechooser.api.ChooserType;
 
@@ -26,62 +27,70 @@ public class VideoChooserBuilder extends Builder {
 		super(context, theme);
 		this.listener = listener;
 		this.context = context;
-		init();
+        setupDefaultData();
 	}
 
 	public VideoChooserBuilder(Context context, OnClickListener listener) {
 		super(context);
 		this.listener = listener;
 		this.context = context;
-		init();
+        setupDefaultData();
 	}
 
-	private void init() {
-		title = "Choose an option";
-		titleGalleryOption = "Choose from Gallery";
-		titleCaptureVideoOption = "Capture Video";
-	}
-
-	public void setDialogTitle(int resId) {
+	public Builder setDialogTitle(int resId) {
 		this.title = context.getString(resId);
+        return this;
 	}
 
-	public void setDialogTitle(String title) {
+	public Builder setDialogTitle(String title) {
 		this.title = title;
+        return this;
 	}
 
-	public void setTitleGalleryOption(String titleGalleryOption) {
+	public Builder setTitleGalleryOption(String titleGalleryOption) {
 		this.titleGalleryOption = titleGalleryOption;
+        return this;
 	}
 
-	public void setTitleGalleryOption(int resId) {
+	public Builder setTitleGalleryOption(int resId) {
 		this.titleGalleryOption = context.getString(resId);
+        return this;
 	}
 
-	public void setTitleCaptureVideoOption(String titleCaptureVideoOption) {
+	public Builder setTitleCaptureVideoOption(String titleCaptureVideoOption) {
 		this.titleCaptureVideoOption = titleCaptureVideoOption;
+        return this;
 	}
 
-	public void setTitleCaptureVideoOption(int resId) {
+	public Builder setTitleCaptureVideoOption(int resId) {
 		this.titleCaptureVideoOption = context.getString(resId);
+        return this;
 	}
 
-	@Override
-	public AlertDialog show() {
-		setTitle(title);
-		CharSequence[] titles = { titleGalleryOption, titleCaptureVideoOption };
-		setItems(titles, new OnClickListener() {
+    private void setupDefaultData(){
+        title = "Choose an option";
+        titleGalleryOption = "Choose from Gallery";
+        titleCaptureVideoOption = "Capture Video";
+    }
 
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				if (which == 0) {
-					listener.onClick(dialog, ChooserType.REQUEST_PICK_VIDEO);
-				} else if (which == 1) {
-					listener.onClick(dialog, ChooserType.REQUEST_CAPTURE_VIDEO);
-				}
-			}
-		});
-		return super.show();
-	}
+    @NonNull
+    @Override
+    public AlertDialog create() {
+        setTitle(title);
+        CharSequence[] titles = { titleGalleryOption, titleCaptureVideoOption };
+        setItems(titles, new OnClickListener() {
 
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == 0) {
+                    listener.onClick(dialog, ChooserType.REQUEST_PICK_VIDEO);
+                } else if (which == 1) {
+                    listener.onClick(dialog, ChooserType.REQUEST_CAPTURE_VIDEO);
+                }
+            }
+        });
+
+        AlertDialog d = create();
+        return d;
+    }
 }

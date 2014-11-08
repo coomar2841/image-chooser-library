@@ -1,4 +1,4 @@
-apply plugin: 'com.android.library'
+apply plugin: 'android-library'
 apply plugin: 'maven'
 apply plugin: 'signing'
 
@@ -20,7 +20,9 @@ signing {
 uploadArchives {
     configuration = configurations.archives
     repositories.mavenDeployer {
-        beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+        beforeDeployment {
+            MavenDeployment deployment -> signing.signPom(deployment)
+        }
 
         repository(url: sonatypeRepo) {
             authentication(userName: sonatypeUsername,

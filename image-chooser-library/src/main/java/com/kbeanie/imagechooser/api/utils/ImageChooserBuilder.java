@@ -29,7 +29,7 @@ public class ImageChooserBuilder extends Builder {
 		super(context, theme);
 		this.listener = listener;
 		this.context = context;
-        init();
+        setupDefaultData();
 	}
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -37,7 +37,7 @@ public class ImageChooserBuilder extends Builder {
 		super(context);
 		this.listener = listener;
 		this.context = context;
-        init();
+        setupDefaultData();
 	}
 
 	public Builder setDialogTitle(String title) {
@@ -70,10 +70,15 @@ public class ImageChooserBuilder extends Builder {
         return this;
 	}
 
-	private void init() {
-		title = "Choose an option";
-		titleGalleryOption = "Choose from Gallery";
-		titleTakePictureOption = "Take a picture";
+    private void setupDefaultData(){
+        title = "Choose an option";
+        titleGalleryOption = "Choose from Gallery";
+        titleTakePictureOption = "Take a picture";
+    }
+
+    @NonNull
+    @Override
+    public AlertDialog create() {
         setTitle(title);
         CharSequence[] titles = { titleGalleryOption, titleTakePictureOption };
         setItems(titles, new OnClickListener() {
@@ -88,6 +93,7 @@ public class ImageChooserBuilder extends Builder {
                 }
             }
         });
-        create();
-	}
+        AlertDialog d = create();
+        return d;
+    }
 }
