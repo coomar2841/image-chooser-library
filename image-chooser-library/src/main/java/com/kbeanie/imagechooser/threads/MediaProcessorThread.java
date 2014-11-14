@@ -68,7 +68,7 @@ public abstract class MediaProcessorThread extends Thread {
 
 	protected boolean shouldCreateThumnails;
 
-	private String mediaExtension;
+	protected String mediaExtension;
 
 	public MediaProcessorThread(String filePath, String foldername,
 			boolean shouldCreateThumbnails) {

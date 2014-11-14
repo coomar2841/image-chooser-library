@@ -36,6 +36,9 @@
             android:name=".MediaChooserActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".FileChooserActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".FragmentImageChooserActivity"
             android:screenOrientation="portrait" />
 

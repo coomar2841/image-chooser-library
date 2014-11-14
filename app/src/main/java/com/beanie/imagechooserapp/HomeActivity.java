@@ -44,8 +44,8 @@ public class HomeActivity extends Activity {
     }
 
     public void gotoImageChooser(View view) {
-		Intent intent = new Intent(this, ImageChooserActivity.class);
-		startActivity(intent);
+        Intent intent = new Intent(this, ImageChooserActivity.class);
+        startActivity(intent);
     }
 
     public void gotoVideoChooser(View view) {
@@ -55,6 +55,11 @@ public class HomeActivity extends Activity {
 
     public void gotoMediaChooser(View view) {
         Intent intent = new Intent(this, MediaChooserActivity.class);
+        startActivity(intent);
+    }
+
+    public void gotoFileChooser(View view) {
+        Intent intent = new Intent(this, FileChooserActivity.class);
         startActivity(intent);
     }
 

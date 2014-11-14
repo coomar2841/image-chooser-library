@@ -37,11 +37,22 @@
         android:layout_marginRight="20dp"
         android:text="@string/pick_media" />
 
+    <Button
+        android:id="@+id/buttonPickFile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/buttonPickMedia"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="20dp"
+        android:onClick="gotoFileChooser"
+        android:layout_marginRight="20dp"
+        android:text="@string/pick_file" />
+
     <TextView
         android:id="@+id/textViewVersion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/buttonPickMedia"
+        android:layout_below="@+id/buttonPickFile"
         android:layout_marginTop="20dp"
         android:gravity="center_horizontal"
         android:text="@string/lab_version_string" />

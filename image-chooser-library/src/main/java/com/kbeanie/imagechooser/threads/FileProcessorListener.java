@@ -14,8 +14,12 @@
  * limitations under the License.
  *******************************************************************************/
 
-package com.kbeanie.imagechooser.api.config;
+package com.kbeanie.imagechooser.threads;
 
-public interface Config {
-    public final static boolean DEBUG = true;
+import com.kbeanie.imagechooser.api.ChosenFile;
+
+public interface FileProcessorListener {
+    public void onProcessedFile(ChosenFile file);
+
+    public void onError(String reason);
 }

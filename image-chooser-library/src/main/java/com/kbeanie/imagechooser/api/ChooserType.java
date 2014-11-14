@@ -25,4 +25,6 @@ public interface ChooserType {
     public final static int REQUEST_PICK_VIDEO = 295;
     
     public final static int REQUEST_PICK_PICTURE_OR_VIDEO = 300;
+
+    public final static int REQUEST_PICK_FILE = 500;
 }

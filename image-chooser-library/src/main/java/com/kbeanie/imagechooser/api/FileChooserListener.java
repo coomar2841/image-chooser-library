@@ -14,8 +14,21 @@
  * limitations under the License.
  *******************************************************************************/
 
-package com.kbeanie.imagechooser.api.config;
+package com.kbeanie.imagechooser.api;
 
-public interface Config {
-    public final static boolean DEBUG = true;
+public interface FileChooserListener {
+    /**
+     * When the processing is complete, you will receive this callback with
+     * {@link com.kbeanie.imagechooser.api.ChosenImage}
+     * 
+     * @param file
+     */
+    public void onFileChosen(ChosenFile file);
+
+    /**
+     * Handle any error conditions if at all, when you receieve this callback
+     * 
+     * @param reason
+     */
+    public void onError(String reason);
 }
