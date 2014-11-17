@@ -89,12 +89,7 @@ public class FileChooserManager extends MediaChooserManager implements FileProce
         if (mimeType == null) {
             mimeType = "*/*";
         }
-        String action = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            action = Intent.ACTION_OPEN_DOCUMENT;
-        } else {
-            action = Intent.ACTION_GET_CONTENT;
-        }
+        String action = Intent.ACTION_GET_CONTENT;
         try {
             Intent intent = new Intent(action);
             intent.setType(mimeType);
