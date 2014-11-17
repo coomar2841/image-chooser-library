@@ -13,14 +13,14 @@
 
 > Don't worry about creating thumbnails to show a preview.
 
-### Code less for capturing  images/videos
+#### Code less for capturing  images/videos
 1. Supports picking up images/videos from phone gallery.
 2. Supports capturing images/videos using the phone camera.
 3. Generates thumb-nails for the any chosen media.
 4. Works on most(99%) of the phones/os versions.
 5. Similar code base to implement irrespective of Android version of device.
 
-### Maven
+#### Maven
 <pre>
 <code>
 &lt;dependency&gt;
@@ -31,26 +31,26 @@
 </code>
 </pre>
 
-### Configuring on Android Studio
+#### Configuring on Android Studio
 > compile 'com.kbeanie:image-chooser-library:1.3.52@aar'
 
-### Version 1.3.52
+#### Version 1.3.52
 1. Added FileChooser for selecting any file
 
-### Version 1.3.1
+#### Version 1.3.1
 1. Added suport sending extras [Issue #34](https://github.com/coomar2841/image-chooser-library/issues/34)
 2. Imports of com.kbeanie.imagechooser.R should be removed [Issue #38](https://github.com/coomar2841/image-chooser-library/issues/38)
 3. Switching to Android Studio/Gradle.
 4. Added maven support (com.kbeanie:image-chooser-library:1.3.1@aar)
 
-### Version 1.3.0
+#### Version 1.3.0
 1. Added support for Microsoft's OneDrive app (Images and Videos)
 
-### Version 1.2.9
+#### Version 1.2.9
 1. Added MediaChooserManager: To pick either a video or an image (Not fully Tested)
 2. Fixed image pickup from the Drive app
 
-### Version 1.2.7
+#### Version 1.2.7
 1. Added exception when Activity not found
 2. Fixed problems with fetching uncached photos/videos from Google photos app
 3. Switched from ACTION_PICK to ACTION_GET_CONTENT (Gives you more options like Dropbox, File Browser etc)
@@ -58,6 +58,7 @@
 
 ### License
 -----------------------------------------------------------------------------------
+
 Copyright 2013 Kumar Bibek
 
 Licensed under the Apache License, Version 2.0 (the "License");<br />
@@ -71,3 +72,5 @@ distributed under the License is distributed on an "AS IS" BASIS,<br />
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<br />
 See the License for the specific language governing permissions and<br />
 limitations under the License.
+
+-----------------------------------------------------------------------------------
