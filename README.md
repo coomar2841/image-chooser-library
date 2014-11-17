@@ -20,7 +20,24 @@
 4. Works on most(99%) of the phones/os versions.
 5. Similar code base to implement irrespective of Android version of device.
 
-## version 1.3.1
+## Maven
+<pre>
+<code>
+&lt;dependency&gt;
+    &lt;groupId&gt;com.kbeanie&lt;/groupId&gt;
+    &lt;artifactId&gt;image-chooser-library&lt;/artifactId&gt;
+    &lt;version&gt;1.3.1&lt;/version&gt;
+&lt;/dependency&gt;
+</code>
+</pre>
+
+## Configuring on Android Studio
+> compile 'com.kbeanie:image-chooser-library:1.3.51@aar'
+
+## Version 1.3.51
+1. Added FileChooser for selecting any file
+
+## Version 1.3.1
 1. Added suport sending extras [Issue #34](https://github.com/coomar2841/image-chooser-library/issues/34)
 2. Imports of com.kbeanie.imagechooser.R should be removed [Issue #38](https://github.com/coomar2841/image-chooser-library/issues/38)
 3. Switching to Android Studio/Gradle.

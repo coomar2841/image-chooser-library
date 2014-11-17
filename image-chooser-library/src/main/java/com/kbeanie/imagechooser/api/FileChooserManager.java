@@ -90,7 +90,7 @@ public class FileChooserManager extends MediaChooserManager implements FileProce
             mimeType = "*/*";
         }
         String action = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             action = Intent.ACTION_OPEN_DOCUMENT;
         } else {
             action = Intent.ACTION_GET_CONTENT;
