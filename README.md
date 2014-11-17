@@ -20,11 +20,6 @@
 4. Works on most(99%) of the phones/os versions.
 5. Similar code base to implement irrespective of Android version of device.
 
-<<<<<<< HEAD
-## version 1.3.1
-1. Added suport sending extras [Issue #34](https://github.com/coomar2841/image-chooser-library/issues/34)
-2. Imports of com.kbeanie.imagechooser.R should be removed [Issue #38](https://github.com/coomar2841/image-chooser-library/issues/38)
-=======
 ## Maven
 <pre>
 <code>
@@ -47,7 +42,6 @@
 2. Imports of com.kbeanie.imagechooser.R should be removed [Issue #38](https://github.com/coomar2841/image-chooser-library/issues/38)
 3. Switching to Android Studio/Gradle.
 4. Added maven support (com.kbeanie:image-chooser-library:1.3.1@aar)
->>>>>>> dev_studio
 
 ## Version 1.3.0
 1. Added support for Microsoft's OneDrive app (Images and Videos)
@@ -71,13 +65,10 @@
 6. Added functionality to handle activity destroyals for a few devices.
 6. Fixed issue: https://github.com/coomar2841/image-chooser-library/issues/7
 
-<<<<<<< HEAD
 ## Version 1.2.5
 1. Updated the support library
 2. Some bug fixes and error handling
 
-=======
->>>>>>> dev_studio
 ### License
 -----------------------------------------------------------------------------------
 Copyright 2013 Kumar Bibek
@@ -92,8 +83,4 @@ Unless required by applicable law or agreed to in writing, software<br />
 distributed under the License is distributed on an "AS IS" BASIS,<br />
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<br />
 See the License for the specific language governing permissions and<br />
-<<<<<<< HEAD
 limitations under the License.
-=======
-limitations under the License.
->>>>>>> dev_studio
