@@ -34,6 +34,8 @@
 ##### Configuring on Android Studio
 > compile 'com.kbeanie:image-chooser-library:1.3.52@aar'
 
+### Release Notes
+
 ##### Version "1.3.52"
 1. Added FileChooser for selecting any file
 
