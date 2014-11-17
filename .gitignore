@@ -1,5 +1,16 @@
+<<<<<<< HEAD
 bin
 gen
 .settings
 build.xml
 local.properties
+=======
+gradle.properties
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+image-chooser-library/gradle.properties
+>>>>>>> dev_studio
