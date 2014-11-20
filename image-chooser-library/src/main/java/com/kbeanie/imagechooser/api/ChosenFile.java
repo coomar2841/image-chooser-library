@@ -5,7 +5,7 @@ package com.kbeanie.imagechooser.api;
  */
 public class ChosenFile {
     private String filePath;
-    private String mimeType = "application";
+    private String mimeType;
     private String fileName;
     private long fileSize;
     private String extension;
