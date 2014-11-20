@@ -18,7 +18,9 @@ package com.kbeanie.imagechooser.threads;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
+import android.provider.OpenableColumns;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -37,7 +39,7 @@ import java.util.Calendar;
 
 public class FileProcessorThread extends MediaProcessorThread {
 
-    private final static String TAG = "ImageProcessorThread";
+    private final static String TAG = "FileProcessorThread";
 
     private FileProcessorListener listener;
 
@@ -46,6 +48,10 @@ public class FileProcessorThread extends MediaProcessorThread {
     private final static int MAX_THRESHOLD_DAYS = (int) (0.5 * 24 * 60 * 60 * 1000);
 
     private ContentResolver cr;
+
+    private String fileDisplayName;
+
+    private long fileSize;
 
     public FileProcessorThread(String filePath, String foldername,
                                boolean shouldCreateThumbnails) {
@@ -58,13 +64,39 @@ public class FileProcessorThread extends MediaProcessorThread {
 
     public void setContext(Context context) {
         this.context = context;
-        cr = context.getContentResolver();
-        String mimeType = cr.getType(Uri.parse(filePath));
-        if (mimeType.contains("/")) {
-            String[] parts = mimeType.split("/");
-            setMediaExtension("." + parts[1]);
-        } else {
-            setMediaExtension("." + mimeType);
+        if (filePath.startsWith("content")) {
+            cr = context.getContentResolver();
+            Cursor cursor = null;
+            String mimeType = cr.getType(Uri.parse(filePath));
+            try {
+                cursor = cr.query(Uri.parse(filePath), null, null, null, null);
+                if (cursor != null && cursor.moveToFirst()) {
+                    fileDisplayName = cursor.getString(
+                            cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                }
+            } finally {
+                cursor.close();
+            }
+            if (mimeType.contains("/")) {
+                String[] parts = mimeType.split("/");
+                setMediaExtension("." + parts[1]);
+            } else {
+                setMediaExtension("." + mimeType);
+            }
+        } else if (filePath.startsWith("file")) {
+            String extension = "";
+
+            int i = filePath.lastIndexOf('.');
+            if (i > 0) {
+                extension = filePath.substring(i + 1);
+            }
+            if (extension != null && !TextUtils.isEmpty(extension)) {
+                setMediaExtension("." + extension);
+            }
+            if (fileDisplayName == null || !TextUtils.isEmpty(fileDisplayName)) {
+                File file = new File(filePath);
+                fileDisplayName = file.getName();
+            }
         }
     }
 
@@ -99,30 +131,40 @@ public class FileProcessorThread extends MediaProcessorThread {
         if (Config.DEBUG) {
             Log.i(TAG, "File Started");
         }
-        try {
-            Uri uri = Uri.parse(filePath);
-            InputStream inputStream = context.getContentResolver()
-                    .openInputStream(uri);
+        if (filePath.startsWith("content:")) {
+            try {
+                Uri uri = Uri.parse(filePath);
+                InputStream inputStream = context.getContentResolver()
+                        .openInputStream(uri);
+                if (fileDisplayName == null) {
+                    fileDisplayName = "" + Calendar.getInstance().getTimeInMillis() + mediaExtension;
+                }
+                if (!fileDisplayName.contains(".") && mediaExtension != null && mediaExtension.length() > 0) {
+                    fileDisplayName = fileDisplayName + mediaExtension;
+                }
+                filePath = FileUtils.getDirectory(foldername) + File.separator
+                        + fileDisplayName;
 
-            filePath = FileUtils.getDirectory(foldername) + File.separator
-                    + Calendar.getInstance().getTimeInMillis() + mediaExtension;
-
-            BufferedOutputStream outStream = new BufferedOutputStream(
-                    new FileOutputStream(filePath));
-            byte[] buf = new byte[2048];
-            int len;
-            while ((len = inputStream.read(buf)) > 0) {
-                outStream.write(buf, 0, len);
+                BufferedOutputStream outStream = new BufferedOutputStream(
+                        new FileOutputStream(filePath));
+                byte[] buf = new byte[2048];
+                int len;
+                while ((len = inputStream.read(buf)) > 0) {
+                    outStream.write(buf, 0, len);
+                }
+                inputStream.close();
+                outStream.close();
+                File fileForSize = new File(filePath);
+                fileSize = fileForSize.length();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                throw e;
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
             }
-            inputStream.close();
-            outStream.close();
-            process();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            throw e;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
+        } else if (filePath.startsWith("file:")) {
+            filePath = filePath.substring(7);
         }
         if (Config.DEBUG) {
             Log.i(TAG, "File Done " + filePath);
@@ -135,9 +177,9 @@ public class FileProcessorThread extends MediaProcessorThread {
         if (listener != null) {
             ChosenFile file = new ChosenFile();
             file.setFilePath(filePath);
-            file.setMimeType(mediaExtension);
-            file.setFileName("Not implemented");
-            file.setFileSize("Not implemented");
+            file.setExtension(mediaExtension);
+            file.setFileName(fileDisplayName);
+            file.setFileSize(fileSize);
             listener.onProcessedFile(file);
         }
     }

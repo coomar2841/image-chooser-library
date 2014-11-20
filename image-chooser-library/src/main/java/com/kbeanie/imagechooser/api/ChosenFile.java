@@ -5,9 +5,10 @@ package com.kbeanie.imagechooser.api;
  */
 public class ChosenFile {
     private String filePath;
-    private String mimeType;
+    private String mimeType = "application";
     private String fileName;
-    private String fileSize;
+    private long fileSize;
+    private String extension;
 
     public String getFilePath() {
         return filePath;
@@ -25,19 +26,46 @@ public class ChosenFile {
         this.fileName = fileName;
     }
 
-    public String getFileSize() {
+    public long getFileSize() {
         return fileSize;
     }
 
-    public void setFileSize(String fileSize) {
+    public void setFileSize(long fileSize) {
         this.fileSize = fileSize;
     }
 
     public String getMimeType() {
+        if (mimeType == null) {
+            for (String ext : imagesExtensions) {
+                if (extension.startsWith(ext)) {
+                    mimeType = "image";
+                    break;
+                }
+            }
+            if (mimeType == null) {
+                for (String ext : videoExtensions) {
+                    if (extension.startsWith(ext)) {
+                        mimeType = "video";
+                        break;
+                    }
+                }
+            }
+        }
         return mimeType;
     }
 
     public void setMimeType(String mimeType) {
         this.mimeType = mimeType;
     }
+
+    public String getExtension() {
+        return extension;
+    }
+
+    public void setExtension(String extension) {
+        this.extension = extension;
+    }
+
+    private String[] imagesExtensions = {".jpg", ".jpeg", ".bpm", ".png", "gif"};
+    private String[] videoExtensions = {".mp4", ".mpeg", ".3gp"};
 }

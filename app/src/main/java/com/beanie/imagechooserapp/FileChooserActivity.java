@@ -65,6 +65,7 @@ public class FileChooserActivity extends Activity implements FileChooserListener
         if (requestCode == ChooserType.REQUEST_PICK_FILE && resultCode == RESULT_OK) {
             if (fm == null) {
                 fm = new FileChooserManager(this);
+                fm.setFileChooserListener(this);
             }
             fm.submit(requestCode, data);
         }
@@ -94,8 +95,9 @@ public class FileChooserActivity extends Activity implements FileChooserListener
         StringBuffer text = new StringBuffer();
         text.append("File name: " + file.getFileName() + "\n");
         text.append("File path: " + file.getFilePath() + "\n");
-        text.append("Mime type:" + file.getMimeType() + "\n");
-        text.append("File size:" + file.getFileSize() + "\n");
+        text.append("Mime type: " + file.getMimeType() + "\n");
+        text.append("File extn: " + file.getExtension() + "\n");
+        text.append("File size:" + file.getFileSize()/1024 + "KB");
         textViewFileDetails.setText(text.toString());
     }
 }

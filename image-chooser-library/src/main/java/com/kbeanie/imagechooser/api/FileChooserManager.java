@@ -1,5 +1,6 @@
 package com.kbeanie.imagechooser.api;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
@@ -109,14 +110,11 @@ public class FileChooserManager extends MediaChooserManager implements FileProce
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void processFile(Intent data) {
-        ContentResolver cr = getContext().getContentResolver();
-        String type = cr.getType(data.getData());
-        if (Config.DEBUG) {
-            Log.i(TAG, "Document Type: " + type);
-        }
+        String dataString = data.getDataString();
 
-        FileProcessorThread thread = new FileProcessorThread(data.getDataString(),
+        FileProcessorThread thread = new FileProcessorThread(dataString,
                 foldername, shouldCreateThumbnails);
         thread.setListener(this);
         if (activity != null) {
