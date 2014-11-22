@@ -32,6 +32,14 @@
         android:onClick="pickFile"
         android:text="Pick any file" />
 
+    <ProgressBar
+        android:layout_marginTop="5dp"
+        android:layout_below="@id/buttonPickFile"
+        android:layout_width="wrap_content"
+        android:id="@+id/pBar"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true" />
+
     <include
         layout="@layout/ad_layout"
         android:layout_width="match_parent"

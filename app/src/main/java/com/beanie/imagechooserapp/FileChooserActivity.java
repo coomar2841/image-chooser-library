@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +23,7 @@ public class FileChooserActivity extends Activity implements FileChooserListener
     private AdView adView;
     private FileChooserManager fm;
     private TextView textViewFileDetails;
+    private ProgressBar pBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,8 @@ public class FileChooserActivity extends Activity implements FileChooserListener
         adView = (AdView) findViewById(R.id.adView);
 
         textViewFileDetails = (TextView) findViewById(R.id.fileDetails);
+        pBar = (ProgressBar) findViewById(R.id.pBar);
+        pBar.setVisibility(View.INVISIBLE);
 
         AdRequest.Builder builder = new AdRequest.Builder();
         builder.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
@@ -45,8 +49,10 @@ public class FileChooserActivity extends Activity implements FileChooserListener
         fm = new FileChooserManager(this);
         fm.setFileChooserListener(this);
         try {
+            pBar.setVisibility(View.VISIBLE);
             fm.choose();
         } catch (Exception e) {
+            pBar.setVisibility(View.INVISIBLE);
             e.printStackTrace();
         }
     }
@@ -76,6 +82,7 @@ public class FileChooserActivity extends Activity implements FileChooserListener
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                pBar.setVisibility(View.INVISIBLE);
                 populateFileDetails(file);
             }
         });
@@ -86,6 +93,7 @@ public class FileChooserActivity extends Activity implements FileChooserListener
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                pBar.setVisibility(View.INVISIBLE);
                 Toast.makeText(FileChooserActivity.this, reason, Toast.LENGTH_LONG).show();
             }
         });
@@ -93,11 +101,11 @@ public class FileChooserActivity extends Activity implements FileChooserListener
 
     private void populateFileDetails(ChosenFile file) {
         StringBuffer text = new StringBuffer();
-        text.append("File name: " + file.getFileName() + "\n");
-        text.append("File path: " + file.getFilePath() + "\n");
-        text.append("Mime type: " + file.getMimeType() + "\n");
-        text.append("File extn: " + file.getExtension() + "\n");
-        text.append("File size:" + file.getFileSize()/1024 + "KB");
+        text.append("File name: " + file.getFileName() + "\n\n");
+        text.append("File path: " + file.getFilePath() + "\n\n");
+        text.append("Mime type: " + file.getMimeType() + "\n\n");
+        text.append("File extn: " + file.getExtension() + "\n\n");
+        text.append("File size: " + file.getFileSize() / 1024 + "KB");
         textViewFileDetails.setText(text.toString());
     }
 }
