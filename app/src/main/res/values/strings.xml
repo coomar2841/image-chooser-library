@@ -2,9 +2,9 @@
 <resources>
 
     <string name="app_name">Image Chooser App</string>
-	<string name="image_chooser">Image Chooser</string>
-	<string name="video_chooser">Video Chooser</string>
-	<string name="pick_media">Pick Video or Image</string>
-    <string name="pick_file">Pick a file</string>
-	<string name="lab_version_string">Version 1.3.56</string>
+	<string name="image_chooser">Click Chooser</string>
+	<string name="video_chooser">Clip Chooser</string>
+	<string name="pick_media">Pick Clips or Click</string>
+    <string name="pick_file">Pick a Art/Drama to view</string>
+	<string name="lab_version_string">Version 0.0.01</string>
 </resources>
