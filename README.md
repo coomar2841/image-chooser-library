@@ -18,7 +18,7 @@ After cloning the Android Studio project, change the name of the file "gradle-ex
 to "gradle.properties" before importing the project into Android Studio.
 Else the project import will fail.
 
-Please ping me if you have any problems.
+Ping me if you have any problems.
 
 #### Code less for capturing  images/videos
 - Supports picking up images/videos from phone gallery.
@@ -40,6 +40,12 @@ Please ping me if you have any problems.
 
 ##### Configuring on Android Studio
 > compile 'com.kbeanie:image-chooser-library:1.3.52@aar'
+
+##### Apps using Image Chooser Library
+
+App Name            | Link to Play Store
+--------------------| ------------------------
+<a href="https://play.google.com/store/apps/details?id=com.beanie.blog&hl=en&referrer=utm_source%3Dicl_github">Blogaway</a>           | <a href="https://play.google.com/store/apps/details?id=com.beanie.blog&hl=en&referrer=utm_source%3Dicl_github"><img src="https://lh6.ggpht.com/PT80sExPDHg0_Y75qGYsrSqzpyEU9v9UDS-bKBKlorqjz1LQ4FAOiRL2tHX3IljbcDU=w300-rw" width="48" height="48"/></a>
 
 ### Release Notes
 
