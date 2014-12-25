@@ -1,10 +1,3 @@
-[Link to image-chooser-library v1.3.1](https://dl.dropboxusercontent.com/u/6696191/image-chooser-library/v1.3.1/image-chooser-library-1.3.1.jar)
-
-<a href="https://play.google.com/store/apps/details?id=com.beanie.imagechooserapp">
-  <img alt="Get it on Google Play"
-       src="https://developer.android.com/images/brand/en_generic_rgb_wo_45.png" />
-</a>
-
 **Makes it easy and simple to integrate "Attach that photo/video" feature into your android apps.**
 
 >Don't worry about various devices/OS variations.
@@ -45,7 +38,10 @@ Ping me if you have any problems.
 
 App Name            | Link to Play Store
 --------------------| ------------------------
-<a href="https://play.google.com/store/apps/details?id=com.beanie.blog&hl=en&referrer=utm_source%3Dicl_github">Blogaway</a>           | <a href="https://play.google.com/store/apps/details?id=com.beanie.blog&hl=en&referrer=utm_source%3Dicl_github"><img src="https://lh6.ggpht.com/PT80sExPDHg0_Y75qGYsrSqzpyEU9v9UDS-bKBKlorqjz1LQ4FAOiRL2tHX3IljbcDU=w300-rw" width="48" height="48"/></a>
+<a href="https://play.google.com/store/apps/details?id=com.beanie.imagechooserapp&hl=en&referrer=utm_source%3Dicl_github"><img src="https://lh6.ggpht.com/5HmHU2cE12jLB1NSX9blKNVa_dj_ymh_FIzajC6joVd4jYBopGQFj5ZFHr9FboHFyQ=w300-rw" width="48" height="48"/></a>|<a href="tps://play.google.com/store/apps/details?id=com.beanie.imagechooserapp&hl=en&referrer=utm_source%3Dicl_github">Blogaway</a>
+<a href="https://play.google.com/store/apps/details?id=com.beanie.blog&hl=en&referrer=utm_source%3Dicl_github"><img src="https://lh6.ggpht.com/PT80sExPDHg0_Y75qGYsrSqzpyEU9v9UDS-bKBKlorqjz1LQ4FAOiRL2tHX3IljbcDU=w300-rw" width="48" height="48"/></a>|<a href="https://play.google.com/store/apps/details?id=com.beanie.blog&hl=en&referrer=utm_source%3Dicl_github">Blogaway</a>
+
+If you would like to add your app to this list, drop me an email.
 
 ### Release Notes
 
