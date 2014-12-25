@@ -1,4 +1,4 @@
-#gradle.properties
+gradle.properties
 .gradle
 /local.properties
 /.idea/workspace.xml
