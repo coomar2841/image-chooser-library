@@ -12,7 +12,7 @@ gradle.properties
 app/app.iml
 
 
-gradle/wrapper/gradle-wrapper.properties
+gradle/
 
 # Library
 image-chooser-library/gradle.properties
