@@ -6,13 +6,13 @@
 
 >Don't worry about creating thumbnails to show a preview.
 
-** Checkout source
+** Checkout source **
 After cloning the Android Studio project, change the name of the file "gradle-example.properties"
 to "gradle.properties" before importing the project into Android Studio.
 Else the project import will fail.
 Ping me if you have any problems.
 
-** Code less for capturing  images/videos
+** Code less for capturing  images/videos **
 - Supports picking up images/videos from phone gallery.
 - Supports capturing images/videos using the phone camera.
 - Generates thumb-nails for the any chosen media.
