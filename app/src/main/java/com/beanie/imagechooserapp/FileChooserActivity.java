@@ -38,7 +38,7 @@ public class FileChooserActivity extends Activity implements FileChooserListener
 
         AdRequest.Builder builder = new AdRequest.Builder();
         builder.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .addTestDevice(Config.TEST_DEVICE_ID_1)
+                .addTestDevice(Config.NEXUS_S)
                 .addTestDevice(Config.TEST_DEVICE_ID_2)
                 .addTestDevice(Config.TEST_GALAXY_NEXUS);
         AdRequest request = builder.build();
