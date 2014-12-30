@@ -23,7 +23,9 @@ import android.net.Uri;
 import android.provider.OpenableColumns;
 import android.text.TextUtils;
 import android.util.Log;
+import android.webkit.MimeTypeMap;
 
+import com.kbeanie.imagechooser.BuildConfig;
 import com.kbeanie.imagechooser.api.ChosenFile;
 import com.kbeanie.imagechooser.api.ChosenImage;
 import com.kbeanie.imagechooser.api.FileUtils;
@@ -31,10 +33,12 @@ import com.kbeanie.imagechooser.api.config.Config;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLConnection;
 import java.util.Calendar;
 
 public class FileProcessorThread extends MediaProcessorThread {
@@ -53,6 +57,8 @@ public class FileProcessorThread extends MediaProcessorThread {
 
     private long fileSize;
 
+    private String mimeType;
+
     public FileProcessorThread(String filePath, String foldername,
                                boolean shouldCreateThumbnails) {
         super(filePath, foldername, shouldCreateThumbnails);
@@ -67,7 +73,21 @@ public class FileProcessorThread extends MediaProcessorThread {
         if (filePath.startsWith("content")) {
             cr = context.getContentResolver();
             Cursor cursor = null;
-            String mimeType = cr.getType(Uri.parse(filePath));
+            mimeType = null;
+            try {
+                InputStream stream = cr.openInputStream(Uri.parse(filePath));
+                mimeType = URLConnection.guessContentTypeFromStream(stream);
+            } catch (Exception e) {
+                e.printStackTrace();
+                // Do nothing
+            }
+            if (mimeType == null) {
+                mimeType = cr.getType(Uri.parse(filePath));
+            }
+
+            if (BuildConfig.DEBUG) {
+                Log.i(TAG, "File mime type: " + mimeType);
+            }
             try {
                 cursor = cr.query(Uri.parse(filePath), null, null, null, null);
                 if (cursor != null && cursor.moveToFirst()) {
@@ -77,21 +97,49 @@ public class FileProcessorThread extends MediaProcessorThread {
             } finally {
                 cursor.close();
             }
-            if (mimeType.contains("/")) {
-                String[] parts = mimeType.split("/");
-                setMediaExtension("." + parts[1]);
+            String extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType);
+            Log.i(TAG, "Extension: " + extension);
+            if (extension == null) {
+                if (mimeType.contains("/")) {
+                    String[] parts = mimeType.split("/");
+                    setMediaExtension("." + parts[1]);
+                } else {
+                    setMediaExtension("." + mimeType);
+                }
             } else {
-                setMediaExtension("." + mimeType);
+                setMediaExtension("." + extension);
             }
         } else if (filePath.startsWith("file")) {
-            String extension = "";
-
-            int i = filePath.lastIndexOf('.');
-            if (i > 0) {
-                extension = filePath.substring(i + 1);
+            String extension = null;
+            try {
+                File file = new File(Uri.parse(filePath).getPath());
+                InputStream stream = new FileInputStream(file);
+                mimeType = URLConnection.guessContentTypeFromStream(stream);
+                cr = context.getContentResolver();
+                mimeType = cr.getType(Uri.parse(filePath));
+                if (mimeType != null) {
+                    extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType);
+                    if (extension != null) {
+                        setMediaExtension("." + extension);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                // Do nothing
             }
-            if (extension != null && !TextUtils.isEmpty(extension)) {
-                setMediaExtension("." + extension);
+
+            // Default Mime Type
+            if (mimeType == null) {
+                mimeType = "application/octet-steam";
+            }
+            if (extension == null) {
+                int i = filePath.lastIndexOf('.');
+                if (i > 0) {
+                    extension = filePath.substring(i + 1);
+                }
+                if (extension != null && !TextUtils.isEmpty(extension)) {
+                    setMediaExtension("." + extension);
+                }
             }
             if (fileDisplayName == null || !TextUtils.isEmpty(fileDisplayName)) {
                 File file = new File(filePath);
@@ -180,6 +228,7 @@ public class FileProcessorThread extends MediaProcessorThread {
             file.setExtension(mediaExtension);
             file.setFileName(fileDisplayName);
             file.setFileSize(fileSize);
+            file.setMimeType(mimeType);
             listener.onProcessedFile(file);
         }
     }
