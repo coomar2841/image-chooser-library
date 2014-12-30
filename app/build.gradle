@@ -23,7 +23,7 @@ android {
         applicationId "com.beanie.imagechooserapp"
         minSdkVersion 9
         targetSdkVersion 20
-        versionCode 50
+        versionCode 51
         versionName "1.4.00"
     }
     buildTypes {
