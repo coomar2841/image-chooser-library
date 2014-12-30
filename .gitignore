@@ -11,6 +11,7 @@ app/local.properties
 *.iws
 .idea/gradle.xml
 app/app.iml
+app/crashlytics.properties
 
 
 gradle/

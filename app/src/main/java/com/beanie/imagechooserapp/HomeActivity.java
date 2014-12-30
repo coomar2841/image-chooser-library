@@ -21,8 +21,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import io.fabric.sdk.android.Fabric;
 
 public class HomeActivity extends Activity {
     private AdView adView;
@@ -30,8 +32,8 @@ public class HomeActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_home);
-
         adView = (AdView) findViewById(R.id.adView);
 
         AdRequest.Builder builder = new AdRequest.Builder();
