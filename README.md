@@ -26,13 +26,22 @@
 &lt;dependency&gt;
     &lt;groupId&gt;com.kbeanie&lt;/groupId&gt;
     &lt;artifactId&gt;image-chooser-library&lt;/artifactId&gt;
-    &lt;version&gt;1.3.56&lt;/version&gt;
+    &lt;version&gt;1.4.02&lt;/version&gt;
 &lt;/dependency&gt;
 </code>
 </pre>
 
 ##### Configuring on Android Studio
 > compile 'com.kbeanie:image-chooser-library:1.4.00@aar'
+
+##### Apps using Image Chooser Library
+
+App Name            | Link to Play Store
+--------------------| ------------------------
+<a href="https://play.google.com/store/apps/details?id=com.beanie.imagechooserapp&hl=en&referrer=utm_source%3Dicl_github"><img src="https://lh6.ggpht.com/5HmHU2cE12jLB1NSX9blKNVa_dj_ymh_FIzajC6joVd4jYBopGQFj5ZFHr9FboHFyQ=w300-rw" width="48" height="48"/></a>|<a href="tps://play.google.com/store/apps/details?id=com.beanie.imagechooserapp&hl=en&referrer=utm_source%3Dicl_github">Blogaway</a>
+<a href="https://play.google.com/store/apps/details?id=com.beanie.blog&hl=en&referrer=utm_source%3Dicl_github"><img src="https://lh6.ggpht.com/PT80sExPDHg0_Y75qGYsrSqzpyEU9v9UDS-bKBKlorqjz1LQ4FAOiRL2tHX3IljbcDU=w300-rw" width="48" height="48"/></a>|<a href="https://play.google.com/store/apps/details?id=com.beanie.blog&hl=en&referrer=utm_source%3Dicl_github">Blogaway</a>
+
+If you would like to add your app to this list, drop me an email.
 
 ### Release Notes
 

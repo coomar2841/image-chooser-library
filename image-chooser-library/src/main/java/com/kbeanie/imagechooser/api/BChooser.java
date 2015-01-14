@@ -171,15 +171,20 @@ public abstract class BChooser {
     }
 
     public long queryProbableFileSize(Uri uri, Context context) {
-        if (uri.toString().startsWith("file")) {
-            File file = new File(uri.getPath());
-            return file.length();
-        } else if (uri.toString().startsWith("content")) {
-            Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
-            cursor.moveToFirst();
-            long length = cursor.getLong(cursor.getColumnIndex(OpenableColumns.SIZE));
-            return length;
+        try {
+            if (uri.toString().startsWith("file")) {
+                File file = new File(uri.getPath());
+                return file.length();
+            } else if (uri.toString().startsWith("content")) {
+                Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
+                cursor.moveToFirst();
+                long length = cursor.getLong(cursor.getColumnIndex(OpenableColumns.SIZE));
+                cursor.close();
+                return length;
+            }
+            return 0;
+        } catch (Exception e) {
+            return 0;
         }
-        return 0;
     }
 }
