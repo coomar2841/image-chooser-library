@@ -32,7 +32,7 @@
 </pre>
 
 ##### Configuring on Android Studio
-> compile 'com.kbeanie:image-chooser-library:1.4.00@aar'
+> compile 'com.kbeanie:image-chooser-library:1.4.02@aar'
 
 ##### Apps using Image Chooser Library
 
