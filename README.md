@@ -1,6 +1,6 @@
 [Link to image-chooser-library v1.3.1](https://dl.dropboxusercontent.com/u/6696191/image-chooser-library/v1.3.1/image-chooser-library-1.3.1.jar)
 
-<a href="https://play.google.com/store/apps/details?id=com.beanie.imagechooserapp">
+<a href="https://play.google.com/store/apps/details?id=com.beanie.imagechooserapp&hl=en&referrer=utm_source%3Dicl_github"">
   <img alt="Get it on Google Play"
        src="https://developer.android.com/images/brand/en_generic_rgb_wo_45.png" />
 </a>
@@ -13,14 +13,17 @@
 
 >Don't worry about creating thumbnails to show a preview.
 
-#### Code less for capturing  images/videos
+>Picking up any file for your app, and it's details.
+
+##### Code less for capturing  images/videos
 - Supports picking up images/videos from phone gallery.
 - Supports capturing images/videos using the phone camera.
 - Generates thumb-nails for the any chosen media.
 - Works on most(99%) of the phones/os versions.
+- (New) Supports picking up files in general.
 - Similar code base to implement irrespective of Android version of device.
 
-#### Maven
+##### Maven
 <pre>
 <code>
 &lt;dependency&gt;
@@ -57,20 +60,7 @@ If you would like to add your app to this list, drop me an email.
 3. Switching to Android Studio/Gradle.
 4. Added maven support
 
-##### Version "1.3.0"
-1. Added support for Microsoft's OneDrive app (Images and Videos)
-
-##### Version "1.2.9"
-1. Added MediaChooserManager: To pick either a video or an image (Not fully Tested)
-2. Fixed image pickup from the Drive app
-
-##### Version "1.2.7"
-1. Added exception when Activity not found
-2. Fixed problems with fetching uncached photos/videos from Google photos app
-3. Switched from ACTION_PICK to ACTION_GET_CONTENT (Gives you more options like Dropbox, File Browser etc)
-4. Fix for KITKAT document picker UI
-
-#### License
+##### License
 -----------------------------------------------------------------------------------
 
 Copyright 2013 Kumar Bibek
