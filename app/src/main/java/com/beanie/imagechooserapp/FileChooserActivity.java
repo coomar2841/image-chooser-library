@@ -3,6 +3,7 @@ package com.beanie.imagechooserapp;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -73,6 +74,7 @@ public class FileChooserActivity extends Activity implements FileChooserListener
                 fm = new FileChooserManager(this);
                 fm.setFileChooserListener(this);
             }
+            Log.i(TAG, "Probable file size: " + fm.queryProbableFileSize(data.getData(), this));
             fm.submit(requestCode, data);
         }
     }
