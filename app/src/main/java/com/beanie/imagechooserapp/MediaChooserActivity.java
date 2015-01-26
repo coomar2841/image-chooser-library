@@ -12,7 +12,7 @@ import com.kbeanie.imagechooser.api.ChosenVideo;
 import com.kbeanie.imagechooser.api.MediaChooserListener;
 import com.kbeanie.imagechooser.api.MediaChooserManager;
 
-public class MediaChooserActivity extends Activity implements
+public class MediaChooserActivity extends BasicActivity implements
 		MediaChooserListener {
 
 	private final static String TAG = "MediaChooserActivity";
@@ -23,6 +23,8 @@ public class MediaChooserActivity extends Activity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_media_chooser);
+
+        setupAds();
 	}
 
 	public void pickMedia(View view) {

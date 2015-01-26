@@ -87,7 +87,7 @@ public class ImageProcessorThread extends MediaProcessorThread {
 		} else if (filePath
 				.startsWith("content://com.google.android.gallery3d")
 				|| filePath
-						.startsWith("content://com.microsoft.skydrive.content.external")) {
+						.startsWith("content://com.microsoft.skydrive.content")) {
 			processPicasaMedia(filePath, ".jpg");
 		} else if (filePath
 				.startsWith("content://com.google.android.apps.photos.content")

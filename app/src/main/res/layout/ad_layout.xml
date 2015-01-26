@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         ads:adSize="BANNER"
-        ads:adUnitId="@string/ad_banner_1">
+        ads:adUnitId="@string/ad_banner_new">
 
     </com.google.android.gms.ads.AdView>
 </LinearLayout>

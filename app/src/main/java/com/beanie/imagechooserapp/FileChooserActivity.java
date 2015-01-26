@@ -19,9 +19,8 @@ import com.kbeanie.imagechooser.api.FileChooserManager;
 /**
  * Created by kbibek on 14/11/14.
  */
-public class FileChooserActivity extends Activity implements FileChooserListener {
+public class FileChooserActivity extends BasicActivity implements FileChooserListener {
     private final static String TAG = "FileChooserActivity";
-    private AdView adView;
     private FileChooserManager fm;
     private TextView textViewFileDetails;
     private ProgressBar pBar;
@@ -30,20 +29,11 @@ public class FileChooserActivity extends Activity implements FileChooserListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_file_chooser);
-
-        adView = (AdView) findViewById(R.id.adView);
-
         textViewFileDetails = (TextView) findViewById(R.id.fileDetails);
         pBar = (ProgressBar) findViewById(R.id.pBar);
         pBar.setVisibility(View.INVISIBLE);
 
-        AdRequest.Builder builder = new AdRequest.Builder();
-        builder.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .addTestDevice(Config.NEXUS_S)
-                .addTestDevice(Config.TEST_DEVICE_ID_2)
-                .addTestDevice(Config.TEST_GALAXY_NEXUS);
-        AdRequest request = builder.build();
-        adView.loadAd(request);
+        setupAds();
     }
 
     public void pickFile(View view) {
@@ -56,14 +46,6 @@ public class FileChooserActivity extends Activity implements FileChooserListener
             pBar.setVisibility(View.INVISIBLE);
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        if (adView != null) {
-            adView.destroy();
-        }
-        super.onDestroy();
     }
 
     @Override

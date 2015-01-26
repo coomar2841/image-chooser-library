@@ -3,7 +3,7 @@ package com.beanie.imagechooserapp;
 import android.app.Activity;
 import android.os.Bundle;
 
-public class FragmentImageChooserActivity extends Activity {
+public class FragmentImageChooserActivity extends BasicActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

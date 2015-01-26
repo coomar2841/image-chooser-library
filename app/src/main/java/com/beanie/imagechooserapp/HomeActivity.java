@@ -24,25 +24,17 @@ import android.view.View;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+
 import io.fabric.sdk.android.Fabric;
 
-public class HomeActivity extends Activity {
-    private AdView adView;
+public class HomeActivity extends BasicActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_home);
-        adView = (AdView) findViewById(R.id.adView);
-
-        AdRequest.Builder builder = new AdRequest.Builder();
-        builder.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .addTestDevice(Config.NEXUS_S)
-                .addTestDevice(Config.TEST_DEVICE_ID_2)
-                .addTestDevice(Config.TEST_GALAXY_NEXUS);
-        AdRequest request = builder.build();
-        adView.loadAd(request);
+        setupAds();
     }
 
     public void gotoImageChooser(View view) {
@@ -63,13 +55,5 @@ public class HomeActivity extends Activity {
     public void gotoFileChooser(View view) {
         Intent intent = new Intent(this, FileChooserActivity.class);
         startActivity(intent);
-    }
-
-    @Override
-    public void onDestroy() {
-        if (adView != null) {
-            adView.destroy();
-        }
-        super.onDestroy();
     }
 }
