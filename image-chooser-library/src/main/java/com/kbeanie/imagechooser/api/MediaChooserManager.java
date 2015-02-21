@@ -177,11 +177,11 @@ public class MediaChooserManager extends BChooser implements
 	private void chooseMedia() throws Exception {
 		checkDirectory();
 		try {
-			Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+			Intent intent = new Intent(Intent.ACTION_PICK);
 			if (extras != null) {
 				intent.putExtras(extras);
 			}
-			intent.setType("video/*, images/*");
+			intent.setType("video/*, image/*");
 			startActivity(intent);
 		} catch (ActivityNotFoundException e) {
 			throw new Exception("Activity not found");
