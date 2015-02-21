@@ -48,6 +48,9 @@ If you would like to add your app to this list, drop me an email.
 
 ### Release Notes
 
+##### Version "1.4.2"
+1. Minor bug fixes.
+
 ##### Version "1.4.00"
 1. Fixed correct mime type reporting based on the actual file
 
