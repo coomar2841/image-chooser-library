@@ -29,13 +29,13 @@
 &lt;dependency&gt;
     &lt;groupId&gt;com.kbeanie&lt;/groupId&gt;
     &lt;artifactId&gt;image-chooser-library&lt;/artifactId&gt;
-    &lt;version&gt;1.4.02&lt;/version&gt;
+    &lt;version&gt;1.4.3&lt;/version&gt;
 &lt;/dependency&gt;
 </code>
 </pre>
 
 ##### Configuring on Android Studio
-> compile 'com.kbeanie:image-chooser-library:1.4.02@aar'
+> compile 'com.kbeanie:image-chooser-library:1.4.3@aar'
 
 ##### Apps using Image Chooser Library
 
