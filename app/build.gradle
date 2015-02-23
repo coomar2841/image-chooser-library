@@ -24,7 +24,7 @@ android {
         minSdkVersion 9
         targetSdkVersion 20
         versionCode 52
-        versionName "1.4.01"
+        versionName "1.4.3"
     }
     buildTypes {
         release {

@@ -76,6 +76,8 @@ public abstract class MediaProcessorThread extends Thread {
 
     protected String mediaExtension;
 
+    protected boolean clearOldFiles = false;
+
     public MediaProcessorThread(String filePath, String foldername,
                                 boolean shouldCreateThumbnails) {
         this.filePath = filePath;
@@ -89,6 +91,10 @@ public abstract class MediaProcessorThread extends Thread {
 
     public void setMediaExtension(String extension) {
         this.mediaExtension = extension;
+    }
+
+    public void clearOldFiles(){
+        this.clearOldFiles = true;
     }
 
     protected void downloadAndProcess(String url) throws Exception {
@@ -274,6 +280,9 @@ public abstract class MediaProcessorThread extends Thread {
 
     protected void manageDiretoryCache(final int maxDirectorySize,
                                        final int maxThresholdDays, final String extension) {
+        if(!clearOldFiles){
+            return;
+        }
         File directory = null;
         directory = new File(FileUtils.getDirectory(foldername));
         File[] files = directory.listFiles();
