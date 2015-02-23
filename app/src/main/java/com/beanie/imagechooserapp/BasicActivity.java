@@ -2,6 +2,8 @@ package com.beanie.imagechooserapp;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.view.MenuItem;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -12,7 +14,7 @@ import com.google.android.gms.analytics.Tracker;
 /**
  * Created by kbibek on 1/26/15.
  */
-public class BasicActivity extends Activity {
+public class BasicActivity extends ActionBarActivity {
     private Tracker tracker;
     private AdView adView;
 
@@ -25,6 +27,18 @@ public class BasicActivity extends Activity {
 
         tracker.setScreenName(getClass().getSimpleName());
         tracker.send(new HitBuilders.ScreenViewBuilder().build());
+
+        if (!(this instanceof HomeActivity)) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     protected void setupAds() {
