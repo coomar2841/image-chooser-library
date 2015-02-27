@@ -215,7 +215,7 @@ public abstract class MediaProcessorThread extends Thread {
     private void copyFileToDir() throws Exception {
         try {
             File file;
-            file = new File(Uri.parse(filePath).getPath());
+            file = new File(filePath);
             File copyTo = new File(FileUtils.getDirectory(foldername)
                     + File.separator + file.getName());
             FileInputStream streamIn = new FileInputStream(file);
