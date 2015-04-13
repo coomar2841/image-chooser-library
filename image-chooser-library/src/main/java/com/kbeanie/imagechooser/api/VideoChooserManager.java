@@ -44,8 +44,6 @@ public class VideoChooserManager extends BChooser implements
 		VideoProcessorListener {
 	private final static String TAG = "VideoChooserManager";
 
-	private final static String DIRECTORY = "bvideochooser";
-
 	private VideoChooserListener listener;
 
 	/**

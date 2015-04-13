@@ -1,18 +1,20 @@
-/*******************************************************************************
+/**
+ * ****************************************************************************
  * Copyright 2013 Kumar Bibek
- *
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * <p/>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ * *****************************************************************************
+ */
 
 package com.kbeanie.imagechooser.api;
 
@@ -30,6 +32,7 @@ import android.provider.OpenableColumns;
 import android.support.v4.app.Fragment;
 
 public abstract class BChooser {
+    protected final static String DIRECTORY = "MediaChooser";
     protected Activity activity;
 
     protected Fragment fragment;
@@ -46,11 +49,11 @@ public abstract class BChooser {
 
     protected Bundle extras;
 
-    public BChooser(Activity activity, int type, String foldername,
+    public BChooser(Activity activity, int type, String folderName,
                     boolean shouldCreateThumbnails) {
         this.activity = activity;
         this.type = type;
-        this.foldername = foldername;
+        this.foldername = folderName;
         this.shouldCreateThumbnails = shouldCreateThumbnails;
     }
 
@@ -117,6 +120,12 @@ public abstract class BChooser {
         }
     }
 
+    /**
+     * This method should be used to re-initialize the ChooserManagers in case your activity of
+     * fragments are destroyed for some reason, and you need to recreate this object in onActivityResult
+     *
+     * @param path
+     */
     public void reinitialize(String path) {
         filePathOriginal = path;
     }
@@ -144,7 +153,6 @@ public abstract class BChooser {
         } else if (appFragment != null) {
             return appFragment.getActivity().getApplicationContext();
         }
-
         return null;
     }
 
@@ -170,6 +178,16 @@ public abstract class BChooser {
         this.extras = extras;
     }
 
+    /**
+     * Utility method which quickly looks up the file size. Use this, if you want to set a limit to
+     * the media chosen, and which your application can safely handle.
+     * <p/>
+     * For example, you might not want a video of 1 GB to be imported into your app.
+     *
+     * @param uri
+     * @param context
+     * @return
+     */
     public long queryProbableFileSize(Uri uri, Context context) {
         try {
             if (uri.toString().startsWith("file")) {
