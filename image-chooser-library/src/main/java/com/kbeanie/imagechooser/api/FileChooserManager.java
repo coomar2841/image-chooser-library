@@ -3,16 +3,11 @@ package com.kbeanie.imagechooser.api;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.os.Build;
 import android.support.v4.app.Fragment;
-import android.util.Log;
-
-import com.kbeanie.imagechooser.api.config.Config;
 import com.kbeanie.imagechooser.threads.FileProcessorListener;
 import com.kbeanie.imagechooser.threads.FileProcessorThread;
-import com.kbeanie.imagechooser.threads.ImageProcessorThread;
 
 /**
  * Created by kbibek on 14/11/14.

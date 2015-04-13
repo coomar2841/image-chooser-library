@@ -30,7 +30,7 @@ import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.kbeanie.imagechooser.api.config.Config;
+import com.kbeanie.imagechooser.BuildConfig;
 import com.kbeanie.imagechooser.threads.VideoProcessorListener;
 import com.kbeanie.imagechooser.threads.VideoProcessorThread;
 
@@ -50,8 +50,7 @@ public class VideoChooserManager extends BChooser implements
 
 	/**
 	 * Simplest constructor. Specify the type
-	 * {@link ChooserType.REQUEST_CHOOSE_IMAGE} or
-	 * {@link ChooserType.REQUEST_TAKE_PICTURE}
+	 * {@link ChooserType}
 	 * 
 	 * @param activity
 	 * @param type
@@ -218,7 +217,7 @@ public class VideoChooserManager extends BChooser implements
 			if (filePathOriginal == null || TextUtils.isEmpty(filePathOriginal)) {
 				onError("File path was null");
 			} else {
-				if (Config.DEBUG) {
+				if (BuildConfig.DEBUG) {
 					Log.i(TAG, "File: " + filePathOriginal);
 				}
 				String path = filePathOriginal;

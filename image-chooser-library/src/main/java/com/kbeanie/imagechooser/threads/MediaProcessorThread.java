@@ -56,8 +56,8 @@ import android.provider.OpenableColumns;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.kbeanie.imagechooser.BuildConfig;
 import com.kbeanie.imagechooser.api.FileUtils;
-import com.kbeanie.imagechooser.api.config.Config;
 
 public abstract class MediaProcessorThread extends Thread {
     private final static String TAG = "MediaProcessorThread";
@@ -116,14 +116,14 @@ public abstract class MediaProcessorThread extends Thread {
     }
 
     private String getThumnailPath(String file) throws Exception {
-        if (Config.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "Compressing ... THUMBNAIL");
         }
         return compressAndSaveImage(file, THUMBNAIL_BIG);
     }
 
     private String getThumbnailSmallPath(String file) throws Exception {
-        if (Config.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "Compressing ... THUMBNAIL SMALL");
         }
         return compressAndSaveImage(file, THUMBNAIL_SMALL);
@@ -139,7 +139,7 @@ public abstract class MediaProcessorThread extends Thread {
                     ExifInterface.TAG_ORIENTATION,
                     ExifInterface.ORIENTATION_NORMAL);
             int rotate = 0;
-            if (Config.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "Before: " + width + "x" + length);
             }
 
@@ -170,7 +170,7 @@ public abstract class MediaProcessorThread extends Thread {
             } else {
                 options.inSampleSize = scale;
             }
-            if (Config.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "Scale: " + (what / options.inSampleSize));
                 Log.i(TAG, "Rotate: " + rotate);
             }
@@ -188,14 +188,14 @@ public abstract class MediaProcessorThread extends Thread {
             }
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
 
-            if (Config.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 ExifInterface exifAfter = new ExifInterface(
                         file.getAbsolutePath());
                 String widthAfter = exifAfter
                         .getAttribute(ExifInterface.TAG_IMAGE_WIDTH);
                 String lengthAfter = exifAfter
                         .getAttribute(ExifInterface.TAG_IMAGE_LENGTH);
-                if (Config.DEBUG) {
+                if (BuildConfig.DEBUG) {
                     Log.i(TAG, "After: " + widthAfter + "x" + lengthAfter);
                 }
             }
@@ -265,7 +265,7 @@ public abstract class MediaProcessorThread extends Thread {
             fileOutputStream.close();
             stream.close();
 
-            if (Config.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "Image saved: " + localFilePath.toString());
             }
         } catch (ClientProtocolException e) {
@@ -293,7 +293,7 @@ public abstract class MediaProcessorThread extends Thread {
         for (File file : files) {
             count = count + file.length();
         }
-        if (Config.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "Directory size: " + count);
         }
 
@@ -332,7 +332,7 @@ public abstract class MediaProcessorThread extends Thread {
 
     protected void processPicasaMedia(String path, String extension)
             throws Exception {
-        if (Config.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "Picasa Started");
         }
         try {
@@ -359,14 +359,14 @@ public abstract class MediaProcessorThread extends Thread {
             e.printStackTrace();
             throw e;
         }
-        if (Config.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "Picasa Done");
         }
     }
 
     protected void processGooglePhotosMedia(String path, String extension)
             throws Exception {
-        if (Config.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "Google photos Started");
             Log.i(TAG, "URI: " + path);
             Log.i(TAG, "Extension: " + extension);
@@ -410,7 +410,7 @@ public abstract class MediaProcessorThread extends Thread {
             e.printStackTrace();
             throw e;
         }
-        if (Config.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "Picasa Done");
         }
     }
@@ -502,7 +502,7 @@ public abstract class MediaProcessorThread extends Thread {
     protected String getAbsoluteImagePathFromUri(Uri imageUri) {
         String[] proj = {MediaColumns.DATA, MediaColumns.DISPLAY_NAME};
 
-        if (Config.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "Image Uri: " + imageUri.toString());
         }
 

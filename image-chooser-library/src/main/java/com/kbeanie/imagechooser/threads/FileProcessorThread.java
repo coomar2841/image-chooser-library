@@ -27,9 +27,7 @@ import android.webkit.MimeTypeMap;
 
 import com.kbeanie.imagechooser.BuildConfig;
 import com.kbeanie.imagechooser.api.ChosenFile;
-import com.kbeanie.imagechooser.api.ChosenImage;
 import com.kbeanie.imagechooser.api.FileUtils;
-import com.kbeanie.imagechooser.api.config.Config;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -167,7 +165,7 @@ public class FileProcessorThread extends MediaProcessorThread {
     }
 
     private void processFile() throws Exception {
-        if (Config.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "Processing File: " + filePath);
         }
         processFileDetails(filePath);
@@ -176,7 +174,7 @@ public class FileProcessorThread extends MediaProcessorThread {
 
     protected void processFileDetails(String path)
             throws Exception {
-        if (Config.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "File Started");
         }
         if (filePath.startsWith("content:")) {
@@ -214,7 +212,7 @@ public class FileProcessorThread extends MediaProcessorThread {
         } else if (filePath.startsWith("file:")) {
             filePath = filePath.substring(7);
         }
-        if (Config.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "File Done " + filePath);
         }
     }

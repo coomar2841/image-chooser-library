@@ -29,9 +29,9 @@ import android.provider.MediaStore.Video.Thumbnails;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.kbeanie.imagechooser.BuildConfig;
 import com.kbeanie.imagechooser.api.ChosenVideo;
 import com.kbeanie.imagechooser.api.FileUtils;
-import com.kbeanie.imagechooser.api.config.Config;
 
 public class VideoProcessorThread extends MediaProcessorThread {
 	private final static String TAG = "VideoProcessorThread";
@@ -78,7 +78,7 @@ public class VideoProcessorThread extends MediaProcessorThread {
 
 	private void processVideo() throws Exception {
 		
-		if(Config.DEBUG){
+		if(BuildConfig.DEBUG){
 			Log.i(TAG, "Processing Video file: " + filePath);
 		}
 		

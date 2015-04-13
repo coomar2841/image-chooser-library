@@ -23,8 +23,8 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.kbeanie.imagechooser.BuildConfig;
 import com.kbeanie.imagechooser.api.ChosenImage;
-import com.kbeanie.imagechooser.api.config.Config;
 
 public class ImageProcessorThread extends MediaProcessorThread {
 
@@ -70,7 +70,7 @@ public class ImageProcessorThread extends MediaProcessorThread {
 
 	private void processImage() throws Exception {
 
-		if (Config.DEBUG) {
+		if (BuildConfig.DEBUG) {
 			Log.i(TAG, "Processing Image File: " + filePath);
 		}
 
