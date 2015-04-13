@@ -29,7 +29,7 @@ import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.kbeanie.imagechooser.api.config.Config;
+import com.kbeanie.imagechooser.BuildConfig;
 import com.kbeanie.imagechooser.threads.ImageProcessorListener;
 import com.kbeanie.imagechooser.threads.ImageProcessorThread;
 
@@ -49,8 +49,7 @@ public class ImageChooserManager extends BChooser implements
 
 	/**
 	 * Simplest constructor. Specify the type
-	 * {@link ChooserType.REQUEST_PICK_PICTURE} or
-	 * {@link ChooserType.REQUEST_CAPTURE_PICTURE}
+	 * {@link ChooserType}
 	 * 
 	 * @param activity
 	 * @param type
@@ -68,8 +67,7 @@ public class ImageChooserManager extends BChooser implements
 	}
 
 	/**
-	 * Specify the type {@link ChooserType.REQUEST_PICK_PICTURE} or
-	 * {@link ChooserType.REQUEST_CAPTURE_PICTURE}
+	 * Specify the type {@link ChooserType}
 	 * <p>
 	 * Optionally, you can control where the exported images with their
 	 * thumbnails would be stored.
@@ -93,8 +91,7 @@ public class ImageChooserManager extends BChooser implements
 	}
 
 	/**
-	 * Specify the type {@link ChooserType.REQUEST_PICK_PICTURE} or
-	 * {@link ChooserType.REQUEST_CAPTURE_PICTURE}
+	 * Specify the type {@link ChooserType}
 	 * <p>
 	 * Optionally, you can set whether you need thumbnail generation or not. If
 	 * not, you would get the original image for the thumbnails as well
@@ -120,8 +117,7 @@ public class ImageChooserManager extends BChooser implements
 	}
 
 	/**
-	 * Specify the type {@link ChooserType.REQUEST_PICK_PICTURE} or
-	 * {@link ChooserType.REQUEST_CAPTURE_PICTURE}
+	 * Specify the type {@link ChooserType}
 	 * <p>
 	 * Specify your own foldername and whether you want the generated thumbnails
 	 * or not
@@ -235,7 +231,7 @@ public class ImageChooserManager extends BChooser implements
 			if (filePathOriginal == null || TextUtils.isEmpty(filePathOriginal)) {
 				onError("File path was null");
 			} else {
-				if (Config.DEBUG) {
+				if (BuildConfig.DEBUG) {
 					Log.i(TAG, "File: " + filePathOriginal);
 				}
 				String path = filePathOriginal;

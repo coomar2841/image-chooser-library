@@ -45,10 +45,6 @@ public class FileProcessorThread extends MediaProcessorThread {
 
     private FileProcessorListener listener;
 
-    private final static int MAX_DIRECTORY_SIZE = 50 * 1024 * 1024;
-
-    private final static int MAX_THRESHOLD_DAYS = (int) (10 * 24 * 60 * 60 * 1000);
-
     private ContentResolver cr;
 
     private String fileDisplayName;
@@ -149,7 +145,7 @@ public class FileProcessorThread extends MediaProcessorThread {
     @Override
     public void run() {
         try {
-            manageDiretoryCache(MAX_DIRECTORY_SIZE, MAX_THRESHOLD_DAYS, mediaExtension);
+            manageDiretoryCache(mediaExtension);
             processFile();
         } catch (IOException e) {
             e.printStackTrace();

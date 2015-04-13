@@ -1,18 +1,20 @@
-/*******************************************************************************
+/**
+ * ****************************************************************************
  * Copyright 2013 Kumar Bibek
- *
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * <p/>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ * *****************************************************************************
+ */
 
 package com.kbeanie.imagechooser.threads;
 
@@ -62,6 +64,11 @@ import com.kbeanie.imagechooser.api.FileUtils;
 public abstract class MediaProcessorThread extends Thread {
     private final static String TAG = "MediaProcessorThread";
 
+    // 500 MB Cache size
+    protected final static int MAX_DIRECTORY_SIZE = 500 * 1024 * 1024;
+    // Number of days to preserve 10 days
+    protected final static int MAX_THRESHOLD_DAYS = (int) (10 * 24 * 60 * 60 * 1000);
+
     private final static int THUMBNAIL_BIG = 1;
 
     private final static int THUMBNAIL_SMALL = 2;
@@ -93,7 +100,7 @@ public abstract class MediaProcessorThread extends Thread {
         this.mediaExtension = extension;
     }
 
-    public void clearOldFiles(){
+    public void clearOldFiles() {
         this.clearOldFiles = true;
     }
 
@@ -278,9 +285,8 @@ public abstract class MediaProcessorThread extends Thread {
         return localFilePath;
     }
 
-    protected void manageDiretoryCache(final int maxDirectorySize,
-                                       final int maxThresholdDays, final String extension) {
-        if(!clearOldFiles){
+    protected void manageDiretoryCache(final String extension) {
+        if (!clearOldFiles) {
             return;
         }
         File directory = null;
@@ -297,13 +303,13 @@ public abstract class MediaProcessorThread extends Thread {
             Log.i(TAG, "Directory size: " + count);
         }
 
-        if (count > maxDirectorySize) {
+        if (count > MAX_DIRECTORY_SIZE) {
             final long today = Calendar.getInstance().getTimeInMillis();
             FileFilter filter = new FileFilter() {
 
                 @Override
                 public boolean accept(File pathname) {
-                    if (today - pathname.lastModified() > maxThresholdDays
+                    if (today - pathname.lastModified() > MAX_THRESHOLD_DAYS
                             && pathname
                             .getAbsolutePath()
                             .toUpperCase(Locale.ENGLISH)
@@ -533,7 +539,7 @@ public abstract class MediaProcessorThread extends Thread {
             cursor.close();
         }
 
-        if( filePath == null && isDownloadsDocument(imageUri) ) {
+        if (filePath == null && isDownloadsDocument(imageUri)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
                 filePath = getPath(context, imageUri);
         }
@@ -584,7 +590,7 @@ public abstract class MediaProcessorThread extends Thread {
                 }
 
                 final String selection = "_id=?";
-                final String[] selectionArgs = new String[] {
+                final String[] selectionArgs = new String[]{
                         split[1]
                 };
 

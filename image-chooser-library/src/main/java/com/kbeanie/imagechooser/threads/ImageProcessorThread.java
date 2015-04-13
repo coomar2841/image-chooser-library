@@ -32,10 +32,6 @@ public class ImageProcessorThread extends MediaProcessorThread {
 
 	private ImageProcessorListener listener;
 
-	private final static int MAX_DIRECTORY_SIZE = 5 * 1024 * 1024;
-
-	private final static int MAX_THRESHOLD_DAYS = (int) (0.5 * 24 * 60 * 60 * 1000);
-
 	public ImageProcessorThread(String filePath, String foldername,
 			boolean shouldCreateThumbnails) {
 		super(filePath, foldername, shouldCreateThumbnails);
@@ -53,7 +49,7 @@ public class ImageProcessorThread extends MediaProcessorThread {
 	@Override
 	public void run() {
 		try {
-			manageDiretoryCache(MAX_DIRECTORY_SIZE, MAX_THRESHOLD_DAYS, "jpg");
+			manageDiretoryCache("jpg");
 			processImage();
 		} catch (IOException e) {
 			e.printStackTrace();

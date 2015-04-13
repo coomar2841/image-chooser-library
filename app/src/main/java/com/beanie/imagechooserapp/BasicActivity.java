@@ -48,7 +48,8 @@ public class BasicActivity extends ActionBarActivity {
         builder.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .addTestDevice(Config.NEXUS_S)
                 .addTestDevice(Config.TEST_DEVICE_ID_2)
-                .addTestDevice(Config.TEST_GALAXY_NEXUS);
+                .addTestDevice(Config.TEST_GALAXY_NEXUS)
+                .addTestDevice(Config.TEST_OPO);
         AdRequest request = builder.build();
         adView.loadAd(request);
     }
