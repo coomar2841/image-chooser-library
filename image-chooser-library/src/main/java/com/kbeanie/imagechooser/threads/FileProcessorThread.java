@@ -47,9 +47,9 @@ public class FileProcessorThread extends MediaProcessorThread {
 
     private FileProcessorListener listener;
 
-    private final static int MAX_DIRECTORY_SIZE = 5 * 1024 * 1024;
+    private final static int MAX_DIRECTORY_SIZE = 50 * 1024 * 1024;
 
-    private final static int MAX_THRESHOLD_DAYS = (int) (0.5 * 24 * 60 * 60 * 1000);
+    private final static int MAX_THRESHOLD_DAYS = (int) (10 * 24 * 60 * 60 * 1000);
 
     private ContentResolver cr;
 
