@@ -220,16 +220,7 @@ public class MediaChooserManager extends BChooser implements
                             shouldCreateThumbnails);
                     ((VideoProcessorThread) thread).setListener(this);
                 }
-
-                if (activity != null) {
-                    thread.setContext(activity.getApplicationContext());
-                } else if (fragment != null) {
-                    thread.setContext(fragment.getActivity()
-                            .getApplicationContext());
-                } else if (appFragment != null) {
-                    thread.setContext(appFragment.getActivity()
-                            .getApplicationContext());
-                }
+                thread.setContext(getContext());
                 thread.start();
             }
         } else {
