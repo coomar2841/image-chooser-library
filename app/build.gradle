@@ -39,8 +39,8 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.1.1'
     compile project(':image-chooser-library')
 //    compile 'com.kbeanie:image-chooser-library:+@aar'
-    compile 'com.google.android.gms:play-services-base:7.3.0'
-    compile 'com.google.android.gms:play-services-ads:7.3.0'
+    compile 'com.google.android.gms:play-services-base:6.5.87'
+    compile 'com.google.android.gms:play-services-ads:6.5.87'
     compile('com.crashlytics.sdk.android:crashlytics:2.2.0@aar') {
         transitive = true;
     }
