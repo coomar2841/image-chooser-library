@@ -16,15 +16,15 @@ repositories {
 
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion "20.0.0"
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         applicationId "com.beanie.imagechooserapp"
         minSdkVersion 9
-        targetSdkVersion 21
-        versionCode 54
-        versionName "1.4.4"
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 53
+        versionName "1.4.3"
     }
     buildTypes {
         release {
@@ -36,12 +36,12 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:21.+'
+    compile 'com.android.support:appcompat-v7:22.1.1'
     compile project(':image-chooser-library')
 //    compile 'com.kbeanie:image-chooser-library:+@aar'
-    compile 'com.google.android.gms:play-services-base:6.5.87'
-    compile 'com.google.android.gms:play-services-ads:6.5.87'
-    compile('com.crashlytics.sdk.android:crashlytics:2.2.0@aar') {
+    compile 'com.google.android.gms:play-services-base:7.3.0'
+    compile 'com.google.android.gms:play-services-ads:7.3.0'
+    compile('com.crashlytics.sdk.android:crashlytics:2.2.4@aar') {
         transitive = true;
     }
 }
