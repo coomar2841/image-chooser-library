@@ -1,10 +1,3 @@
-[Link to image-chooser-library v1.3.1](https://dl.dropboxusercontent.com/u/6696191/image-chooser-library/v1.3.1/image-chooser-library-1.3.1.jar)
-
-<a href="https://play.google.com/store/apps/details?id=com.beanie.imagechooserapp&hl=en&referrer=utm_source%3Dicl_github"">
-  <img alt="Get it on Google Play"
-       src="https://developer.android.com/images/brand/en_generic_rgb_wo_45.png" />
-</a>
-
 **Makes it easy and simple to integrate "Attach that photo/video" feature into your android apps.**
 
 >Don't worry about various devices/OS variations.
@@ -14,6 +7,11 @@
 >Don't worry about creating thumbnails to show a preview.
 
 >Picking up any file for your app, and it's details.
+
+<a href="https://play.google.com/store/apps/details?id=com.beanie.imagechooserapp&hl=en&referrer=utm_source%3Dicl_github"">
+  <img alt="Get it on Google Play"
+       src="https://developer.android.com/images/brand/en_generic_rgb_wo_45.png" />
+</a>
 
 ##### Code less for capturing  images/videos
 - Supports picking up images/videos from phone gallery.
@@ -29,13 +27,13 @@
 &lt;dependency&gt;
     &lt;groupId&gt;com.kbeanie&lt;/groupId&gt;
     &lt;artifactId&gt;image-chooser-library&lt;/artifactId&gt;
-    &lt;version&gt;1.4.3&lt;/version&gt;
+    &lt;version&gt;1.4.4&lt;/version&gt;
 &lt;/dependency&gt;
 </code>
 </pre>
 
 ##### Configuring on Android Studio
-> compile 'com.kbeanie:image-chooser-library:1.4.3@aar'
+> compile 'com.kbeanie:image-chooser-library:1.4.4@aar'
 
 ##### Apps using Image Chooser Library
 
@@ -47,6 +45,9 @@ App Name            | Link to Play Store
 If you would like to add your app to this list, drop me an email.
 
 ### Release Notes
+
+##### Version "1.4.4"
+1. Minor fix: Launcher Icon collision with default project icon
 
 ##### Version "1.4.3"
 1. Minor bug fixes.
