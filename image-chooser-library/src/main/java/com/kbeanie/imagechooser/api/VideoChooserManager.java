@@ -56,15 +56,15 @@ public class VideoChooserManager extends BChooser implements
      * @param type
      */
     public VideoChooserManager(Activity activity, int type) {
-        super(activity, type, DIRECTORY, true);
+        super(activity, type, true);
     }
 
     public VideoChooserManager(Fragment fragment, int type) {
-        super(fragment, type, DIRECTORY, true);
+        super(fragment, type, true);
     }
 
     public VideoChooserManager(android.app.Fragment fragment, int type) {
-        super(fragment, type, DIRECTORY, true);
+        super(fragment, type, true);
     }
 
     @Deprecated
@@ -85,17 +85,17 @@ public class VideoChooserManager extends BChooser implements
 
     public VideoChooserManager(Activity activity, int type,
                                boolean shouldCreateThumbnails) {
-        super(activity, type, DIRECTORY, shouldCreateThumbnails);
+        super(activity, type, shouldCreateThumbnails);
     }
 
     public VideoChooserManager(Fragment fragment, int type,
                                boolean shouldCreateThumbnails) {
-        super(fragment, type, DIRECTORY, shouldCreateThumbnails);
+        super(fragment, type, shouldCreateThumbnails);
     }
 
     public VideoChooserManager(android.app.Fragment fragment, int type,
                                boolean shouldCreateThumbnails) {
-        super(fragment, type, DIRECTORY, shouldCreateThumbnails);
+        super(fragment, type, shouldCreateThumbnails);
     }
 
     @Deprecated

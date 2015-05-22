@@ -3,6 +3,7 @@ package com.beanie.imagechooserapp;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.google.android.gms.ads.AdRequest;
@@ -14,7 +15,7 @@ import com.google.android.gms.analytics.Tracker;
 /**
  * Created by kbibek on 1/26/15.
  */
-public class BasicActivity extends ActionBarActivity {
+public class BasicActivity extends AppCompatActivity {
     private Tracker tracker;
     private AdView adView;
 
