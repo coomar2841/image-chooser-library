@@ -83,18 +83,34 @@ public class ImageChooserManager extends BChooser implements
      * thumbnails would be stored.
      * </p>
      *
+     * @deprecated Use BChooserPreferences to set your desired folder name
      * @param activity
      * @param type
      * @param folderName
      */
+    @Deprecated
     public ImageChooserManager(Activity activity, int type, String folderName) {
         super(activity, type, folderName, true);
     }
 
+    /**
+     * @deprecated Use BChooserPreferences to set your desired folder name
+     * @param fragment
+     * @param type
+     * @param folderName
+     */
+    @Deprecated
     public ImageChooserManager(Fragment fragment, int type, String folderName) {
         super(fragment, type, folderName, true);
     }
 
+    /**
+     * @deprecated Use BChooserPreferences to set your desired folder name
+     * @param fragment
+     * @param type
+     * @param folderName
+     */
+    @Deprecated
     public ImageChooserManager(android.app.Fragment fragment, int type,
                                String folderName) {
         super(fragment, type, folderName, true);
@@ -132,22 +148,39 @@ public class ImageChooserManager extends BChooser implements
      * Specify your own foldername and whether you want the generated thumbnails
      * or not
      * </p>
-     *
+     * @deprecated Use BChooserPreferences to set your desired folder name
      * @param activity
      * @param type
      * @param foldername
      * @param shouldCreateThumbnails
      */
+    @Deprecated
     public ImageChooserManager(Activity activity, int type, String foldername,
                                boolean shouldCreateThumbnails) {
         super(activity, type, foldername, shouldCreateThumbnails);
     }
 
+    /**
+     * @deprecated Use BChooserPreferences to set your desired folder name
+     * @param fragment
+     * @param type
+     * @param foldername
+     * @param shouldCreateThumbnails
+     */
+    @Deprecated
     public ImageChooserManager(Fragment fragment, int type, String foldername,
                                boolean shouldCreateThumbnails) {
         super(fragment, type, foldername, shouldCreateThumbnails);
     }
 
+    /**
+     * @deprecated Use BChooserPreferences to set your desired folder name
+     * @param fragment
+     * @param type
+     * @param foldername
+     * @param shouldCreateThumbnails
+     */
+    @Deprecated
     public ImageChooserManager(android.app.Fragment fragment, int type,
                                String foldername, boolean shouldCreateThumbnails) {
         super(fragment, type, foldername, shouldCreateThumbnails);

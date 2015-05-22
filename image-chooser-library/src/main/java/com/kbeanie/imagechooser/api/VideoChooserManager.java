@@ -67,14 +67,17 @@ public class VideoChooserManager extends BChooser implements
         super(fragment, type, DIRECTORY, true);
     }
 
+    @Deprecated
     public VideoChooserManager(Activity activity, int type, String foldername) {
         super(activity, type, foldername, true);
     }
 
+    @Deprecated
     public VideoChooserManager(Fragment fragment, int type, String foldername) {
         super(fragment, type, foldername, true);
     }
 
+    @Deprecated
     public VideoChooserManager(android.app.Fragment fragment, int type,
                                String foldername) {
         super(fragment, type, foldername, true);
@@ -95,16 +98,19 @@ public class VideoChooserManager extends BChooser implements
         super(fragment, type, DIRECTORY, shouldCreateThumbnails);
     }
 
+    @Deprecated
     public VideoChooserManager(Activity activity, int type, String foldername,
                                boolean shouldCreateThumbnails) {
         super(activity, type, foldername, shouldCreateThumbnails);
     }
 
+    @Deprecated
     public VideoChooserManager(Fragment fragment, int type, String foldername,
                                boolean shouldCreateThumbnails) {
         super(fragment, type, foldername, shouldCreateThumbnails);
     }
 
+    @Deprecated
     public VideoChooserManager(android.app.Fragment fragment, int type,
                                String foldername, boolean shouldCreateThumbnails) {
         super(fragment, type, foldername, shouldCreateThumbnails);

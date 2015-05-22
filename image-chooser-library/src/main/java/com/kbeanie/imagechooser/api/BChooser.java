@@ -21,18 +21,19 @@ package com.kbeanie.imagechooser.api;
 import java.io.File;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
 import android.support.v4.app.Fragment;
 
 public abstract class BChooser {
-    protected final static String DIRECTORY = "MediaChooser";
     protected Activity activity;
 
     protected Fragment fragment;
@@ -49,6 +50,7 @@ public abstract class BChooser {
 
     protected Bundle extras;
 
+    @Deprecated
     public BChooser(Activity activity, int type, String folderName,
                     boolean shouldCreateThumbnails) {
         this.activity = activity;
@@ -57,6 +59,7 @@ public abstract class BChooser {
         this.shouldCreateThumbnails = shouldCreateThumbnails;
     }
 
+    @Deprecated
     public BChooser(Fragment fragment, int type, String foldername,
                     boolean shouldCreateThumbnails) {
         this.fragment = fragment;
@@ -65,12 +68,38 @@ public abstract class BChooser {
         this.shouldCreateThumbnails = shouldCreateThumbnails;
     }
 
+    @Deprecated
     public BChooser(android.app.Fragment fragment, int type, String foldername,
                     boolean shouldCreateThumbnails) {
         this.appFragment = fragment;
         this.type = type;
         this.foldername = foldername;
         this.shouldCreateThumbnails = shouldCreateThumbnails;
+    }
+
+    public BChooser(Activity activity, int type,
+                    boolean shouldCreateThumbnails) {
+        this.activity = activity;
+        this.type = type;
+        this.shouldCreateThumbnails = shouldCreateThumbnails;
+        initDirector(activity.getApplicationContext());
+    }
+
+    public BChooser(Fragment fragment, int type,
+                    boolean shouldCreateThumbnails) {
+        this.fragment = fragment;
+        this.type = type;
+        this.shouldCreateThumbnails = shouldCreateThumbnails;
+        initDirector(fragment.getActivity().getApplicationContext());
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public BChooser(android.app.Fragment fragment, int type,
+                    boolean shouldCreateThumbnails) {
+        this.appFragment = fragment;
+        this.type = type;
+        this.shouldCreateThumbnails = shouldCreateThumbnails;
+        initDirector(fragment.getActivity().getApplicationContext());
     }
 
     /**
@@ -204,5 +233,10 @@ public abstract class BChooser {
         } catch (Exception e) {
             return 0;
         }
+    }
+
+    private void initDirector(Context context){
+        BChooserPreferences preferences = new BChooserPreferences(context);
+        foldername = preferences.getFolderName();
     }
 }

@@ -53,15 +53,15 @@ public class MediaChooserManager extends BChooser implements
      * @param type
      */
     public MediaChooserManager(Activity activity, int type) {
-        super(activity, type, DIRECTORY, true);
+        super(activity, type, true);
     }
 
     public MediaChooserManager(Fragment fragment, int type) {
-        super(fragment, type, DIRECTORY, true);
+        super(fragment, type, true);
     }
 
     public MediaChooserManager(android.app.Fragment fragment, int type) {
-        super(fragment, type, DIRECTORY, true);
+        super(fragment, type, true);
     }
 
     /**
@@ -101,17 +101,17 @@ public class MediaChooserManager extends BChooser implements
      */
     public MediaChooserManager(Activity activity, int type,
                                boolean shouldCreateThumbnails) {
-        super(activity, type, DIRECTORY, shouldCreateThumbnails);
+        super(activity, type, shouldCreateThumbnails);
     }
 
     public MediaChooserManager(Fragment fragment, int type,
                                boolean shouldCreateThumbnails) {
-        super(fragment, type, DIRECTORY, shouldCreateThumbnails);
+        super(fragment, type, shouldCreateThumbnails);
     }
 
     public MediaChooserManager(android.app.Fragment fragment, int type,
                                boolean shouldCreateThumbnails) {
-        super(fragment, type, DIRECTORY, shouldCreateThumbnails);
+        super(fragment, type, shouldCreateThumbnails);
     }
 
     /**
