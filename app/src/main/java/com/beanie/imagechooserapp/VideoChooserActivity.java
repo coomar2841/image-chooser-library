@@ -90,8 +90,8 @@ public class VideoChooserActivity extends BasicActivity implements
                 ChooserType.REQUEST_PICK_VIDEO);
         videoChooserManager.setVideoChooserListener(this);
         try {
-            pbar.setVisibility(View.VISIBLE);
             videoChooserManager.choose();
+            pbar.setVisibility(View.VISIBLE);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         } catch (Exception e) {

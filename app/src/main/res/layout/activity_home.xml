@@ -32,10 +32,10 @@
         android:layout_below="@id/buttonVideoChooser"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="20dp"
-        android:visibility="invisible"
-        android:onClick="gotoMediaChooser"
         android:layout_marginRight="20dp"
-        android:text="@string/pick_media" />
+        android:onClick="gotoMediaChooser"
+        android:text="@string/pick_media"
+        android:visibility="invisible" />
 
     <Button
         android:id="@+id/buttonPickFile"
@@ -44,9 +44,19 @@
         android:layout_below="@id/buttonPickMedia"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="20dp"
-        android:onClick="gotoFileChooser"
         android:layout_marginRight="20dp"
+        android:onClick="gotoFileChooser"
         android:text="@string/pick_file" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/buttonPickFile"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:onClick="gotoImageChooserFragment"
+        android:text="@string/image_chooser_fragment" />
 
     <TextView
         android:id="@+id/textViewVersion"
