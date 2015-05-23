@@ -8,5 +8,7 @@ public class FragmentImageChooserActivity extends BasicActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.fragment_image_chooser_activity);
+
+		setupAds();
 	}
 }
