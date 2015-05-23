@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 /**
+ * Preferences for ICL
  * Created by kbibek on 5/22/15.
  */
 public class BChooserPreferences {
@@ -15,6 +16,10 @@ public class BChooserPreferences {
         preferences = context.getSharedPreferences(FILE, Context.MODE_PRIVATE);
     }
 
+    /**
+     * Set the folder name to be used for all files or temporary files
+     * @param folderName
+     */
     public void setFolderName(String folderName){
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(FOLDER_NAME, folderName);

@@ -24,6 +24,8 @@ import android.view.View;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.kbeanie.imagechooser.api.BChooser;
+import com.kbeanie.imagechooser.api.BChooserPreferences;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -35,6 +37,10 @@ public class HomeActivity extends BasicActivity {
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_home);
         setupAds();
+
+        // One time call to setup the folder to be used for all files
+        BChooserPreferences preferences = new BChooserPreferences(getApplicationContext());
+        preferences.setFolderName("ICL");
     }
 
     public void gotoImageChooser(View view) {

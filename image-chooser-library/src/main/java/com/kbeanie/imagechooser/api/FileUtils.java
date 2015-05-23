@@ -21,6 +21,11 @@ import java.io.File;
 import android.os.Environment;
 
 public class FileUtils {
+    /**
+     * Returns the path of the folder specified in external storage
+     * @param foldername
+     * @return
+     */
     public static String getDirectory(String foldername) {
         File directory = null;
         directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
