@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -33,6 +34,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.kbeanie.imagechooser.api.ChooserType;
@@ -42,6 +44,8 @@ import com.kbeanie.imagechooser.api.ImageChooserManager;
 
 public class ImageChooserActivity extends BasicActivity implements
         ImageChooserListener {
+
+    private final static String TAG = "ICA";
 
     private ImageView imageViewThumbnail;
 
@@ -60,6 +64,7 @@ public class ImageChooserActivity extends BasicActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(TAG, "Activity Created");
         setContentView(R.layout.activity_image_chooser);
 
         Button buttonTakePicture = (Button) findViewById(R.id.buttonTakePicture);
@@ -121,6 +126,9 @@ public class ImageChooserActivity extends BasicActivity implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.i(TAG, "OnActivityResult");
+        Log.i(TAG, "File Path : " + filePath);
+        Log.i(TAG, "Chooser Type: " + chooserType);
         if (resultCode == RESULT_OK
                 && (requestCode == ChooserType.REQUEST_PICK_PICTURE || requestCode == ChooserType.REQUEST_CAPTURE_PICTURE)) {
             if (imageChooserManager == null) {
@@ -173,6 +181,9 @@ public class ImageChooserActivity extends BasicActivity implements
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+        Log.i(TAG, "Saving Stuff");
+        Log.i(TAG, "File Path: " + filePath);
+        Log.i(TAG, "Chooser Type: " + chooserType);
         outState.putInt("chooser_type", chooserType);
         outState.putString("media_path", filePath);
         super.onSaveInstanceState(outState);
@@ -189,6 +200,17 @@ public class ImageChooserActivity extends BasicActivity implements
                 filePath = savedInstanceState.getString("media_path");
             }
         }
+        Log.i(TAG, "Restoring Stuff");
+        Log.i(TAG, "File Path: " + filePath);
+        Log.i(TAG, "Chooser Type: " + chooserType);
         super.onRestoreInstanceState(savedInstanceState);
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.i(TAG, "Activity Destroyed");
+    }
+
+
 }

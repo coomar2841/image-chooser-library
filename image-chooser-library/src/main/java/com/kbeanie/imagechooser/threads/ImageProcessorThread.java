@@ -65,7 +65,6 @@ public class ImageProcessorThread extends MediaProcessorThread {
 	}
 
 	private void processImage() throws Exception {
-
 		if (BuildConfig.DEBUG) {
 			Log.i(TAG, "Processing Image File: " + filePath);
 		}
