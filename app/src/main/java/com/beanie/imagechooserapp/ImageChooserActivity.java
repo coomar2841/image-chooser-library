@@ -41,9 +41,11 @@ import com.kbeanie.imagechooser.api.ChooserType;
 import com.kbeanie.imagechooser.api.ChosenImage;
 import com.kbeanie.imagechooser.api.ImageChooserListener;
 import com.kbeanie.imagechooser.api.ImageChooserManager;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 public class ImageChooserActivity extends BasicActivity implements
-        ImageChooserListener {
+        ImageChooserListener, Picasso.Listener {
 
     private final static String TAG = "ICA";
 
@@ -146,13 +148,40 @@ public class ImageChooserActivity extends BasicActivity implements
 
             @Override
             public void run() {
+                Log.i(TAG, "Chosen Image: " + image.getFilePathOriginal());
                 pbar.setVisibility(View.GONE);
                 if (image != null) {
                     textViewFile.setText(image.getFilePathOriginal());
-                    imageViewThumbnail.setImageURI(Uri.parse(new File(image
-                            .getFileThumbnail()).toString()));
-                    imageViewThumbSmall.setImageURI(Uri.parse(new File(image
-                            .getFileThumbnailSmall()).toString()));
+                    Picasso.with(ImageChooserActivity.this)
+                            .load(Uri.fromFile(new File(image.getFileThumbnail())))
+                            .fit()
+                            .centerInside()
+                            .into(imageViewThumbnail, new Callback() {
+                                @Override
+                                public void onSuccess() {
+                                    Log.i(TAG, "Picasso Success Loading Thumbnail");
+                                }
+
+                                @Override
+                                public void onError() {
+                                    Log.i(TAG, "Picasso Error Loading Thumbnail");
+                                }
+                            });
+                    Picasso.with(ImageChooserActivity.this)
+                            .load(Uri.fromFile(new File(image.getFileThumbnailSmall())))
+                            .fit()
+                            .centerInside()
+                            .into(imageViewThumbSmall, new Callback() {
+                                @Override
+                                public void onSuccess() {
+                                    Log.i(TAG, "Picasso Success Loading Thumbnail Small");
+                                }
+
+                                @Override
+                                public void onError() {
+                                    Log.i(TAG, "Picasso Error Loading Thumbnail Small");
+                                }
+                            });
                 }
             }
         });
@@ -213,4 +242,8 @@ public class ImageChooserActivity extends BasicActivity implements
     }
 
 
+    @Override
+    public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
+
+    }
 }
