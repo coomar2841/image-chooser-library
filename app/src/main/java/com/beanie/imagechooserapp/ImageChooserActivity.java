@@ -45,7 +45,7 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 public class ImageChooserActivity extends BasicActivity implements
-        ImageChooserListener, Picasso.Listener {
+        ImageChooserListener {
 
     private final static String TAG = "ICA";
 
@@ -62,6 +62,12 @@ public class ImageChooserActivity extends BasicActivity implements
     private String filePath;
 
     private int chooserType;
+
+    private boolean isActivityResultOver = false;
+
+    private String originalFilePath;
+    private String thumbnailFilePath;
+    private String thumbnailSmallFilePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,43 +154,42 @@ public class ImageChooserActivity extends BasicActivity implements
 
             @Override
             public void run() {
-                Log.i(TAG, "Chosen Image: " + image.getFilePathOriginal());
+                Log.i(TAG, "Chosen Image: O - " + image.getFilePathOriginal());
+                Log.i(TAG, "Chosen Image: T - " + image.getFileThumbnail());
+                Log.i(TAG, "Chosen Image: Ts - " + image.getFileThumbnailSmall());
+                isActivityResultOver = true;
+                originalFilePath = image.getFilePathOriginal();
+                thumbnailFilePath = image.getFileThumbnail();
+                thumbnailSmallFilePath = image.getFileThumbnailSmall();
                 pbar.setVisibility(View.GONE);
                 if (image != null) {
+                    Log.i(TAG, "Chosen Image: Is not null");
                     textViewFile.setText(image.getFilePathOriginal());
-                    Picasso.with(ImageChooserActivity.this)
-                            .load(Uri.fromFile(new File(image.getFileThumbnail())))
-                            .fit()
-                            .centerInside()
-                            .into(imageViewThumbnail, new Callback() {
-                                @Override
-                                public void onSuccess() {
-                                    Log.i(TAG, "Picasso Success Loading Thumbnail");
-                                }
-
-                                @Override
-                                public void onError() {
-                                    Log.i(TAG, "Picasso Error Loading Thumbnail");
-                                }
-                            });
-                    Picasso.with(ImageChooserActivity.this)
-                            .load(Uri.fromFile(new File(image.getFileThumbnailSmall())))
-                            .fit()
-                            .centerInside()
-                            .into(imageViewThumbSmall, new Callback() {
-                                @Override
-                                public void onSuccess() {
-                                    Log.i(TAG, "Picasso Success Loading Thumbnail Small");
-                                }
-
-                                @Override
-                                public void onError() {
-                                    Log.i(TAG, "Picasso Error Loading Thumbnail Small");
-                                }
-                            });
+                    loadImage(imageViewThumbnail, image.getFileThumbnail());
+                    loadImage(imageViewThumbSmall, image.getFileThumbnailSmall());
+                } else {
+                    Log.i(TAG, "Chosen Image: Is null");
                 }
             }
         });
+    }
+
+    private void loadImage(ImageView iv, final String path) {
+        Picasso.with(ImageChooserActivity.this)
+                .load(Uri.fromFile(new File(path)))
+                .fit()
+                .centerInside()
+                .into(iv, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        Log.i(TAG, "Picasso Success Loading Thumbnail - " + path);
+                    }
+
+                    @Override
+                    public void onError() {
+                        Log.i(TAG, "Picasso Error Loading Thumbnail Small - " + path);
+                    }
+                });
     }
 
     @Override
@@ -193,6 +198,7 @@ public class ImageChooserActivity extends BasicActivity implements
 
             @Override
             public void run() {
+                Log.i(TAG, "OnError: " + reason);
                 pbar.setVisibility(View.GONE);
                 Toast.makeText(ImageChooserActivity.this, reason,
                         Toast.LENGTH_LONG).show();
@@ -213,8 +219,12 @@ public class ImageChooserActivity extends BasicActivity implements
         Log.i(TAG, "Saving Stuff");
         Log.i(TAG, "File Path: " + filePath);
         Log.i(TAG, "Chooser Type: " + chooserType);
+        outState.putBoolean("activity_result_over", isActivityResultOver);
         outState.putInt("chooser_type", chooserType);
         outState.putString("media_path", filePath);
+        outState.putString("orig", originalFilePath);
+        outState.putString("thumb", thumbnailFilePath);
+        outState.putString("thumbs", thumbnailSmallFilePath);
         super.onSaveInstanceState(outState);
     }
 
@@ -224,26 +234,34 @@ public class ImageChooserActivity extends BasicActivity implements
             if (savedInstanceState.containsKey("chooser_type")) {
                 chooserType = savedInstanceState.getInt("chooser_type");
             }
-
             if (savedInstanceState.containsKey("media_path")) {
                 filePath = savedInstanceState.getString("media_path");
+            }
+            if (savedInstanceState.containsKey("activity_result_over")) {
+                isActivityResultOver = savedInstanceState.getBoolean("activity_result_over");
+                originalFilePath = savedInstanceState.getString("orig");
+                thumbnailFilePath = savedInstanceState.getString("thumb");
+                thumbnailSmallFilePath = savedInstanceState.getString("thumbs");
             }
         }
         Log.i(TAG, "Restoring Stuff");
         Log.i(TAG, "File Path: " + filePath);
         Log.i(TAG, "Chooser Type: " + chooserType);
+        Log.i(TAG, "Activity Result Over: " + isActivityResultOver);
+        if (isActivityResultOver) {
+            populateData();
+        }
         super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    private void populateData() {
+        loadImage(imageViewThumbnail, thumbnailFilePath);
+        loadImage(imageViewThumbSmall, thumbnailSmallFilePath);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         Log.i(TAG, "Activity Destroyed");
-    }
-
-
-    @Override
-    public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
-
     }
 }
