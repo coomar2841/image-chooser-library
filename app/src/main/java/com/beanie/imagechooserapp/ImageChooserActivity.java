@@ -255,6 +255,7 @@ public class ImageChooserActivity extends BasicActivity implements
     }
 
     private void populateData() {
+        Log.i(TAG, "Populating Data");
         loadImage(imageViewThumbnail, thumbnailFilePath);
         loadImage(imageViewThumbSmall, thumbnailSmallFilePath);
     }
