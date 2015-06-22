@@ -178,15 +178,13 @@ public class ImageChooserActivity extends BasicActivity implements
 	}
 
 	@Override
-	protected void onRestoreInstanceState(Bundle savedInstanceState) {
-		if (savedInstanceState != null) {
-			if (savedInstanceState.containsKey("chooser_type")) {
-				chooserType = savedInstanceState.getInt("chooser_type");
-			}
+	protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+		if (savedInstanceState.containsKey("chooser_type")) {
+			chooserType = savedInstanceState.getInt("chooser_type");
+		}
 
-			if (savedInstanceState.containsKey("media_path")) {
-				filePath = savedInstanceState.getString("media_path");
-			}
+		if (savedInstanceState.containsKey("media_path")) {
+			filePath = savedInstanceState.getString("media_path");
 		}
 		super.onRestoreInstanceState(savedInstanceState);
 	}
