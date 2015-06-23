@@ -184,7 +184,7 @@ public class FileProcessorThread extends MediaProcessorThread {
                 if (!fileDisplayName.contains(".") && mediaExtension != null && mediaExtension.length() > 0) {
                     fileDisplayName = fileDisplayName + mediaExtension;
                 }
-                filePath = FileUtils.getDirectory(foldername) + File.separator
+                filePath = FileUtils.getDirectory(context, foldername) + File.separator
                         + fileDisplayName;
 
                 BufferedOutputStream outStream = new BufferedOutputStream(

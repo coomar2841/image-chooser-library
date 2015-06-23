@@ -16,9 +16,6 @@
 
 package com.kbeanie.imagechooser.api;
 
-import java.io.File;
-import java.util.Calendar;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -32,6 +29,9 @@ import android.util.Log;
 import com.kbeanie.imagechooser.BuildConfig;
 import com.kbeanie.imagechooser.threads.ImageProcessorListener;
 import com.kbeanie.imagechooser.threads.ImageProcessorThread;
+
+import java.io.File;
+import java.util.Calendar;
 
 /**
  * Easy Image Chooser Library for Android Apps. Forget about coding workarounds
@@ -175,7 +175,6 @@ public class ImageChooserManager extends BChooser implements
 	}
 
 	private void choosePicture() throws Exception {
-		checkDirectory();
 		try {
 			Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 			intent.setType("image/*");
@@ -189,10 +188,9 @@ public class ImageChooserManager extends BChooser implements
 	}
 
 	private String takePicture() throws Exception {
-		checkDirectory();
 		try {
 			Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-			filePathOriginal = FileUtils.getDirectory(foldername)
+			filePathOriginal = FileUtils.getDirectory(getContext(), foldername)
 					+ File.separator + Calendar.getInstance().getTimeInMillis()
 					+ ".jpg";
 			intent.putExtra(MediaStore.EXTRA_OUTPUT,

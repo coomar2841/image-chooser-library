@@ -16,17 +16,16 @@
 
 package com.kbeanie.imagechooser.api;
 
+import android.content.Context;
+
 import java.io.File;
 
-import android.os.Environment;
-
 public class FileUtils {
-    public static String getDirectory(String foldername) {
-        File directory = null;
-        directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
-                + File.separator + foldername);
-        if (!directory.exists()) {
-            directory.mkdirs();
+
+    public static String getDirectory(Context context, String foldername) {
+        File directory = getExternalCacheDir(context, foldername);
+        if (directory == null) {
+            directory = getInternalCacheDir(context, foldername);
         }
         return directory.getAbsolutePath();
     }
@@ -40,5 +39,31 @@ public class FileUtils {
         }
         return extension;
     }
+
+    private static File getExternalCacheDir(Context context, String foldername) {
+        // Get the directory for the app's private pictures directory.
+        File cacheDir = context.getExternalCacheDir();
+        if (cacheDir == null) {
+            return null;
+        }
+        File cache = new File(cacheDir, foldername);
+        if (!cache.exists()) {
+            if (!cache.mkdirs()) {
+                cache = null;
+            }
+        }
+        return cache;
+    }
+
+    private static File getInternalCacheDir(Context context, String foldername) {
+        File cache = new File(context.getCacheDir(), foldername);
+        if (!cache.exists()) {
+            if (!cache.mkdirs()) {
+                cache = null;
+            }
+        }
+        return cache;
+    }
+
 
 }

@@ -18,11 +18,6 @@
 
 package com.kbeanie.imagechooser.threads;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Calendar;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
@@ -34,6 +29,11 @@ import android.util.Log;
 import com.kbeanie.imagechooser.BuildConfig;
 import com.kbeanie.imagechooser.api.ChosenVideo;
 import com.kbeanie.imagechooser.api.FileUtils;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Calendar;
 
 public class VideoProcessorThread extends MediaProcessorThread {
     private final static String TAG = "VideoProcessorThread";
@@ -126,7 +126,7 @@ public class VideoProcessorThread extends MediaProcessorThread {
         Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(filePath,
                 Thumbnails.FULL_SCREEN_KIND);
         if (bitmap != null) {
-            previewImage = FileUtils.getDirectory(foldername) + File.separator
+            previewImage = FileUtils.getDirectory(context, foldername) + File.separator
                     + Calendar.getInstance().getTimeInMillis() + ".jpg";
             File file = new File(previewImage);
             FileOutputStream stream = new FileOutputStream(file);
@@ -141,7 +141,7 @@ public class VideoProcessorThread extends MediaProcessorThread {
         Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(filePath,
                 Thumbnails.MINI_KIND);
         if (bitmap != null) {
-            thumbnailPath = FileUtils.getDirectory(foldername) + File.separator
+            thumbnailPath = FileUtils.getDirectory(context, foldername) + File.separator
                     + Calendar.getInstance().getTimeInMillis() + ".jpg";
             File file = new File(thumbnailPath);
             FileOutputStream stream = new FileOutputStream(file);

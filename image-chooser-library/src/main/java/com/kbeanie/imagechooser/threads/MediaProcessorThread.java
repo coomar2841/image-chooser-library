@@ -18,25 +18,6 @@
 
 package com.kbeanie.imagechooser.threads;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileDescriptor;
-import java.io.FileFilter;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Calendar;
-import java.util.Locale;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.ContentUris;
@@ -60,6 +41,25 @@ import android.util.Log;
 
 import com.kbeanie.imagechooser.BuildConfig;
 import com.kbeanie.imagechooser.api.FileUtils;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Calendar;
+import java.util.Locale;
 
 public abstract class MediaProcessorThread extends Thread {
     private final static String TAG = "MediaProcessorThread";
@@ -223,7 +223,7 @@ public abstract class MediaProcessorThread extends Thread {
         try {
             File file;
             file = new File(Uri.parse(filePath).getPath());
-            File copyTo = new File(FileUtils.getDirectory(foldername)
+            File copyTo = new File(FileUtils.getDirectory(context, foldername)
                     + File.separator + file.getName());
             FileInputStream streamIn = new FileInputStream(file);
             BufferedOutputStream outStream = new BufferedOutputStream(
@@ -257,7 +257,7 @@ public abstract class MediaProcessorThread extends Thread {
             HttpResponse response = client.execute(getRequest);
             InputStream stream = response.getEntity().getContent();
 
-            localFilePath = FileUtils.getDirectory(foldername) + File.separator
+            localFilePath = FileUtils.getDirectory(context, foldername) + File.separator
                     + Calendar.getInstance().getTimeInMillis() + "."
                     + mediaExtension;
             File localFile = new File(localFilePath);
@@ -290,7 +290,7 @@ public abstract class MediaProcessorThread extends Thread {
             return;
         }
         File directory = null;
-        directory = new File(FileUtils.getDirectory(foldername));
+        directory = new File(FileUtils.getDirectory(context, foldername));
         File[] files = directory.listFiles();
         long count = 0;
         if (files == null) {
@@ -345,7 +345,7 @@ public abstract class MediaProcessorThread extends Thread {
             InputStream inputStream = context.getContentResolver()
                     .openInputStream(Uri.parse(path));
 
-            filePath = FileUtils.getDirectory(foldername) + File.separator
+            filePath = FileUtils.getDirectory(context, foldername) + File.separator
                     + Calendar.getInstance().getTimeInMillis() + extension;
 
             BufferedOutputStream outStream = new BufferedOutputStream(
@@ -384,7 +384,7 @@ public abstract class MediaProcessorThread extends Thread {
         }
         try {
 
-            filePath = FileUtils.getDirectory(foldername) + File.separator
+            filePath = FileUtils.getDirectory(context, foldername) + File.separator
                     + Calendar.getInstance().getTimeInMillis() + extension;
 
             ParcelFileDescriptor parcelFileDescriptor = context
@@ -482,7 +482,7 @@ public abstract class MediaProcessorThread extends Thread {
             InputStream inputStream = context.getContentResolver()
                     .openInputStream(Uri.parse(path));
 
-            filePath = FileUtils.getDirectory(foldername) + File.separator
+            filePath = FileUtils.getDirectory(context, foldername) + File.separator
                     + Calendar.getInstance().getTimeInMillis() + extension;
 
             BufferedOutputStream outStream = new BufferedOutputStream(

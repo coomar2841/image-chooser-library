@@ -16,9 +16,6 @@
 
 package com.kbeanie.imagechooser.api;
 
-import java.io.File;
-import java.util.Calendar;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -33,6 +30,9 @@ import android.util.Log;
 import com.kbeanie.imagechooser.BuildConfig;
 import com.kbeanie.imagechooser.threads.VideoProcessorListener;
 import com.kbeanie.imagechooser.threads.VideoProcessorThread;
+
+import java.io.File;
+import java.util.Calendar;
 
 /**
  * Easy Image Chooser Library for Android Apps. Forget about coding workarounds
@@ -152,10 +152,9 @@ public class VideoChooserManager extends BChooser implements
 	}
 
 	private String captureVideoCurrent() throws Exception {
-		checkDirectory();
 		try {
 			Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-			filePathOriginal = FileUtils.getDirectory(foldername)
+			filePathOriginal = FileUtils.getDirectory(getContext(), foldername)
 					+ File.separator + Calendar.getInstance().getTimeInMillis()
 					+ ".mp4";
 			intent.putExtra(MediaStore.EXTRA_OUTPUT,
@@ -184,7 +183,6 @@ public class VideoChooserManager extends BChooser implements
 	}
 
 	private void pickVideo() throws Exception {
-		checkDirectory();
 		try {
 			Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 			if (extras != null) {
