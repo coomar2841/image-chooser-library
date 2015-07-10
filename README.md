@@ -27,7 +27,7 @@
 &lt;dependency&gt;
     &lt;groupId&gt;com.kbeanie&lt;/groupId&gt;
     &lt;artifactId&gt;image-chooser-library&lt;/artifactId&gt;
-    &lt;version&gt;1.4.4&lt;/version&gt;
+    &lt;version&gt;1.4.5&lt;/version&gt;
 &lt;/dependency&gt;
 </code>
 </pre>
@@ -46,26 +46,16 @@ If you would like to add your app to this list, drop me an email.
 
 ### Release Notes
 
+##### Version "1.4.5"
+1. Removed launcher icon from the library source
+2.
+
 ##### Version "1.4.4"
 1. Minor fix: Launcher Icon collision with default project icon
 
 ##### Version "1.4.3"
 1. Minor bug fixes.
 
-##### Version "1.4.2"
-1. Minor bug fixes.
-
-##### Version "1.4.00"
-1. Fixed correct mime type reporting based on the actual file
-
-##### Version "1.3.56"
-1. Added FileChooser for selecting any file
-
-##### Version "1.3.1"
-1. Added suport sending extras [Issue #34](https://github.com/coomar2841/image-chooser-library/issues/34)
-2. Imports of com.kbeanie.imagechooser.R should be removed [Issue #38](https://github.com/coomar2841/image-chooser-library/issues/38)
-3. Switching to Android Studio/Gradle.
-4. Added maven support
 
 ##### License
 -----------------------------------------------------------------------------------
