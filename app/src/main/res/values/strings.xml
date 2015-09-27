@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Image Chooser App</string>
+	<string name="image_chooser">Image Chooser</string>
+	<string name="video_chooser">Video Chooser</string>
+	<string name="pick_media">Pick Video or Image</string>
+    <string name="pick_file">Pick a file</string>
+	<string name="image_chooser_fragment">Image Chooser (Fragment)</string>
+	<string name="lab_version_string">Version 1.4.4</string>
+</resources>
