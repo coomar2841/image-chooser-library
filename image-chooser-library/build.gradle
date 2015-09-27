@@ -25,7 +25,7 @@ uploadArchives {
             MavenDeployment deployment -> signing.signPom(deployment)
         }
 
-        pom.groupId = group
+        pom.groupId = "com.kbeanie"
         pom.artifactId = "image-chooser-library"
         pom.version = version
 
