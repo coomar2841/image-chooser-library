@@ -19,7 +19,6 @@ package com.kbeanie.imagechooser.threads;
 import com.kbeanie.imagechooser.api.ChosenFile;
 
 public interface FileProcessorListener {
-    public void onProcessedFile(ChosenFile file);
-
-    public void onError(String reason);
+    void onProcessedFile(ChosenFile file);
+    void onError(String reason);
 }

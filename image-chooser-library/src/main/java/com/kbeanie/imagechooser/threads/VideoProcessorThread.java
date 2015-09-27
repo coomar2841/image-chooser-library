@@ -34,9 +34,13 @@ import android.util.Log;
 import com.kbeanie.imagechooser.BuildConfig;
 import com.kbeanie.imagechooser.api.ChosenVideo;
 import com.kbeanie.imagechooser.api.FileUtils;
+import com.kbeanie.imagechooser.exceptions.ChooserException;
+import static com.kbeanie.imagechooser.helpers.StreamHelper.*;
+
 
 public class VideoProcessorThread extends MediaProcessorThread {
-    private final static String TAG = "VideoProcessorThread";
+
+    private final static String TAG = VideoProcessorThread.class.getSimpleName();
 
     private VideoProcessorListener listener;
 
@@ -61,20 +65,15 @@ public class VideoProcessorThread extends MediaProcessorThread {
         try {
             manageDiretoryCache("mp4");
             processVideo();
-        } catch (IOException e) {
-            e.printStackTrace();
-            if (listener != null) {
-                listener.onError(e.getMessage());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception e) { // catch all, just to be sure we can send message back to listener in all circumenstances.
+            Log.e(TAG, e.getMessage(), e);
             if (listener != null) {
                 listener.onError(e.getMessage());
             }
         }
     }
 
-    private void processVideo() throws Exception {
+    private void processVideo() throws ChooserException {
 
         if (BuildConfig.DEBUG) {
             Log.i(TAG, "Processing Video file: " + filePath);
@@ -110,7 +109,7 @@ public class VideoProcessorThread extends MediaProcessorThread {
     }
 
     @Override
-    protected void process() throws Exception {
+    protected void process() throws ChooserException {
         super.process();
         if (shouldCreateThumnails) {
             createPreviewImage();
@@ -121,7 +120,7 @@ public class VideoProcessorThread extends MediaProcessorThread {
         }
     }
 
-    private String createPreviewImage() throws IOException {
+    private String createPreviewImage() throws ChooserException  {
         previewImage = null;
         Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(filePath,
                 Thumbnails.FULL_SCREEN_KIND);
@@ -129,14 +128,22 @@ public class VideoProcessorThread extends MediaProcessorThread {
             previewImage = FileUtils.getDirectory(foldername) + File.separator
                     + Calendar.getInstance().getTimeInMillis() + ".jpg";
             File file = new File(previewImage);
-            FileOutputStream stream = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-            stream.flush();
+
+            FileOutputStream stream = null;
+            try {
+                stream = new FileOutputStream(file);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            } catch(IOException e) {
+                throw new ChooserException(e);
+            } finally {
+                flush(stream);
+            }
+
         }
         return previewImage;
     }
 
-    private String createThumbnailOfVideo() throws IOException {
+    private String createThumbnailOfVideo() throws ChooserException {
         String thumbnailPath = null;
         Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(filePath,
                 Thumbnails.MINI_KIND);
@@ -144,9 +151,16 @@ public class VideoProcessorThread extends MediaProcessorThread {
             thumbnailPath = FileUtils.getDirectory(foldername) + File.separator
                     + Calendar.getInstance().getTimeInMillis() + ".jpg";
             File file = new File(thumbnailPath);
-            FileOutputStream stream = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-            stream.flush();
+
+            FileOutputStream stream = null;
+            try {
+                stream = new FileOutputStream(file);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            } catch(IOException e) {
+                throw new ChooserException(e);
+            } finally {
+                flush(stream);
+            }
         }
         return thumbnailPath;
     }

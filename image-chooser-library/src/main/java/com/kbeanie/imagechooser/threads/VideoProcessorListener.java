@@ -19,7 +19,6 @@ package com.kbeanie.imagechooser.threads;
 import com.kbeanie.imagechooser.api.ChosenVideo;
 
 public interface VideoProcessorListener {
-    public void onProcessedVideo(ChosenVideo video);
-
-    public void onError(String reason);
+    void onProcessedVideo(ChosenVideo video);
+    void onError(String reason);
 }

@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'maven'
 apply plugin: 'signing'
 
+version = "1.5.0"
 group = "com.kbeanie"
 
 configurations {
@@ -24,6 +25,10 @@ uploadArchives {
             MavenDeployment deployment -> signing.signPom(deployment)
         }
 
+        pom.groupId = group
+        pom.artifactId = "image-chooser-library"
+        pom.version = version
+
         repository(url: sonatypeRepo) {
             authentication(userName: sonatypeUsername,
                     password: sonatypePassword)
@@ -36,9 +41,9 @@ uploadArchives {
             url 'https://github.com/coomar2841/image-chooser-library'
 
             scm {
-                url 'scm:git@github.com:coomar2841/image-chooser-library.git'
-                connection 'scm:git@github.com:coomar2841/image-chooser-library.git'
-                developerConnection 'scm:git@github.com:coomar2841/image-chooser-library.git'
+                url scmUrl
+                connection scmUrl
+                developerConnection scmUrl
             }
 
             licenses {
@@ -68,7 +73,7 @@ android {
         minSdkVersion 8
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.0"
+        versionName version
     }
     buildTypes {
         release {
@@ -76,9 +81,21 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    signingConfigs {
+        debug {
+            storeFile file("debug.keystore")
+        }
+        release {
+//            keyAlias chooserReleaseKeyAlias
+//            keyPassword chooserReleaseKeyPassword
+//            storeFile file(chooserReleaseStoreFile)
+//            storePassword chooserReleaseStorePassword
+        }
+    }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:support-v4:22.1.1'
+    compile 'com.android.support:support-v4:23.0.1'
 }

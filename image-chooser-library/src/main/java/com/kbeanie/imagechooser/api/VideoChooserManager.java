@@ -18,14 +18,10 @@
 
 package com.kbeanie.imagechooser.api;
 
-import java.io.File;
-import java.util.Calendar;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
@@ -33,6 +29,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.kbeanie.imagechooser.BuildConfig;
+import com.kbeanie.imagechooser.exceptions.ChooserException;
 import com.kbeanie.imagechooser.threads.VideoProcessorListener;
 import com.kbeanie.imagechooser.threads.VideoProcessorThread;
 
@@ -44,7 +41,8 @@ import com.kbeanie.imagechooser.threads.VideoProcessorThread;
  */
 public class VideoChooserManager extends BChooser implements
         VideoProcessorListener {
-    private final static String TAG = "VideoChooserManager";
+
+    private final static String TAG = VideoChooserManager.class.getSimpleName();
 
     private VideoChooserListener listener;
 
@@ -127,10 +125,10 @@ public class VideoChooserManager extends BChooser implements
     }
 
     @Override
-    public String choose() throws Exception {
+    public String choose() throws ChooserException {
         String path = null;
         if (listener == null) {
-            throw new IllegalArgumentException(
+            throw new ChooserException(
                     "ImageChooserListener cannot be null. Forgot to set ImageChooserListener???");
         }
         switch (type) {
@@ -141,13 +139,13 @@ public class VideoChooserManager extends BChooser implements
                 pickVideo();
                 break;
             default:
-                throw new IllegalArgumentException(
+                throw new ChooserException(
                         "Cannot choose an image in VideoChooserManager");
         }
         return path;
     }
 
-    private String captureVideo() throws Exception {
+    private String captureVideo() throws ChooserException {
         int sdk = Build.VERSION.SDK_INT;
         if (sdk >= Build.VERSION_CODES.GINGERBREAD
                 && sdk <= Build.VERSION_CODES.GINGERBREAD_MR1) {
@@ -157,26 +155,23 @@ public class VideoChooserManager extends BChooser implements
         }
     }
 
-    private String captureVideoCurrent() throws Exception {
+    private String captureVideoCurrent() throws ChooserException {
         checkDirectory();
         try {
             Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-            filePathOriginal = FileUtils.getDirectory(foldername)
-                    + File.separator + Calendar.getInstance().getTimeInMillis()
-                    + ".mp4";
-            intent.putExtra(MediaStore.EXTRA_OUTPUT,
-                    Uri.fromFile(new File(filePathOriginal)));
+            filePathOriginal = buildFilePathOriginal(foldername);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, buildCaptureUri(filePathOriginal));
             if (extras != null) {
                 intent.putExtras(extras);
             }
             startActivity(intent);
         } catch (ActivityNotFoundException e) {
-            throw new Exception("Activity not found");
+            throw new ChooserException(e);
         }
         return filePathOriginal;
     }
 
-    private String captureVideoPatchedMethodForGingerbread() throws Exception {
+    private String captureVideoPatchedMethodForGingerbread() throws ChooserException {
         try {
             Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
             if (extras != null) {
@@ -184,12 +179,12 @@ public class VideoChooserManager extends BChooser implements
             }
             startActivity(intent);
         } catch (ActivityNotFoundException e) {
-            throw new Exception("Activity not found");
+            throw new ChooserException(e);
         }
         return null;
     }
 
-    private void pickVideo() throws Exception {
+    private void pickVideo() throws ChooserException {
         checkDirectory();
         try {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -199,7 +194,7 @@ public class VideoChooserManager extends BChooser implements
             intent.setType("video/*");
             startActivity(intent);
         } catch (ActivityNotFoundException e) {
-            throw new Exception("Activity not found");
+            throw new ChooserException(e);
         }
     }
 
@@ -238,7 +233,7 @@ public class VideoChooserManager extends BChooser implements
 
     @SuppressLint("NewApi")
     private void processCameraVideo(Intent intent) {
-        String path = null;
+        String path;
         int sdk = Build.VERSION.SDK_INT;
         if (sdk >= Build.VERSION_CODES.GINGERBREAD
                 && sdk <= Build.VERSION_CODES.GINGERBREAD_MR1) {
