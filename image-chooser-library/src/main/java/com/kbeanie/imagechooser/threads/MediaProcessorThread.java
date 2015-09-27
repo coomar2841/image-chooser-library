@@ -117,12 +117,12 @@ public abstract class MediaProcessorThread extends Thread {
 
     protected String[] createThumbnails(String image) throws Exception {
         String[] images = new String[2];
-        images[0] = getThumnailPath(image);
+        images[0] = getThumbnailPath(image);
         images[1] = getThumbnailSmallPath(image);
         return images;
     }
 
-    private String getThumnailPath(String file) throws Exception {
+    private String getThumbnailPath(String file) throws Exception {
         if (BuildConfig.DEBUG) {
             Log.i(TAG, "Compressing ... THUMBNAIL");
         }
