@@ -2,7 +2,8 @@ apply plugin: 'com.android.library'
 apply plugin: 'maven'
 apply plugin: 'signing'
 
-group = "com.seniordev" // "com.kbeanie"
+version = "1.5.0"
+group = "com.kbeanie"
 
 configurations {
     archives {
@@ -24,11 +25,11 @@ uploadArchives {
             MavenDeployment deployment -> signing.signPom(deployment)
         }
 
-        pom.groupId = "com.seniordev"
+        pom.groupId = group
         pom.artifactId = "image-chooser-library"
-        pom.version = "1.5"
+        pom.version = version
 
-        repository(url: 'http://ci.bipper.com/artifactory/ext-release-local') { // sonatypeRepo ext-release-local
+        repository(url: sonatypeRepo) {
             authentication(userName: sonatypeUsername,
                     password: sonatypePassword)
         }
@@ -37,13 +38,12 @@ uploadArchives {
             name 'Image Chooser Library'
             packaging 'aar'
             description 'Image Chooser Library for Android Applications'
-            //url 'https://github.com/coomar2841/image-chooser-library'
-            url 'https://github.com/tha022/image-intent-handler'
+            url 'https://github.com/coomar2841/image-chooser-library'
 
             scm {
-                url                 'scm:git:ssh://git@ci.bipper.com:3687/image-chooser-library'
-                connection          'scm:git:ssh://git@ci.bipper.com:3687/image-chooser-library'
-                developerConnection 'scm:git:ssh://git@ci.bipper.com:3687/image-chooser-library'
+                url                 scmUrl
+                connection          scmUrl
+                developerConnection scmUrl
             }
 
             licenses {
@@ -56,9 +56,9 @@ uploadArchives {
 
             developers {
                 developer {
-                    id 'tha022'
-                    name 'Thomas Vervik'
-                    email 'thomas.vervik@seniordevonly.com'
+                    id 'coomar2841'
+                    name 'Kumar Bibek'
+                    email 'coomar.101@gmail.com'
                 }
             }
         }
@@ -73,7 +73,7 @@ android {
         minSdkVersion 8
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.5"
+        versionName version
     }
     buildTypes {
         release {
@@ -87,10 +87,10 @@ android {
             storeFile file("debug.keystore")
         }
         release {
-            keyAlias digReleaseKeyAlias
-            keyPassword digReleaseKeyPassword
-            storeFile file(digReleaseStoreFile)
-            storePassword digReleaseStorePassword
+            keyAlias chooserReleaseKeyAlias
+            keyPassword chooserReleaseKeyPassword
+            storeFile file(chooserReleaseStoreFile)
+            storePassword chooserReleaseStorePassword
         }
     }
 }
