@@ -35,13 +35,10 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 
 import com.kbeanie.imagechooser.exceptions.ChooserException;
-import com.kbeanie.imagechooser.factory.DateFactory;
 import com.kbeanie.imagechooser.factory.UriFactory;
 
-import static com.kbeanie.imagechooser.helpers.StreamHelper.close;
 import static com.kbeanie.imagechooser.helpers.StreamHelper.closeSilent;
 import static com.kbeanie.imagechooser.helpers.StreamHelper.verifyCursor;
-import static com.kbeanie.imagechooser.helpers.StreamHelper.verifyStream;
 
 public abstract class BChooser {
 
@@ -148,9 +145,7 @@ public abstract class BChooser {
         directory = new File(FileUtils.getDirectory(foldername));
         if (!directory.exists()) {
             if(!directory.mkdirs() && !directory.isDirectory()) {
-                String err = "Error creating directory: "+directory;
-                Log.d(TAG, err);
-                throw new ChooserException(err);
+                throw new ChooserException("Error creating directory: "+directory);
             }
         }
     }
