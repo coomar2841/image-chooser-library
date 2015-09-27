@@ -19,7 +19,6 @@ package com.kbeanie.imagechooser.threads;
 import com.kbeanie.imagechooser.api.ChosenImage;
 
 public interface ImageProcessorListener {
-    public void onProcessedImage(ChosenImage image);
-
-    public void onError(String reason);
+    void onProcessedImage(ChosenImage image);
+    void onError(String reason);
 }

@@ -6,6 +6,8 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Build;
 import android.support.v4.app.Fragment;
+
+import com.kbeanie.imagechooser.exceptions.ChooserException;
 import com.kbeanie.imagechooser.threads.FileProcessorListener;
 import com.kbeanie.imagechooser.threads.FileProcessorThread;
 
@@ -14,7 +16,7 @@ import com.kbeanie.imagechooser.threads.FileProcessorThread;
  */
 public class FileChooserManager extends MediaChooserManager implements FileProcessorListener {
 
-    private final static String TAG = "FileChooserManager";
+    private final static String TAG = FileChooserManager.class.getSimpleName();
 
     private FileChooserListener listener;
 
@@ -77,7 +79,7 @@ public class FileChooserManager extends MediaChooserManager implements FileProce
     }
 
     @Override
-    public String choose() throws Exception {
+    public String choose() throws ChooserException {
         if (listener == null) {
             throw new IllegalArgumentException(
                     "FileChooserListener cannot be null. Forgot to set FileChooserListener???");
@@ -91,7 +93,7 @@ public class FileChooserManager extends MediaChooserManager implements FileProce
             intent.setType(mimeType);
             startActivity(intent);
         } catch (ActivityNotFoundException e) {
-            throw new Exception("Activity not Found");
+            throw new ChooserException(e);
         }
         return null;
     }

@@ -20,6 +20,7 @@ package com.kbeanie.imagechooser.threads;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileFilter;
@@ -28,6 +29,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -60,9 +62,12 @@ import android.util.Log;
 
 import com.kbeanie.imagechooser.BuildConfig;
 import com.kbeanie.imagechooser.api.FileUtils;
+import com.kbeanie.imagechooser.exceptions.ChooserException;
+
+import static com.kbeanie.imagechooser.helpers.StreamHelper.*;
 
 public abstract class MediaProcessorThread extends Thread {
-    private final static String TAG = "MediaProcessorThread";
+    private final static String TAG = MediaProcessorThread.class.getSimpleName();
 
     // 500 MB Cache size
     protected final static int MAX_DIRECTORY_SIZE = 500 * 1024 * 1024;
@@ -85,6 +90,7 @@ public abstract class MediaProcessorThread extends Thread {
 
     protected boolean clearOldFiles = false;
 
+
     public MediaProcessorThread(String filePath, String foldername,
                                 boolean shouldCreateThumbnails) {
         this.filePath = filePath;
@@ -104,40 +110,42 @@ public abstract class MediaProcessorThread extends Thread {
         this.clearOldFiles = true;
     }
 
-    protected void downloadAndProcess(String url) throws Exception {
+    protected void downloadAndProcess(String url) throws ChooserException {
         filePath = downloadFile(url);
         process();
     }
 
-    protected void process() throws IOException, Exception {
+    protected void process() throws ChooserException {
         if (!filePath.contains(foldername)) {
             copyFileToDir();
         }
     }
 
-    protected String[] createThumbnails(String image) throws Exception {
+    protected String[] createThumbnails(String image) throws ChooserException {
         String[] images = new String[2];
         images[0] = getThumnailPath(image);
         images[1] = getThumbnailSmallPath(image);
         return images;
     }
 
-    private String getThumnailPath(String file) throws Exception {
+    private String getThumnailPath(String file) throws ChooserException {
         if (BuildConfig.DEBUG) {
             Log.i(TAG, "Compressing ... THUMBNAIL");
         }
         return compressAndSaveImage(file, THUMBNAIL_BIG);
     }
 
-    private String getThumbnailSmallPath(String file) throws Exception {
+    private String getThumbnailSmallPath(String file) throws ChooserException {
         if (BuildConfig.DEBUG) {
             Log.i(TAG, "Compressing ... THUMBNAIL SMALL");
         }
         return compressAndSaveImage(file, THUMBNAIL_SMALL);
     }
 
-    private String compressAndSaveImage(String fileImage, int scale)
-            throws Exception {
+    private String compressAndSaveImage(String fileImage, int scale) throws ChooserException {
+
+        FileOutputStream stream = null;
+
         try {
             ExifInterface exif = new ExifInterface(fileImage);
             String width = exif.getAttribute(ExifInterface.TAG_IMAGE_WIDTH);
@@ -147,6 +155,7 @@ public abstract class MediaProcessorThread extends Thread {
                     ExifInterface.ORIENTATION_NORMAL);
             int rotate = 0;
             if (BuildConfig.DEBUG) {
+                Log.i(TAG, "File name: "+fileImage+" scale: "+scale);
                 Log.i(TAG, "Before: " + width + "x" + length);
             }
 
@@ -182,17 +191,20 @@ public abstract class MediaProcessorThread extends Thread {
                 Log.i(TAG, "Rotate: " + rotate);
             }
             Bitmap bitmap = BitmapFactory.decodeFile(fileImage, options);
+            verifyBitmap(fileImage, bitmap);
+
             File original = new File(fileImage);
             File file = new File(
                     (original.getParent() + File.separator + original.getName()
                             .replace(".", "_fact_" + scale + ".")));
-            FileOutputStream stream = new FileOutputStream(file);
+            stream = new FileOutputStream(file);
             if (rotate != 0) {
                 Matrix matrix = new Matrix();
                 matrix.setRotate(rotate);
                 bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
                         bitmap.getHeight(), matrix, false);
             }
+
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
 
             if (BuildConfig.DEBUG) {
@@ -206,47 +218,43 @@ public abstract class MediaProcessorThread extends Thread {
                     Log.i(TAG, "After: " + widthAfter + "x" + lengthAfter);
                 }
             }
-            stream.flush();
-            stream.close();
+
             return file.getAbsolutePath();
 
         } catch (IOException e) {
-            e.printStackTrace();
-            throw e;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new Exception("Corrupt or deleted file???");
+            throw new ChooserException(e);
+        } finally {
+            flush(stream);
+            close(stream);
         }
     }
 
-    private void copyFileToDir() throws Exception {
+    private void copyFileToDir() throws ChooserException {
+
+        FileInputStream streamIn = null;
+        BufferedOutputStream outStream = null;
+
         try {
             File file;
             file = new File(Uri.parse(filePath).getPath());
-            File copyTo = new File(FileUtils.getDirectory(foldername)
-                    + File.separator + file.getName());
-            FileInputStream streamIn = new FileInputStream(file);
-            BufferedOutputStream outStream = new BufferedOutputStream(
-                    new FileOutputStream(copyTo));
+            File copyTo = new File(FileUtils.getDirectory(foldername) + File.separator + file.getName());
+            streamIn = new FileInputStream(file);
+            outStream = new BufferedOutputStream(new FileOutputStream(copyTo));
             byte[] buf = new byte[2048];
             int len;
             while ((len = streamIn.read(buf)) > 0) {
                 outStream.write(buf, 0, len);
             }
-            streamIn.close();
-            outStream.close();
+
             filePath = copyTo.getAbsolutePath();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            throw new Exception("File not found");
         } catch (IOException e) {
-            e.printStackTrace();
-            throw e;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new Exception("Corrupt or deleted file???");
+            throw new ChooserException(e);
+        } finally {
+            close(streamIn);
+            close(outStream);
         }
     }
+
 
     protected String downloadFile(String url) {
         String localFilePath = "";
@@ -289,7 +297,7 @@ public abstract class MediaProcessorThread extends Thread {
         if (!clearOldFiles) {
             return;
         }
-        File directory = null;
+        File directory;
         directory = new File(FileUtils.getDirectory(foldername));
         File[] files = directory.listFiles();
         long count = 0;
@@ -336,42 +344,45 @@ public abstract class MediaProcessorThread extends Thread {
     protected abstract void processingDone(String file, String thumbnail,
                                            String thumbnailSmall);
 
-    protected void processPicasaMedia(String path, String extension)
-            throws Exception {
+    protected void processPicasaMedia(String path, String extension) throws ChooserException {
         if (BuildConfig.DEBUG) {
             Log.i(TAG, "Picasa Started");
         }
+
+        InputStream inputStream = null;
+        BufferedOutputStream outStream = null;
+
         try {
-            InputStream inputStream = context.getContentResolver()
+            inputStream = context.getContentResolver()
                     .openInputStream(Uri.parse(path));
+
+            verifyStream(path, inputStream);
 
             filePath = FileUtils.getDirectory(foldername) + File.separator
                     + Calendar.getInstance().getTimeInMillis() + extension;
 
-            BufferedOutputStream outStream = new BufferedOutputStream(
-                    new FileOutputStream(filePath));
+            outStream = new BufferedOutputStream(new FileOutputStream(filePath));
             byte[] buf = new byte[2048];
             int len;
             while ((len = inputStream.read(buf)) > 0) {
                 outStream.write(buf, 0, len);
             }
-            inputStream.close();
-            outStream.close();
+
             process();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            throw e;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
+        } catch (IOException e) {
+            throw new ChooserException(e);
+        } finally {
+            close(inputStream);
+            close(outStream);
         }
+
         if (BuildConfig.DEBUG) {
             Log.i(TAG, "Picasa Done");
         }
     }
 
     protected void processGooglePhotosMedia(String path, String extension)
-            throws Exception {
+            throws ChooserException {
         if (BuildConfig.DEBUG) {
             Log.i(TAG, "Google photos Started");
             Log.i(TAG, "URI: " + path);
@@ -382,6 +393,10 @@ public abstract class MediaProcessorThread extends Thread {
                 && !TextUtils.isEmpty(retrievedExtension)) {
             extension = "." + retrievedExtension;
         }
+
+        InputStream inputStream = null;
+        BufferedOutputStream outStream = null;
+
         try {
 
             filePath = FileUtils.getDirectory(foldername) + File.separator
@@ -391,31 +406,33 @@ public abstract class MediaProcessorThread extends Thread {
                     .getContentResolver().openFileDescriptor(Uri.parse(path),
                             "r");
 
+            verifyStream(path, parcelFileDescriptor);
+
             FileDescriptor fileDescriptor = parcelFileDescriptor
                     .getFileDescriptor();
 
-            InputStream inputStream = new FileInputStream(fileDescriptor);
+            inputStream = new FileInputStream(fileDescriptor);
 
             BufferedInputStream reader = new BufferedInputStream(inputStream);
 
-            BufferedOutputStream outStream = new BufferedOutputStream(
+            outStream = new BufferedOutputStream(
                     new FileOutputStream(filePath));
             byte[] buf = new byte[2048];
             int len;
             while ((len = reader.read(buf)) > 0) {
                 outStream.write(buf, 0, len);
             }
-            outStream.flush();
-            outStream.close();
-            inputStream.close();
             process();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            throw e;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
+        } catch (IOException e) {
+
+            throw new ChooserException(e);
+        } finally {
+            flush(outStream);
+            close(outStream);
+            close(inputStream);
         }
+
+
         if (BuildConfig.DEBUG) {
             Log.i(TAG, "Picasa Done");
         }
@@ -476,31 +493,34 @@ public abstract class MediaProcessorThread extends Thread {
     }
 
     protected void processContentProviderMedia(String path, String extension)
-            throws Exception {
+            throws ChooserException {
         checkExtension(Uri.parse(path));
+
+        InputStream inputStream = null;
+        BufferedOutputStream outStream = null;
+
         try {
-            InputStream inputStream = context.getContentResolver()
+            inputStream = context.getContentResolver()
                     .openInputStream(Uri.parse(path));
+            verifyStream(path, inputStream);
 
             filePath = FileUtils.getDirectory(foldername) + File.separator
                     + Calendar.getInstance().getTimeInMillis() + extension;
 
-            BufferedOutputStream outStream = new BufferedOutputStream(
-                    new FileOutputStream(filePath));
+            outStream = new BufferedOutputStream(new FileOutputStream(filePath));
             byte[] buf = new byte[2048];
             int len;
             while ((len = inputStream.read(buf)) > 0) {
                 outStream.write(buf, 0, len);
             }
-            inputStream.close();
-            outStream.close();
+
             process();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            throw e;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage(), e);
+            throw new ChooserException(e);
+        } finally {
+            close(inputStream);
+            close(outStream);
         }
     }
 

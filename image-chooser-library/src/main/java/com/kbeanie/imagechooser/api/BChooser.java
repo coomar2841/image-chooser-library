@@ -32,8 +32,18 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
 import android.support.v4.app.Fragment;
+import android.util.Log;
+
+import com.kbeanie.imagechooser.exceptions.ChooserException;
+import com.kbeanie.imagechooser.factory.UriFactory;
+
+import static com.kbeanie.imagechooser.helpers.StreamHelper.closeSilent;
+import static com.kbeanie.imagechooser.helpers.StreamHelper.verifyCursor;
 
 public abstract class BChooser {
+
+    static final String TAG = BChooser.class.getSimpleName();
+
     protected Activity activity;
 
     protected Fragment fragment;
@@ -118,7 +128,7 @@ public abstract class BChooser {
      * @throws IllegalArgumentException
      * @throws Exception
      */
-    public abstract String choose() throws IllegalArgumentException, Exception;
+    public abstract String choose() throws ChooserException;
 
     /**
      * Call this method to process the result from within your onActivityResult
@@ -130,11 +140,13 @@ public abstract class BChooser {
      */
     public abstract void submit(int requestCode, Intent data);
 
-    protected void checkDirectory() {
-        File directory = null;
+    protected void checkDirectory() throws ChooserException {
+        File directory;
         directory = new File(FileUtils.getDirectory(foldername));
         if (!directory.exists()) {
-            directory.mkdirs();
+            if(!directory.mkdirs() && !directory.isDirectory()) {
+                throw new ChooserException("Error creating directory: "+directory);
+            }
         }
     }
 
@@ -196,11 +208,8 @@ public abstract class BChooser {
 
         ContentResolver cR = getContext().getContentResolver();
         String type = cR.getType(data.getData());
-        if (type != null && type.startsWith("video")) {
-            return true;
-        }
+        return type != null && type.startsWith("video");
 
-        return false;
     }
 
     public void setExtras(Bundle extras) {
@@ -218,25 +227,40 @@ public abstract class BChooser {
      * @return
      */
     public long queryProbableFileSize(Uri uri, Context context) {
-        try {
-            if (uri.toString().startsWith("file")) {
-                File file = new File(uri.getPath());
-                return file.length();
-            } else if (uri.toString().startsWith("content")) {
-                Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
-                cursor.moveToFirst();
-                long length = cursor.getLong(cursor.getColumnIndex(OpenableColumns.SIZE));
-                cursor.close();
-                return length;
-            }
-            return 0;
-        } catch (Exception e) {
-            return 0;
+
+        if (uri.toString().startsWith("file")) {
+            File file = new File(uri.getPath());
+            return file.length();
         }
+        else if (uri.toString().startsWith("content")) {
+            Cursor cursor = null;
+            try {
+                cursor = context.getContentResolver().query(uri, null, null, null, null);
+                verifyCursor(uri, cursor);
+                if(cursor.moveToFirst()) {
+                    return cursor.getLong(cursor.getColumnIndex(OpenableColumns.SIZE));
+                }
+                return 0;
+            } catch (ChooserException e) {
+                return 0;
+            } finally {
+                closeSilent(cursor);
+            }
+        }
+
+        return 0;
     }
 
     private void initDirector(Context context){
         BChooserPreferences preferences = new BChooserPreferences(context);
         foldername = preferences.getFolderName();
+    }
+
+    protected String buildFilePathOriginal(String foldername) {
+        return UriFactory.getInstance().getFilePathOriginal(foldername);
+    }
+
+    protected Uri buildCaptureUri(String filePathOriginal) {
+        return Uri.fromFile(new File(filePathOriginal));
     }
 }

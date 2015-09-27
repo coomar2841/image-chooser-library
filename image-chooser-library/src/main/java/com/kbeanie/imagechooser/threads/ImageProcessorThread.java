@@ -16,8 +16,6 @@
 
 package com.kbeanie.imagechooser.threads;
 
-import java.io.IOException;
-
 import android.content.Context;
 import android.net.Uri;
 import android.text.TextUtils;
@@ -25,6 +23,8 @@ import android.util.Log;
 
 import com.kbeanie.imagechooser.BuildConfig;
 import com.kbeanie.imagechooser.api.ChosenImage;
+import com.kbeanie.imagechooser.exceptions.ChooserException;
+
 
 public class ImageProcessorThread extends MediaProcessorThread {
 
@@ -51,20 +51,15 @@ public class ImageProcessorThread extends MediaProcessorThread {
 		try {
 			manageDiretoryCache("jpg");
 			processImage();
-		} catch (IOException e) {
-			e.printStackTrace();
-			if (listener != null) {
-				listener.onError(e.getMessage());
-			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Log.e(TAG, e.getMessage(), e);
 			if (listener != null) {
 				listener.onError(e.getMessage());
 			}
 		}
 	}
 
-	private void processImage() throws Exception {
+	private void processImage() throws ChooserException {
 		if (BuildConfig.DEBUG) {
 			Log.i(TAG, "Processing Image File: " + filePath);
 		}
@@ -97,7 +92,7 @@ public class ImageProcessorThread extends MediaProcessorThread {
 	}
 
 	@Override
-	protected void process() throws Exception {
+	protected void process() throws ChooserException {
 		super.process();
 		if (shouldCreateThumnails) {
 			String[] thumbnails = createThumbnails(this.filePath);

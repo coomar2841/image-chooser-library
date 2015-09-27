@@ -27,6 +27,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.kbeanie.imagechooser.BuildConfig;
+import com.kbeanie.imagechooser.exceptions.ChooserException;
 import com.kbeanie.imagechooser.threads.ImageProcessorListener;
 import com.kbeanie.imagechooser.threads.ImageProcessorThread;
 import com.kbeanie.imagechooser.threads.MediaProcessorThread;
@@ -41,7 +42,8 @@ import com.kbeanie.imagechooser.threads.VideoProcessorThread;
  */
 public class MediaChooserManager extends BChooser implements
         ImageProcessorListener, VideoProcessorListener {
-    private final static String TAG = "MediaChooserManager";
+
+    private final static String TAG = MediaChooserManager.class.getSimpleName();
 
     private MediaChooserListener listener;
 
@@ -152,10 +154,9 @@ public class MediaChooserManager extends BChooser implements
     }
 
     @Override
-    public String choose() throws Exception {
-        String path = null;
+    public String choose() throws ChooserException {
         if (listener == null) {
-            throw new IllegalArgumentException(
+            throw new ChooserException(
                     "MediaChooserListener cannot be null. Forgot to set MediaChooserListener???");
         }
         switch (type) {
@@ -163,14 +164,14 @@ public class MediaChooserManager extends BChooser implements
                 chooseMedia();
                 break;
             default:
-                throw new IllegalArgumentException(
+                throw new ChooserException(
                         "This chooser type is unappropriate with MediaChooserManager: "
                                 + type);
         }
-        return path;
+        return null;
     }
 
-    private void chooseMedia() throws Exception {
+    private void chooseMedia() throws ChooserException {
         checkDirectory();
         try {
             Intent intent = new Intent(Intent.ACTION_PICK);
@@ -180,7 +181,7 @@ public class MediaChooserManager extends BChooser implements
             intent.setType("video/*, image/*");
             startActivity(intent);
         } catch (ActivityNotFoundException e) {
-            throw new Exception("Activity not found");
+            throw new ChooserException(e);
         }
     }
 
@@ -209,7 +210,7 @@ public class MediaChooserManager extends BChooser implements
                     Log.i(TAG, "File: " + filePathOriginal);
                 }
                 String path = filePathOriginal;
-                MediaProcessorThread thread = null;
+                MediaProcessorThread thread;
 
                 if (!wasVideoSelected(data)) {
                     thread = new ImageProcessorThread(path, foldername,

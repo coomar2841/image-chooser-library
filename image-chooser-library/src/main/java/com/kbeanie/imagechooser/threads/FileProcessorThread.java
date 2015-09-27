@@ -28,6 +28,7 @@ import android.webkit.MimeTypeMap;
 import com.kbeanie.imagechooser.BuildConfig;
 import com.kbeanie.imagechooser.api.ChosenFile;
 import com.kbeanie.imagechooser.api.FileUtils;
+import com.kbeanie.imagechooser.exceptions.ChooserException;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -38,6 +39,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLConnection;
 import java.util.Calendar;
+import static com.kbeanie.imagechooser.helpers.StreamHelper.*;
+
 
 public class FileProcessorThread extends MediaProcessorThread {
 
@@ -66,14 +69,18 @@ public class FileProcessorThread extends MediaProcessorThread {
         this.context = context;
         if (filePath.startsWith("content")) {
             cr = context.getContentResolver();
-            Cursor cursor = null;
             mimeType = null;
+
+            InputStream stream = null;
             try {
-                InputStream stream = cr.openInputStream(Uri.parse(filePath));
+                stream = cr.openInputStream(Uri.parse(filePath));
+                verifyStream(filePath, stream);
                 mimeType = URLConnection.guessContentTypeFromStream(stream);
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (IOException | ChooserException e) {
+                Log.e(TAG, e.getMessage(), e);
                 // Do nothing
+            } finally {
+                closeSilent(stream);
             }
             if (mimeType == null) {
                 mimeType = cr.getType(Uri.parse(filePath));
@@ -82,6 +89,8 @@ public class FileProcessorThread extends MediaProcessorThread {
             if (BuildConfig.DEBUG) {
                 Log.i(TAG, "File mime type: " + mimeType);
             }
+
+            Cursor cursor = null;
             try {
                 cursor = cr.query(Uri.parse(filePath), null, null, null, null);
                 if (cursor != null && cursor.moveToFirst()) {
@@ -89,7 +98,7 @@ public class FileProcessorThread extends MediaProcessorThread {
                             cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
                 }
             } finally {
-                cursor.close();
+                closeSilent(cursor);
             }
             String extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType);
             Log.i(TAG, "Extension: " + extension);
@@ -105,9 +114,11 @@ public class FileProcessorThread extends MediaProcessorThread {
             }
         } else if (filePath.startsWith("file")) {
             String extension = null;
+
+            InputStream stream = null;
             try {
                 File file = new File(Uri.parse(filePath).getPath());
-                InputStream stream = new FileInputStream(file);
+                stream = new FileInputStream(file);
                 mimeType = URLConnection.guessContentTypeFromStream(stream);
                 cr = context.getContentResolver();
                 mimeType = cr.getType(Uri.parse(filePath));
@@ -117,9 +128,11 @@ public class FileProcessorThread extends MediaProcessorThread {
                         setMediaExtension("." + extension);
                     }
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (IOException e) {
+                Log.e(TAG, e.getMessage(), e);
                 // Do nothing
+            } finally {
+                closeSilent(stream);
             }
 
             // Default Mime Type
@@ -147,20 +160,15 @@ public class FileProcessorThread extends MediaProcessorThread {
         try {
             manageDiretoryCache(mediaExtension);
             processFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-            if (listener != null) {
-                listener.onError(e.getMessage());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception e) { // catch all, just to be sure we can send message back to listener in all circumenstances.
+            Log.e(TAG, e.getMessage(), e);
             if (listener != null) {
                 listener.onError(e.getMessage());
             }
         }
     }
 
-    private void processFile() throws Exception {
+    private void processFile() throws ChooserException {
         if (BuildConfig.DEBUG) {
             Log.i(TAG, "Processing File: " + filePath);
         }
@@ -168,16 +176,20 @@ public class FileProcessorThread extends MediaProcessorThread {
         process();
     }
 
-    protected void processFileDetails(String path)
-            throws Exception {
+    protected void processFileDetails(String path) throws ChooserException {
         if (BuildConfig.DEBUG) {
             Log.i(TAG, "File Started");
         }
         if (filePath.startsWith("content:")) {
+
+            InputStream inputStream = null;
+            BufferedOutputStream outStream = null;
+
             try {
                 Uri uri = Uri.parse(filePath);
-                InputStream inputStream = context.getContentResolver()
-                        .openInputStream(uri);
+                inputStream = context.getContentResolver().openInputStream(uri);
+                verifyStream(filePath, inputStream);
+
                 if (fileDisplayName == null) {
                     fileDisplayName = "" + Calendar.getInstance().getTimeInMillis() + mediaExtension;
                 }
@@ -187,23 +199,20 @@ public class FileProcessorThread extends MediaProcessorThread {
                 filePath = FileUtils.getDirectory(foldername) + File.separator
                         + fileDisplayName;
 
-                BufferedOutputStream outStream = new BufferedOutputStream(
+                outStream = new BufferedOutputStream(
                         new FileOutputStream(filePath));
                 byte[] buf = new byte[2048];
                 int len;
                 while ((len = inputStream.read(buf)) > 0) {
                     outStream.write(buf, 0, len);
                 }
-                inputStream.close();
-                outStream.close();
                 File fileForSize = new File(filePath);
                 fileSize = fileForSize.length();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-                throw e;
-            } catch (Exception e) {
-                e.printStackTrace();
-                throw e;
+            } catch (IOException e) {
+                throw new ChooserException(e);
+            } finally {
+                close(inputStream);
+                close(outStream);
             }
         } else if (filePath.startsWith("file:")) {
             filePath = filePath.substring(7);
@@ -214,7 +223,7 @@ public class FileProcessorThread extends MediaProcessorThread {
     }
 
     @Override
-    protected void process() throws Exception {
+    protected void process() throws ChooserException {
         super.process();
         if (listener != null) {
             ChosenFile file = new ChosenFile();
