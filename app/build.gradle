@@ -23,8 +23,8 @@ android {
         applicationId "com.beanie.imagechooserapp"
         minSdkVersion 9
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 53
-        versionName "1.4.3"
+        versionCode 54
+        versionName "1.5.0"
     }
     buildTypes {
         release {
@@ -41,6 +41,7 @@ dependencies {
 //    compile 'com.kbeanie:image-chooser-library:+@aar'
     compile 'com.google.android.gms:play-services-base:8.1.0'
     compile 'com.google.android.gms:play-services-ads:8.1.0'
+    compile 'com.google.android.gms:play-services-analytics:8.1.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile('com.crashlytics.sdk.android:crashlytics:2.2.4@aar') {
         transitive = true;
