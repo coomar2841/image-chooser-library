@@ -113,6 +113,7 @@ public class FileChooserManager extends MediaChooserManager implements FileProce
 
         FileProcessorThread thread = new FileProcessorThread(dataString,
                 foldername, shouldCreateThumbnails);
+        thread.clearOldFiles(clearOldFiles);
         thread.setListener(this);
         if (activity != null) {
             thread.setContext(activity.getApplicationContext());

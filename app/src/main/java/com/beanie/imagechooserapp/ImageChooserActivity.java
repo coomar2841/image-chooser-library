@@ -108,6 +108,7 @@ public class ImageChooserActivity extends BasicActivity implements
         imageChooserManager = new ImageChooserManager(this,
                 ChooserType.REQUEST_PICK_PICTURE, true);
         imageChooserManager.setImageChooserListener(this);
+        imageChooserManager.clearOldFiles();
         try {
             pbar.setVisibility(View.VISIBLE);
             filePath = imageChooserManager.choose();

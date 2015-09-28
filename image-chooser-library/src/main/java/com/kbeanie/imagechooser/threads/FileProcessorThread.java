@@ -33,7 +33,6 @@ import com.kbeanie.imagechooser.exceptions.ChooserException;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -158,7 +157,7 @@ public class FileProcessorThread extends MediaProcessorThread {
     @Override
     public void run() {
         try {
-            manageDiretoryCache(mediaExtension);
+            manageDirectoryCache(mediaExtension);
             processFile();
         } catch (Exception e) { // catch all, just to be sure we can send message back to listener in all circumenstances.
             Log.e(TAG, e.getMessage(), e);

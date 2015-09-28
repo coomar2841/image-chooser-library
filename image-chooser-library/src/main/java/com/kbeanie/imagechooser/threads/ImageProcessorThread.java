@@ -49,7 +49,7 @@ public class ImageProcessorThread extends MediaProcessorThread {
     @Override
     public void run() {
         try {
-            manageDiretoryCache("jpg");
+            manageDirectoryCache("jpg");
             processImage();
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
@@ -84,7 +84,11 @@ public class ImageProcessorThread extends MediaProcessorThread {
                 || filePath
                 .startsWith("content://com.android.providers.media.documents")
                 || filePath
-                .startsWith("content://com.google.android.apps.docs.storage")) {
+                .startsWith("content://com.google.android.apps.docs.storage")
+                || filePath
+                .startsWith("content://com.android.externalstorage.documents")
+                || filePath
+                .startsWith("content://com.android.internalstorage.documents")) {
             processGooglePhotosMedia(filePath, ".jpg");
         } else {
             process();

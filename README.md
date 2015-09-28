@@ -27,13 +27,13 @@
 &lt;dependency&gt;
     &lt;groupId&gt;com.kbeanie&lt;/groupId&gt;
     &lt;artifactId&gt;image-chooser-library&lt;/artifactId&gt;
-    &lt;version&gt;1.4.5&lt;/version&gt;
+    &lt;version&gt;1.5.0&lt;/version&gt;
 &lt;/dependency&gt;
 </code>
 </pre>
 
 ##### Configuring on Android Studio
-> compile 'com.kbeanie:image-chooser-library:1.4.4@aar'
+> compile 'com.kbeanie:image-chooser-library:1.5.0@aar'
 
 ##### Apps using Image Chooser Library
 
@@ -71,9 +71,9 @@ To build and upload to your repo:
 
 ### Release Notes
 
-##### Version "1.4.5"
+##### Version "1.5.0"
 1. Removed launcher icon from the library source
-2.
+2. Bug Fixes
 
 ##### Version "1.4.4"
 1. Minor fix: Launcher Icon collision with default project icon

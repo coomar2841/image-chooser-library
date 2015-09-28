@@ -243,6 +243,7 @@ public class VideoChooserManager extends BChooser implements
         }
         VideoProcessorThread thread = new VideoProcessorThread(path,
                 foldername, shouldCreateThumbnails);
+        thread.clearOldFiles(clearOldFiles);
         thread.setListener(this);
         thread.setContext(getContext());
         thread.start();

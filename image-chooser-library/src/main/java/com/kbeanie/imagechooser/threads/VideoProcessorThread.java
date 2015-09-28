@@ -63,7 +63,7 @@ public class VideoProcessorThread extends MediaProcessorThread {
     @Override
     public void run() {
         try {
-            manageDiretoryCache("mp4");
+            manageDirectoryCache("mp4");
             processVideo();
         } catch (Exception e) { // catch all, just to be sure we can send message back to listener in all circumenstances.
             Log.e(TAG, e.getMessage(), e);

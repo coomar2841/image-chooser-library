@@ -58,6 +58,7 @@ public class ImageChooserManager extends BChooser implements
 
     /**
      * Simple constructor for using with a fragment from the support library
+     *
      * @param fragment
      * @param type
      */
@@ -67,6 +68,7 @@ public class ImageChooserManager extends BChooser implements
 
     /**
      * Simple constructor for using with a fragment
+     *
      * @param fragment
      * @param type
      */
@@ -81,10 +83,10 @@ public class ImageChooserManager extends BChooser implements
      * thumbnails would be stored.
      * </p>
      *
-     * @deprecated Use BChooserPreferences to set your desired folder name
      * @param activity
      * @param type
      * @param folderName
+     * @deprecated Use BChooserPreferences to set your desired folder name
      */
     @Deprecated
     public ImageChooserManager(Activity activity, int type, String folderName) {
@@ -92,10 +94,10 @@ public class ImageChooserManager extends BChooser implements
     }
 
     /**
-     * @deprecated Use BChooserPreferences to set your desired folder name
      * @param fragment
      * @param type
      * @param folderName
+     * @deprecated Use BChooserPreferences to set your desired folder name
      */
     @Deprecated
     public ImageChooserManager(Fragment fragment, int type, String folderName) {
@@ -103,10 +105,10 @@ public class ImageChooserManager extends BChooser implements
     }
 
     /**
-     * @deprecated Use BChooserPreferences to set your desired folder name
      * @param fragment
      * @param type
      * @param folderName
+     * @deprecated Use BChooserPreferences to set your desired folder name
      */
     @Deprecated
     public ImageChooserManager(android.app.Fragment fragment, int type,
@@ -146,11 +148,12 @@ public class ImageChooserManager extends BChooser implements
      * Specify your own foldername and whether you want the generated thumbnails
      * or not
      * </p>
-     * @deprecated Use BChooserPreferences to set your desired folder name
+     *
      * @param activity
      * @param type
      * @param foldername
      * @param shouldCreateThumbnails
+     * @deprecated Use BChooserPreferences to set your desired folder name
      */
     @Deprecated
     public ImageChooserManager(Activity activity, int type, String foldername,
@@ -159,11 +162,11 @@ public class ImageChooserManager extends BChooser implements
     }
 
     /**
-     * @deprecated Use BChooserPreferences to set your desired folder name
      * @param fragment
      * @param type
      * @param foldername
      * @param shouldCreateThumbnails
+     * @deprecated Use BChooserPreferences to set your desired folder name
      */
     @Deprecated
     public ImageChooserManager(Fragment fragment, int type, String foldername,
@@ -172,11 +175,11 @@ public class ImageChooserManager extends BChooser implements
     }
 
     /**
-     * @deprecated Use BChooserPreferences to set your desired folder name
      * @param fragment
      * @param type
      * @param foldername
      * @param shouldCreateThumbnails
+     * @deprecated Use BChooserPreferences to set your desired folder name
      */
     @Deprecated
     public ImageChooserManager(android.app.Fragment fragment, int type,
@@ -275,6 +278,7 @@ public class ImageChooserManager extends BChooser implements
                 String path = filePathOriginal;
                 ImageProcessorThread thread = new ImageProcessorThread(path,
                         foldername, shouldCreateThumbnails);
+                thread.clearOldFiles(clearOldFiles);
                 thread.setListener(this);
                 thread.setContext(getContext());
                 thread.start();

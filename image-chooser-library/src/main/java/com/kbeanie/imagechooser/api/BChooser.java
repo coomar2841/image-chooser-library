@@ -32,7 +32,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 
 import com.kbeanie.imagechooser.exceptions.ChooserException;
 import com.kbeanie.imagechooser.factory.UriFactory;
@@ -59,6 +58,8 @@ public abstract class BChooser {
     protected String filePathOriginal;
 
     protected Bundle extras;
+
+    protected boolean clearOldFiles;
 
     @Deprecated
     public BChooser(Activity activity, int type, String folderName,
@@ -92,7 +93,7 @@ public abstract class BChooser {
         this.activity = activity;
         this.type = type;
         this.shouldCreateThumbnails = shouldCreateThumbnails;
-        initDirector(activity.getApplicationContext());
+        initDirectory(activity.getApplicationContext());
     }
 
     public BChooser(Fragment fragment, int type,
@@ -100,7 +101,7 @@ public abstract class BChooser {
         this.fragment = fragment;
         this.type = type;
         this.shouldCreateThumbnails = shouldCreateThumbnails;
-        initDirector(fragment.getActivity().getApplicationContext());
+        initDirectory(fragment.getActivity().getApplicationContext());
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -109,7 +110,7 @@ public abstract class BChooser {
         this.appFragment = fragment;
         this.type = type;
         this.shouldCreateThumbnails = shouldCreateThumbnails;
-        initDirector(fragment.getActivity().getApplicationContext());
+        initDirectory(fragment.getActivity().getApplicationContext());
     }
 
     /**
@@ -251,7 +252,7 @@ public abstract class BChooser {
         return 0;
     }
 
-    private void initDirector(Context context){
+    private void initDirectory(Context context){
         BChooserPreferences preferences = new BChooserPreferences(context);
         foldername = preferences.getFolderName();
     }
@@ -262,5 +263,9 @@ public abstract class BChooser {
 
     protected Uri buildCaptureUri(String filePathOriginal) {
         return Uri.fromFile(new File(filePathOriginal));
+    }
+
+    public void clearOldFiles(){
+        this.clearOldFiles = true;
     }
 }

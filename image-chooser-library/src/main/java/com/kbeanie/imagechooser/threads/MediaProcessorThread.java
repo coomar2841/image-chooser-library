@@ -106,8 +106,8 @@ public abstract class MediaProcessorThread extends Thread {
         this.mediaExtension = extension;
     }
 
-    public void clearOldFiles() {
-        this.clearOldFiles = true;
+    public void clearOldFiles(boolean clearOldFiles) {
+        this.clearOldFiles = clearOldFiles;
     }
 
     protected void downloadAndProcess(String url) throws ChooserException {
@@ -180,13 +180,13 @@ public abstract class MediaProcessorThread extends Thread {
 
             Options options = new Options();
             if (what > 3000) {
-                options.inSampleSize = scale * 32;
+                options.inSampleSize = scale * 6;
             } else if (what > 2000 && what <= 3000) {
-                options.inSampleSize = scale * 16;
+                options.inSampleSize = scale * 5;
             } else if (what > 1500 && what <= 2000) {
-                options.inSampleSize = scale * 8;
-            } else if (what > 1000 && what <= 1500) {
                 options.inSampleSize = scale * 4;
+            } else if (what > 1000 && what <= 1500) {
+                options.inSampleSize = scale * 3;
             } else if (what > 400 && what <= 1000) {
                 options.inSampleSize = scale * 2;
             } else {
@@ -297,7 +297,7 @@ public abstract class MediaProcessorThread extends Thread {
         return localFilePath;
     }
 
-    protected void manageDiretoryCache(final String extension) {
+    protected void manageDirectoryCache(final String extension) {
         if (!clearOldFiles) {
             return;
         }
@@ -551,7 +551,11 @@ public abstract class MediaProcessorThread extends Thread {
                 || imageUriString
                 .startsWith("content://com.google.android.apps.docs.storage")
                 || imageUriString
-                .startsWith("content://com.microsoft.skydrive.content.external")) {
+                .startsWith("content://com.microsoft.skydrive.content.external")
+                || imageUriString
+                .startsWith("content://com.android.externalstorage.documents")
+                || imageUriString
+                .startsWith("content://com.android.internalstorage.documents")) {
             filePath = imageUri.toString();
         } else {
             Cursor cursor = context.getContentResolver().query(imageUri, proj,
