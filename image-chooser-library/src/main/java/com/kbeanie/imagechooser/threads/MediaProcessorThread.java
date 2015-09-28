@@ -57,14 +57,12 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.provider.MediaStore.MediaColumns;
 import android.provider.OpenableColumns;
-import android.support.v4.graphics.BitmapCompat;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.kbeanie.imagechooser.BuildConfig;
 import com.kbeanie.imagechooser.api.FileUtils;
 import com.kbeanie.imagechooser.exceptions.ChooserException;
-import com.kbeanie.imagechooser.helpers.PatchedInputStream;
 
 import static com.kbeanie.imagechooser.helpers.StreamHelper.*;
 
@@ -147,20 +145,25 @@ public abstract class MediaProcessorThread extends Thread {
     private String compressAndSaveImage(String fileImage, int scale) throws ChooserException {
 
         FileOutputStream stream = null;
-
+        BufferedInputStream bstream = null;
+        Bitmap bitmap = null;
         try {
+            Options optionsForGettingDimensions = new Options();
+            optionsForGettingDimensions.inJustDecodeBounds = true;
+            bitmap = BitmapFactory.decodeFile(fileImage, optionsForGettingDimensions);
+            if (bitmap != null) {
+                bitmap.recycle();
+            }
+            int w, l;
+            w = optionsForGettingDimensions.outWidth;
+            l = optionsForGettingDimensions.outHeight;
+
             ExifInterface exif = new ExifInterface(fileImage);
-            String width = exif.getAttribute(ExifInterface.TAG_IMAGE_WIDTH);
-            String length = exif.getAttribute(ExifInterface.TAG_IMAGE_LENGTH);
+
             int orientation = exif.getAttributeInt(
                     ExifInterface.TAG_ORIENTATION,
                     ExifInterface.ORIENTATION_NORMAL);
             int rotate = 0;
-            if (BuildConfig.DEBUG) {
-                Log.i(TAG, "File name: " + fileImage + " scale: " + scale);
-                Log.i(TAG, "Before: " + width + "x" + length);
-            }
-
             switch (orientation) {
                 case ExifInterface.ORIENTATION_ROTATE_270:
                     rotate = -90;
@@ -173,31 +176,33 @@ public abstract class MediaProcessorThread extends Thread {
                     break;
             }
 
-            int w = Integer.parseInt(width);
-            int l = Integer.parseInt(length);
-
             int what = w > l ? w : l;
 
             Options options = new Options();
             if (what > 3000) {
-                options.inSampleSize = scale * 6;
+                options.inSampleSize = scale * 32;
             } else if (what > 2000 && what <= 3000) {
-                options.inSampleSize = scale * 5;
+                options.inSampleSize = scale * 16;
             } else if (what > 1500 && what <= 2000) {
-                options.inSampleSize = scale * 4;
+                options.inSampleSize = scale * 8;
             } else if (what > 1000 && what <= 1500) {
-                options.inSampleSize = scale * 3;
+                options.inSampleSize = scale * 4;
             } else if (what > 400 && what <= 1000) {
                 options.inSampleSize = scale * 2;
             } else {
                 options.inSampleSize = scale;
             }
+
+            options.inJustDecodeBounds = false;
             if (BuildConfig.DEBUG) {
                 Log.i(TAG, "Scale: " + (what / options.inSampleSize));
                 Log.i(TAG, "Rotate: " + rotate);
             }
-            Bitmap bitmap = BitmapFactory.decodeFile(fileImage, options);
-            verifyBitmap(fileImage, bitmap);
+            // TODO: Sometime the decode File Returns null for some images
+            // For such cases, thumbnails can't be created.
+            // Thumbnails will link to the original file
+            bitmap = BitmapFactory.decodeFile(fileImage);
+//            verifyBitmap(fileImage, bitmap);
 
             File original = new File(fileImage);
             File file = new File(
@@ -213,23 +218,15 @@ public abstract class MediaProcessorThread extends Thread {
 
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
 
-            if (BuildConfig.DEBUG) {
-                ExifInterface exifAfter = new ExifInterface(
-                        file.getAbsolutePath());
-                String widthAfter = exifAfter
-                        .getAttribute(ExifInterface.TAG_IMAGE_WIDTH);
-                String lengthAfter = exifAfter
-                        .getAttribute(ExifInterface.TAG_IMAGE_LENGTH);
-                if (BuildConfig.DEBUG) {
-                    Log.i(TAG, "After: " + widthAfter + "x" + lengthAfter);
-                }
-            }
-
             return file.getAbsolutePath();
 
         } catch (IOException e) {
-            throw new ChooserException(e);
+            return fileImage;
+//            throw new ChooserException(e);
+        } catch (Exception e) {
+            return fileImage;
         } finally {
+            close(bstream);
             flush(stream);
             close(stream);
         }
@@ -256,6 +253,7 @@ public abstract class MediaProcessorThread extends Thread {
         } catch (IOException e) {
             throw new ChooserException(e);
         } finally {
+            flush(outStream);
             close(streamIn);
             close(outStream);
         }
