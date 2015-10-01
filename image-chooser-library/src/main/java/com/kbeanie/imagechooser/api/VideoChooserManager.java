@@ -159,7 +159,7 @@ public class VideoChooserManager extends BChooser implements
         checkDirectory();
         try {
             Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-            filePathOriginal = buildFilePathOriginal(foldername);
+            filePathOriginal = buildFilePathOriginal(foldername, "mp4");
             intent.putExtra(MediaStore.EXTRA_OUTPUT, buildCaptureUri(filePathOriginal));
             if (extras != null) {
                 intent.putExtras(extras);

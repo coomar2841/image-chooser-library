@@ -236,7 +236,7 @@ public class ImageChooserManager extends BChooser implements
         checkDirectory();
         try {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            filePathOriginal = buildFilePathOriginal(foldername);
+            filePathOriginal = buildFilePathOriginal(foldername, "jpg");
             intent.putExtra(MediaStore.EXTRA_OUTPUT, buildCaptureUri(filePathOriginal));
             if (extras != null) {
                 intent.putExtras(extras);

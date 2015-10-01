@@ -17,7 +17,7 @@ public class UriFactory {
 
     /**
      * If set, it will be the temp URI where the camera app should save the captured image / video to
-     *
+     * <p/>
      * intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
      */
     private String filePathOriginal;
@@ -33,15 +33,15 @@ public class UriFactory {
         this.filePathOriginal = filePathOriginal;
     }
 
-    public String getFilePathOriginal(String foldername) {
-        if(filePathOriginal != null) {
-            Log.d(TAG, "File path set. We return: "+filePathOriginal);
+    public String getFilePathOriginal(String foldername, String extension) {
+        if (filePathOriginal != null) {
+            Log.d(TAG, "File path set. We return: " + filePathOriginal);
             return filePathOriginal;
         }
 
         return FileUtils.getDirectory(foldername)
                 + File.separator + DateFactory.getInstance().getTimeInMillis()
-                + ".jpg";
+                + "." + extension;
     }
 
     public void reset() {
@@ -53,7 +53,7 @@ public class UriFactory {
     private static UriFactory instance;
 
     public static UriFactory getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new UriFactory();
         }
         return instance;

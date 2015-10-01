@@ -71,6 +71,9 @@ To build and upload to your repo:
 
 ### Release Notes
 
+##### Version "1.5.1"
+1. Important fix for attaching video files.
+
 ##### Version "1.5.0"
 1. Removed launcher icon from the library source
 2. Bug Fixes

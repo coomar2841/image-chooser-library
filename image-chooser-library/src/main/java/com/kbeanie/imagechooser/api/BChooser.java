@@ -145,8 +145,8 @@ public abstract class BChooser {
         File directory;
         directory = new File(FileUtils.getDirectory(foldername));
         if (!directory.exists()) {
-            if(!directory.mkdirs() && !directory.isDirectory()) {
-                throw new ChooserException("Error creating directory: "+directory);
+            if (!directory.mkdirs() && !directory.isDirectory()) {
+                throw new ChooserException("Error creating directory: " + directory);
             }
         }
     }
@@ -232,13 +232,12 @@ public abstract class BChooser {
         if (uri.toString().startsWith("file")) {
             File file = new File(uri.getPath());
             return file.length();
-        }
-        else if (uri.toString().startsWith("content")) {
+        } else if (uri.toString().startsWith("content")) {
             Cursor cursor = null;
             try {
                 cursor = context.getContentResolver().query(uri, null, null, null, null);
                 verifyCursor(uri, cursor);
-                if(cursor.moveToFirst()) {
+                if (cursor.moveToFirst()) {
                     return cursor.getLong(cursor.getColumnIndex(OpenableColumns.SIZE));
                 }
                 return 0;
@@ -252,20 +251,20 @@ public abstract class BChooser {
         return 0;
     }
 
-    private void initDirectory(Context context){
+    private void initDirectory(Context context) {
         BChooserPreferences preferences = new BChooserPreferences(context);
         foldername = preferences.getFolderName();
     }
 
-    protected String buildFilePathOriginal(String foldername) {
-        return UriFactory.getInstance().getFilePathOriginal(foldername);
+    protected String buildFilePathOriginal(String foldername, String extension) {
+        return UriFactory.getInstance().getFilePathOriginal(foldername, extension);
     }
 
     protected Uri buildCaptureUri(String filePathOriginal) {
         return Uri.fromFile(new File(filePathOriginal));
     }
 
-    public void clearOldFiles(){
+    public void clearOldFiles() {
         this.clearOldFiles = true;
     }
 }
