@@ -201,7 +201,7 @@ public abstract class MediaProcessorThread extends Thread {
             // TODO: Sometime the decode File Returns null for some images
             // For such cases, thumbnails can't be created.
             // Thumbnails will link to the original file
-            bitmap = BitmapFactory.decodeFile(fileImage);
+            bitmap = BitmapFactory.decodeFile(fileImage, options);
 //            verifyBitmap(fileImage, bitmap);
 
             File original = new File(fileImage);

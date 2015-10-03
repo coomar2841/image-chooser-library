@@ -27,13 +27,13 @@
 &lt;dependency&gt;
     &lt;groupId&gt;com.kbeanie&lt;/groupId&gt;
     &lt;artifactId&gt;image-chooser-library&lt;/artifactId&gt;
-    &lt;version&gt;1.5.1&lt;/version&gt;
+    &lt;version&gt;1.5.2&lt;/version&gt;
 &lt;/dependency&gt;
 </code>
 </pre>
 
 ##### Configuring on Android Studio
-> compile 'com.kbeanie:image-chooser-library:1.5.1@aar'
+> compile 'com.kbeanie:image-chooser-library:1.5.2@aar'
 
 ##### Apps using Image Chooser Library
 
@@ -47,6 +47,9 @@ App                 | Link to Play Store     |App                | Link to Play 
 If you would like to add your app to this list, drop me an email.
 
 ### Release Notes
+
+##### Version "1.5.2"
+1. Out of Memory Errors Fix. (Issue 204)
 
 ##### Version "1.5.1"
 1. Important fix for attaching video files.
