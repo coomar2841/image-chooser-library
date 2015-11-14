@@ -30,6 +30,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.Buffer;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -150,9 +151,13 @@ public abstract class MediaProcessorThread extends Thread {
         try {
             Options optionsForGettingDimensions = new Options();
             optionsForGettingDimensions.inJustDecodeBounds = true;
-            bitmap = BitmapFactory.decodeFile(fileImage, optionsForGettingDimensions);
+            BufferedInputStream boundsOnlyStream = new BufferedInputStream(new FileInputStream(fileImage));
+            bitmap = BitmapFactory.decodeStream(boundsOnlyStream, null, optionsForGettingDimensions);
             if (bitmap != null) {
                 bitmap.recycle();
+            }
+            if (boundsOnlyStream != null) {
+                boundsOnlyStream.close();
             }
             int w, l;
             w = optionsForGettingDimensions.outWidth;
@@ -201,9 +206,13 @@ public abstract class MediaProcessorThread extends Thread {
             // TODO: Sometime the decode File Returns null for some images
             // For such cases, thumbnails can't be created.
             // Thumbnails will link to the original file
-            bitmap = BitmapFactory.decodeFile(fileImage, options);
+            BufferedInputStream scaledInputStream = new BufferedInputStream(new FileInputStream(fileImage));
+            bitmap = BitmapFactory.decodeStream(scaledInputStream, null, options);
 //            verifyBitmap(fileImage, bitmap);
-
+            scaledInputStream.close();
+            if (bitmap == null) {
+                return fileImage;
+            }
             File original = new File(fileImage);
             File file = new File(
                     (original.getParent() + File.separator + original.getName()
@@ -233,19 +242,17 @@ public abstract class MediaProcessorThread extends Thread {
     }
 
     private void copyFileToDir() throws ChooserException {
-
-        FileInputStream streamIn = null;
         BufferedOutputStream outStream = null;
-
+        BufferedInputStream bStream = null;
         try {
             File file;
             file = new File(Uri.parse(filePath).getPath());
             File copyTo = new File(FileUtils.getDirectory(foldername) + File.separator + file.getName());
-            streamIn = new FileInputStream(file);
+            bStream = new BufferedInputStream(new FileInputStream(file));
             outStream = new BufferedOutputStream(new FileOutputStream(copyTo));
             byte[] buf = new byte[2048];
             int len;
-            while ((len = streamIn.read(buf)) > 0) {
+            while ((len = bStream.read(buf)) > 0) {
                 outStream.write(buf, 0, len);
             }
 
@@ -254,7 +261,7 @@ public abstract class MediaProcessorThread extends Thread {
             throw new ChooserException(e);
         } finally {
             flush(outStream);
-            close(streamIn);
+            close(bStream);
             close(outStream);
         }
     }
@@ -268,6 +275,7 @@ public abstract class MediaProcessorThread extends Thread {
         try {
             HttpResponse response = client.execute(getRequest);
             InputStream stream = response.getEntity().getContent();
+            BufferedInputStream bStream = new BufferedInputStream(stream);
 
             localFilePath = FileUtils.getDirectory(foldername) + File.separator
                     + Calendar.getInstance().getTimeInMillis() + "."
@@ -278,11 +286,11 @@ public abstract class MediaProcessorThread extends Thread {
 
             byte[] buffer = new byte[1024];
             int len;
-            while ((len = stream.read(buffer)) > 0)
+            while ((len = bStream.read(buffer)) > 0)
                 fileOutputStream.write(buffer, 0, len);
             fileOutputStream.flush();
             fileOutputStream.close();
-            stream.close();
+            bStream.close();
 
             if (BuildConfig.DEBUG) {
                 Log.i(TAG, "Image saved: " + localFilePath.toString());
@@ -353,14 +361,16 @@ public abstract class MediaProcessorThread extends Thread {
             Log.i(TAG, "Picasa Started");
         }
 
-        InputStream inputStream = null;
         BufferedOutputStream outStream = null;
+        BufferedInputStream bStream = null;
 
         try {
-            inputStream = context.getContentResolver()
+            InputStream inputStream = context.getContentResolver()
                     .openInputStream(Uri.parse(path));
 
-            verifyStream(path, inputStream);
+            bStream = new BufferedInputStream(inputStream);
+
+            verifyStream(path, bStream);
 
             filePath = FileUtils.getDirectory(foldername) + File.separator
                     + Calendar.getInstance().getTimeInMillis() + extension;
@@ -368,7 +378,7 @@ public abstract class MediaProcessorThread extends Thread {
             outStream = new BufferedOutputStream(new FileOutputStream(filePath));
             byte[] buf = new byte[2048];
             int len;
-            while ((len = inputStream.read(buf)) > 0) {
+            while ((len = bStream.read(buf)) > 0) {
                 outStream.write(buf, 0, len);
             }
 
@@ -376,7 +386,7 @@ public abstract class MediaProcessorThread extends Thread {
         } catch (IOException e) {
             throw new ChooserException(e);
         } finally {
-            close(inputStream);
+            close(bStream);
             close(outStream);
         }
 
@@ -398,7 +408,7 @@ public abstract class MediaProcessorThread extends Thread {
             extension = "." + retrievedExtension;
         }
 
-        InputStream inputStream = null;
+        BufferedInputStream inputStream = null;
         BufferedOutputStream outStream = null;
 
         try {
@@ -415,7 +425,7 @@ public abstract class MediaProcessorThread extends Thread {
             FileDescriptor fileDescriptor = parcelFileDescriptor
                     .getFileDescriptor();
 
-            inputStream = new FileInputStream(fileDescriptor);
+            inputStream = new BufferedInputStream(new FileInputStream(fileDescriptor));
 
             BufferedInputStream reader = new BufferedInputStream(inputStream);
 
@@ -501,11 +511,13 @@ public abstract class MediaProcessorThread extends Thread {
 
         InputStream inputStream = null;
         BufferedOutputStream outStream = null;
+        BufferedInputStream bStream = null;
 
         try {
             inputStream = context.getContentResolver()
                     .openInputStream(Uri.parse(path));
-            verifyStream(path, inputStream);
+            bStream = new BufferedInputStream(inputStream);
+            verifyStream(path, bStream);
 
             filePath = FileUtils.getDirectory(foldername) + File.separator
                     + Calendar.getInstance().getTimeInMillis() + extension;
@@ -513,7 +525,7 @@ public abstract class MediaProcessorThread extends Thread {
             outStream = new BufferedOutputStream(new FileOutputStream(filePath));
             byte[] buf = new byte[2048];
             int len;
-            while ((len = inputStream.read(buf)) > 0) {
+            while ((len = bStream.read(buf)) > 0) {
                 outStream.write(buf, 0, len);
             }
 
@@ -522,7 +534,7 @@ public abstract class MediaProcessorThread extends Thread {
             Log.e(TAG, e.getMessage(), e);
             throw new ChooserException(e);
         } finally {
-            close(inputStream);
+            close(bStream);
             close(outStream);
         }
     }
