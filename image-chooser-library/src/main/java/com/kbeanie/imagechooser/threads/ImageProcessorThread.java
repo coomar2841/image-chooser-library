@@ -88,7 +88,8 @@ public class ImageProcessorThread extends MediaProcessorThread {
                 || filePath
                 .startsWith("content://com.android.externalstorage.documents")
                 || filePath
-                .startsWith("content://com.android.internalstorage.documents")) {
+                .startsWith("content://com.android.internalstorage.documents") ||
+                filePath.startsWith("content://")) {
             processGooglePhotosMedia(filePath, ".jpg");
         } else {
             process();

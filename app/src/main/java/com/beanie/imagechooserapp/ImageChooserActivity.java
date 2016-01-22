@@ -39,7 +39,10 @@ import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.kbeanie.imagechooser.api.ChooserType;
+import com.kbeanie.imagechooser.api.ChosenFile;
 import com.kbeanie.imagechooser.api.ChosenImage;
+import com.kbeanie.imagechooser.api.FileChooserListener;
+import com.kbeanie.imagechooser.api.FileChooserManager;
 import com.kbeanie.imagechooser.api.ImageChooserListener;
 import com.kbeanie.imagechooser.api.ImageChooserManager;
 import com.squareup.picasso.Callback;
@@ -101,6 +104,8 @@ public class ImageChooserActivity extends BasicActivity implements
         pbar.setVisibility(View.GONE);
 
         setupAds();
+
+        checkForSharedImage(getIntent());
     }
 
     private void chooseImage() {
@@ -266,5 +271,21 @@ public class ImageChooserActivity extends BasicActivity implements
     public void onDestroy() {
         super.onDestroy();
         Log.i(TAG, "Activity Destroyed");
+    }
+
+    private void checkForSharedImage(Intent intent) {
+        String action = intent.getAction();
+        String type = intent.getType();
+        Uri streamData = (Uri) intent.getExtras().get(Intent.EXTRA_STREAM);
+        Log.i(TAG, "Incoming Share: Action: " + action);
+        Log.i(TAG, "Incoming Share: Type: " + type);
+        Log.i(TAG, "Incoming Share: Stream: " + streamData);
+
+        intent.setData(streamData);
+
+        ImageChooserManager m = new ImageChooserManager(this, ChooserType.REQUEST_PICK_PICTURE);
+        m.setImageChooserListener(this);
+
+        m.submit(ChooserType.REQUEST_PICK_PICTURE, intent);
     }
 }

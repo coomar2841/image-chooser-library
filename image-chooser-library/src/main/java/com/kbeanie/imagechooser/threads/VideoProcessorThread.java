@@ -35,6 +35,7 @@ import com.kbeanie.imagechooser.BuildConfig;
 import com.kbeanie.imagechooser.api.ChosenVideo;
 import com.kbeanie.imagechooser.api.FileUtils;
 import com.kbeanie.imagechooser.exceptions.ChooserException;
+
 import static com.kbeanie.imagechooser.helpers.StreamHelper.*;
 
 
@@ -99,7 +100,8 @@ public class VideoProcessorThread extends MediaProcessorThread {
                 || filePath
                 .startsWith("content://com.android.providers.media.documents")
                 || filePath
-                .startsWith("content://com.google.android.apps.docs.storage")) {
+                .startsWith("content://com.google.android.apps.docs.storage") ||
+                filePath.startsWith("content://")) {
             processGooglePhotosMedia(filePath, ".mp4");
         } else if (filePath.startsWith("content://media/external/video")) {
             processContentProviderMedia(filePath, ".mp4");
@@ -120,7 +122,7 @@ public class VideoProcessorThread extends MediaProcessorThread {
         }
     }
 
-    private String createPreviewImage() throws ChooserException  {
+    private String createPreviewImage() throws ChooserException {
         previewImage = null;
         Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(filePath,
                 Thumbnails.FULL_SCREEN_KIND);
@@ -133,7 +135,7 @@ public class VideoProcessorThread extends MediaProcessorThread {
             try {
                 stream = new FileOutputStream(file);
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-            } catch(IOException e) {
+            } catch (IOException e) {
                 throw new ChooserException(e);
             } finally {
                 flush(stream);
@@ -156,7 +158,7 @@ public class VideoProcessorThread extends MediaProcessorThread {
             try {
                 stream = new FileOutputStream(file);
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-            } catch(IOException e) {
+            } catch (IOException e) {
                 throw new ChooserException(e);
             } finally {
                 flush(stream);

@@ -567,7 +567,8 @@ public abstract class MediaProcessorThread extends Thread {
                 || imageUriString
                 .startsWith("content://com.android.externalstorage.documents")
                 || imageUriString
-                .startsWith("content://com.android.internalstorage.documents")) {
+                .startsWith("content://com.android.internalstorage.documents") ||
+                imageUriString.startsWith("content://")) {
             filePath = imageUri.toString();
         } else {
             Cursor cursor = context.getContentResolver().query(imageUri, proj,
