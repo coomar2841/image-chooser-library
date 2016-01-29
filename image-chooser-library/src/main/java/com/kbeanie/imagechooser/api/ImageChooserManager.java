@@ -226,6 +226,7 @@ public class ImageChooserManager extends BChooser implements
             if (extras != null) {
                 intent.putExtras(extras);
             }
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             startActivity(intent);
         } catch (ActivityNotFoundException e) {
             throw new ChooserException(e);
@@ -250,17 +251,21 @@ public class ImageChooserManager extends BChooser implements
 
     @Override
     public void submit(int requestCode, Intent data) {
-        if (requestCode != type) {
-            onError("onActivityResult requestCode is different from the type the chooser was initialized with.");
-        } else {
-            switch (requestCode) {
-                case ChooserType.REQUEST_PICK_PICTURE:
-                    processImageFromGallery(data);
-                    break;
-                case ChooserType.REQUEST_CAPTURE_PICTURE:
-                    processCameraImage();
-                    break;
+        try {
+            if (requestCode != type) {
+                onError("onActivityResult requestCode is different from the type the chooser was initialized with.");
+            } else {
+                switch (requestCode) {
+                    case ChooserType.REQUEST_PICK_PICTURE:
+                        processImageFromGallery(data);
+                        break;
+                    case ChooserType.REQUEST_CAPTURE_PICTURE:
+                        processCameraImage();
+                        break;
+                }
             }
+        } catch (Exception e) {
+            onError(e.getMessage());
         }
     }
 
@@ -269,6 +274,7 @@ public class ImageChooserManager extends BChooser implements
         if (data != null && data.getDataString() != null) {
             String uri = data.getData().toString();
             sanitizeURI(uri);
+
             if (filePathOriginal == null || TextUtils.isEmpty(filePathOriginal)) {
                 onError("File path was null");
             } else {

@@ -91,6 +91,7 @@ public class FileChooserManager extends MediaChooserManager implements FileProce
         try {
             Intent intent = new Intent(action);
             intent.setType(mimeType);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             startActivity(intent);
         } catch (ActivityNotFoundException e) {
             throw new ChooserException(e);
@@ -100,10 +101,14 @@ public class FileChooserManager extends MediaChooserManager implements FileProce
 
     @Override
     public void submit(int requestCode, Intent data) {
-        if (requestCode != type) {
-            onError("onActivityResult requestCode is different from the type the chooser was initialized with.");
-        } else {
-            processFile(data);
+        try {
+            if (requestCode != type) {
+                onError("onActivityResult requestCode is different from the type the chooser was initialized with.");
+            } else {
+                processFile(data);
+            }
+        } catch (Exception e) {
+            onError(e.getMessage());
         }
     }
 

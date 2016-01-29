@@ -191,6 +191,7 @@ public class VideoChooserManager extends BChooser implements
             if (extras != null) {
                 intent.putExtras(extras);
             }
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             intent.setType("video/*");
             startActivity(intent);
         } catch (ActivityNotFoundException e) {
@@ -200,13 +201,17 @@ public class VideoChooserManager extends BChooser implements
 
     @Override
     public void submit(int requestCode, Intent data) {
-        switch (type) {
-            case ChooserType.REQUEST_PICK_VIDEO:
-                processVideoFromGallery(data);
-                break;
-            case ChooserType.REQUEST_CAPTURE_VIDEO:
-                processCameraVideo(data);
-                break;
+        try {
+            switch (type) {
+                case ChooserType.REQUEST_PICK_VIDEO:
+                    processVideoFromGallery(data);
+                    break;
+                case ChooserType.REQUEST_CAPTURE_VIDEO:
+                    processCameraVideo(data);
+                    break;
+            }
+        } catch (Exception e) {
+            onError(e.getMessage());
         }
     }
 

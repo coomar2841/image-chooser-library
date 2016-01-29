@@ -274,18 +274,25 @@ public class ImageChooserActivity extends BasicActivity implements
     }
 
     private void checkForSharedImage(Intent intent) {
-        String action = intent.getAction();
-        String type = intent.getType();
-        Uri streamData = (Uri) intent.getExtras().get(Intent.EXTRA_STREAM);
-        Log.i(TAG, "Incoming Share: Action: " + action);
-        Log.i(TAG, "Incoming Share: Type: " + type);
-        Log.i(TAG, "Incoming Share: Stream: " + streamData);
+        if (intent != null) {
+            if (intent.getAction() != null && intent.getType() != null && intent.getExtras() != null) {
+                String action = intent.getAction();
+                String type = intent.getType();
+                Uri streamData = (Uri) intent.getExtras().get(Intent.EXTRA_STREAM);
+                Log.i(TAG, "Incoming Share: Action: " + action);
+                Log.i(TAG, "Incoming Share: Type: " + type);
+                Log.i(TAG, "Incoming Share: Stream: " + streamData);
 
-        intent.setData(streamData);
+                Intent sIntent = new Intent();
+                sIntent.setData(streamData);
 
-        ImageChooserManager m = new ImageChooserManager(this, ChooserType.REQUEST_PICK_PICTURE);
-        m.setImageChooserListener(this);
+                intent.setData(streamData);
 
-        m.submit(ChooserType.REQUEST_PICK_PICTURE, intent);
+                ImageChooserManager m = new ImageChooserManager(this, ChooserType.REQUEST_PICK_PICTURE);
+                m.setImageChooserListener(this);
+
+                m.submit(ChooserType.REQUEST_PICK_PICTURE, sIntent);
+            }
+        }
     }
 }

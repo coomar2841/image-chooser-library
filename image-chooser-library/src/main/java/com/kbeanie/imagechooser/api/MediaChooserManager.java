@@ -187,14 +187,18 @@ public class MediaChooserManager extends BChooser implements
 
     @Override
     public void submit(int requestCode, Intent data) {
-        if (requestCode != type) {
-            onError("onActivityResult requestCode is different from the type the chooser was initialized with.");
-        } else {
-            switch (requestCode) {
-                case ChooserType.REQUEST_PICK_PICTURE_OR_VIDEO:
-                    processImageFromGallery(data);
-                    break;
+        try {
+            if (requestCode != type) {
+                onError("onActivityResult requestCode is different from the type the chooser was initialized with.");
+            } else {
+                switch (requestCode) {
+                    case ChooserType.REQUEST_PICK_PICTURE_OR_VIDEO:
+                        processImageFromGallery(data);
+                        break;
+                }
             }
+        } catch (Exception e) {
+            onError(e.getMessage());
         }
     }
 

@@ -44,6 +44,7 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -381,7 +382,7 @@ public abstract class MediaProcessorThread extends Thread {
             while ((len = bStream.read(buf)) > 0) {
                 outStream.write(buf, 0, len);
             }
-
+            flush(outStream);
             process();
         } catch (IOException e) {
             throw new ChooserException(e);
@@ -415,7 +416,6 @@ public abstract class MediaProcessorThread extends Thread {
 
             filePath = FileUtils.getDirectory(foldername) + File.separator
                     + Calendar.getInstance().getTimeInMillis() + extension;
-
             ParcelFileDescriptor parcelFileDescriptor = context
                     .getContentResolver().openFileDescriptor(Uri.parse(path),
                             "r");
@@ -436,6 +436,7 @@ public abstract class MediaProcessorThread extends Thread {
             while ((len = reader.read(buf)) > 0) {
                 outStream.write(buf, 0, len);
             }
+            flush(outStream);
             process();
         } catch (IOException e) {
             throw new ChooserException(e);
