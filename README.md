@@ -62,12 +62,6 @@ If you would like to add your app to this list, drop me an email.
 1. Removed launcher icon from the library source
 2. Bug Fixes
 
-##### Version "1.4.4"
-1. Minor fix: Launcher Icon collision with default project icon
-
-##### Version "1.4.3"
-1. Minor bug fixes.
-
 
 ##### License
 -----------------------------------------------------------------------------------
