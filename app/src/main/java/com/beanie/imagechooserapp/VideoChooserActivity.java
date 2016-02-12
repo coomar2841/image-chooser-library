@@ -20,20 +20,20 @@ package com.beanie.imagechooserapp;
 
 import java.io.File;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.widget.VideoView;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.kbeanie.imagechooser.api.ChooserType;
 import com.kbeanie.imagechooser.api.ChosenVideo;
+import com.kbeanie.imagechooser.api.ChosenVideos;
+import com.kbeanie.imagechooser.api.IntentUtils;
 import com.kbeanie.imagechooser.api.VideoChooserListener;
 import com.kbeanie.imagechooser.api.VideoChooserManager;
 
@@ -67,6 +67,8 @@ public class VideoChooserActivity extends BasicActivity implements
         videoView = (VideoView) findViewById(R.id.videoView);
 
         setupAds();
+
+        checkForSharedVideo(getIntent());
     }
 
     public void captureVideo(View view) {
@@ -88,6 +90,9 @@ public class VideoChooserActivity extends BasicActivity implements
         chooserType = ChooserType.REQUEST_PICK_VIDEO;
         videoChooserManager = new VideoChooserManager(this,
                 ChooserType.REQUEST_PICK_VIDEO);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        videoChooserManager.setExtras(bundle);
         videoChooserManager.setVideoChooserListener(this);
         try {
             videoChooserManager.choose();
@@ -133,6 +138,17 @@ public class VideoChooserActivity extends BasicActivity implements
     }
 
     @Override
+    public void onVideosChosen(final ChosenVideos videos) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Log.i(getClass().getName(), "run: Videos Chosen: " + videos.size());
+                onVideoChosen(videos.getImage(0));
+            }
+        });
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK
                 && (requestCode == ChooserType.REQUEST_CAPTURE_VIDEO || requestCode == ChooserType.REQUEST_PICK_VIDEO)) {
@@ -172,5 +188,16 @@ public class VideoChooserActivity extends BasicActivity implements
             }
         }
         super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    private void checkForSharedVideo(Intent intent) {
+        if (intent != null) {
+            if (intent.getAction() != null && intent.getType() != null && intent.getExtras() != null) {
+                VideoChooserManager m = new VideoChooserManager(this, ChooserType.REQUEST_PICK_VIDEO);
+                m.setVideoChooserListener(this);
+
+                m.submit(ChooserType.REQUEST_PICK_VIDEO, IntentUtils.getIntentForMultipleSelection(intent));
+            }
+        }
     }
 }

@@ -10,6 +10,7 @@ import com.kbeanie.imagechooser.api.ChooserType;
 import com.kbeanie.imagechooser.api.ChosenImage;
 import com.kbeanie.imagechooser.api.ChosenImages;
 import com.kbeanie.imagechooser.api.ChosenVideo;
+import com.kbeanie.imagechooser.api.ChosenVideos;
 import com.kbeanie.imagechooser.api.MediaChooserListener;
 import com.kbeanie.imagechooser.api.MediaChooserManager;
 
@@ -56,6 +57,11 @@ public class MediaChooserActivity extends BasicActivity implements
 	@Override
 	public void onError(String reason) {
 		Log.i(TAG, "Error: " + reason);
+	}
+
+	@Override
+	public void onVideosChosen(ChosenVideos videos) {
+
 	}
 
 	@Override

@@ -167,7 +167,7 @@ public class ImageProcessorThread extends MediaProcessorThread {
     }
 
     protected ChosenImage process(String filePath) throws ChooserException {
-        ChosenImage image = super.process(filePath);
+        ChosenImage image = super.processImage(filePath);
         if (shouldCreateThumnails) {
             String[] thumbnails = createThumbnails(filePath);
             image.setFileThumbnail(thumbnails[0]);

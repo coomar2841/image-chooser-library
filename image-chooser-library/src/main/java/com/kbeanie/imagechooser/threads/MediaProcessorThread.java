@@ -18,33 +18,10 @@
 
 package com.kbeanie.imagechooser.threads;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.Closeable;
-import java.io.File;
-import java.io.FileDescriptor;
-import java.io.FileFilter;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.Buffer;
-import java.util.Calendar;
-import java.util.Locale;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.ContentUris;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -64,10 +41,27 @@ import android.util.Log;
 
 import com.kbeanie.imagechooser.BuildConfig;
 import com.kbeanie.imagechooser.api.ChosenImage;
+import com.kbeanie.imagechooser.api.ChosenVideo;
 import com.kbeanie.imagechooser.api.FileUtils;
 import com.kbeanie.imagechooser.exceptions.ChooserException;
 
-import static com.kbeanie.imagechooser.helpers.StreamHelper.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Calendar;
+import java.util.Locale;
+
+import static com.kbeanie.imagechooser.helpers.StreamHelper.close;
+import static com.kbeanie.imagechooser.helpers.StreamHelper.flush;
+import static com.kbeanie.imagechooser.helpers.StreamHelper.verifyStream;
 
 public abstract class MediaProcessorThread extends Thread {
     private final static String TAG = MediaProcessorThread.class.getSimpleName();
@@ -125,9 +119,15 @@ public abstract class MediaProcessorThread extends Thread {
         process();
     }
 
+    protected ChosenVideo downloadAndProcessVideo(String url) throws ChooserException {
+        String localFile = downloadFile(url);
+        ChosenVideo video = processVideo(localFile);
+        return video;
+    }
+
     protected ChosenImage downloadAndProcessNew(String url) throws ChooserException {
         String downloadedFilePath = downloadFile(url);
-        ChosenImage image = process(downloadedFilePath);
+        ChosenImage image = processImage(downloadedFilePath);
         return image;
     }
 
@@ -137,7 +137,18 @@ public abstract class MediaProcessorThread extends Thread {
         }
     }
 
-    protected ChosenImage process(String filePath) throws ChooserException {
+    protected ChosenVideo processVideo(String filePath) throws ChooserException {
+        ChosenVideo video = new ChosenVideo();
+        if (!filePath.contains(foldername)) {
+            String localFilePath = copyFileToDir(filePath);
+            video.setVideoFilePath(localFilePath);
+        } else {
+            video.setVideoFilePath(filePath);
+        }
+        return video;
+    }
+
+    protected ChosenImage processImage(String filePath) throws ChooserException {
         ChosenImage image = new ChosenImage();
         if (!filePath.contains(foldername)) {
             String localFilePath = copyFileToDir(filePath);
@@ -321,12 +332,10 @@ public abstract class MediaProcessorThread extends Thread {
 
     protected String downloadFile(String url) {
         String localFilePath = "";
-        HttpClient client = new DefaultHttpClient();
-        HttpGet getRequest = new HttpGet(url);
-
         try {
-            HttpResponse response = client.execute(getRequest);
-            InputStream stream = response.getEntity().getContent();
+            URL u = new URL(url);
+            HttpURLConnection urlConnection = (HttpURLConnection) u.openConnection();
+            InputStream stream = new BufferedInputStream(urlConnection.getInputStream());
             BufferedInputStream bStream = new BufferedInputStream(stream);
 
             localFilePath = FileUtils.getDirectory(foldername) + File.separator
@@ -347,8 +356,6 @@ public abstract class MediaProcessorThread extends Thread {
             if (BuildConfig.DEBUG) {
                 Log.i(TAG, "Image saved: " + localFilePath.toString());
             }
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (Exception e) {
@@ -447,6 +454,46 @@ public abstract class MediaProcessorThread extends Thread {
         }
     }
 
+    protected ChosenVideo processPicasaMediaNewVideo(String path, String extension) throws ChooserException {
+        if (BuildConfig.DEBUG) {
+            Log.i(TAG, "Picasa Started");
+        }
+
+        ChosenVideo video = null;
+        BufferedOutputStream outStream = null;
+        BufferedInputStream bStream = null;
+        String outFile;
+        try {
+            InputStream inputStream = context.getContentResolver()
+                    .openInputStream(Uri.parse(path));
+
+            bStream = new BufferedInputStream(inputStream);
+
+            verifyStream(path, bStream);
+
+            outFile = FileUtils.getDirectory(foldername) + File.separator
+                    + Calendar.getInstance().getTimeInMillis() + extension;
+
+            outStream = new BufferedOutputStream(new FileOutputStream(outFile));
+            byte[] buf = new byte[2048];
+            int len;
+            while ((len = bStream.read(buf)) > 0) {
+                outStream.write(buf, 0, len);
+            }
+            flush(outStream);
+            video = processVideo(outFile);
+        } catch (IOException e) {
+            throw new ChooserException(e);
+        } finally {
+            close(bStream);
+            close(outStream);
+        }
+        if (BuildConfig.DEBUG) {
+            Log.i(TAG, "Picasa Done");
+        }
+        return video;
+    }
+
     protected ChosenImage processPicasaMediaNew(String path, String extension) throws ChooserException {
         if (BuildConfig.DEBUG) {
             Log.i(TAG, "Picasa Started");
@@ -475,7 +522,7 @@ public abstract class MediaProcessorThread extends Thread {
                 outStream.write(buf, 0, len);
             }
             flush(outStream);
-            image = process(path);
+            image = processImage(path);
         } catch (IOException e) {
             throw new ChooserException(e);
         } finally {
@@ -546,6 +593,64 @@ public abstract class MediaProcessorThread extends Thread {
         }
     }
 
+    protected ChosenVideo processGooglePhotosMediaNewVideo(String path, String extension)
+            throws ChooserException {
+        ChosenVideo video;
+        if (BuildConfig.DEBUG) {
+            Log.i(TAG, "Google photos Started");
+            Log.i(TAG, "URI: " + path);
+            Log.i(TAG, "Extension: " + extension);
+        }
+        String retrievedExtension = checkExtension(Uri.parse(path));
+        if (retrievedExtension != null
+                && !TextUtils.isEmpty(retrievedExtension)) {
+            extension = "." + retrievedExtension;
+        }
+
+        BufferedInputStream inputStream = null;
+        BufferedOutputStream outStream = null;
+        String localPath;
+        try {
+
+            localPath = FileUtils.getDirectory(foldername) + File.separator
+                    + Calendar.getInstance().getTimeInMillis() + extension;
+            ParcelFileDescriptor parcelFileDescriptor = context
+                    .getContentResolver().openFileDescriptor(Uri.parse(path),
+                            "r");
+
+            verifyStream(path, parcelFileDescriptor);
+
+            FileDescriptor fileDescriptor = parcelFileDescriptor
+                    .getFileDescriptor();
+
+            inputStream = new BufferedInputStream(new FileInputStream(fileDescriptor));
+
+            BufferedInputStream reader = new BufferedInputStream(inputStream);
+
+            outStream = new BufferedOutputStream(
+                    new FileOutputStream(localPath));
+            byte[] buf = new byte[2048];
+            int len;
+            while ((len = reader.read(buf)) > 0) {
+                outStream.write(buf, 0, len);
+            }
+            flush(outStream);
+            video  = processVideo(localPath);
+        } catch (IOException e) {
+            throw new ChooserException(e);
+        } finally {
+            flush(outStream);
+            close(outStream);
+            close(inputStream);
+        }
+
+
+        if (BuildConfig.DEBUG) {
+            Log.i(TAG, "Picasa Done");
+        }
+        return video;
+    }
+
     protected ChosenImage processGooglePhotosMediaNew(String path, String extension)
             throws ChooserException {
         String outFile;
@@ -589,7 +694,7 @@ public abstract class MediaProcessorThread extends Thread {
                 outStream.write(buf, 0, len);
             }
             flush(outStream);
-            image = process(outFile);
+            image = processImage(outFile);
         } catch (IOException e) {
             throw new ChooserException(e);
         } finally {
@@ -692,6 +797,42 @@ public abstract class MediaProcessorThread extends Thread {
             close(bStream);
             close(outStream);
         }
+    }
+
+    protected ChosenVideo processContentProviderMediaNewVideo(String path, String extension)
+            throws ChooserException {
+        checkExtension(Uri.parse(path));
+        ChosenVideo video = null;
+        InputStream inputStream = null;
+        BufferedOutputStream outStream = null;
+        BufferedInputStream bStream = null;
+        String outFile;
+        try {
+            inputStream = context.getContentResolver()
+                    .openInputStream(Uri.parse(path));
+            bStream = new BufferedInputStream(inputStream);
+            verifyStream(path, bStream);
+
+            outFile = FileUtils.getDirectory(foldername) + File.separator
+                    + Calendar.getInstance().getTimeInMillis() + extension;
+
+            outStream = new BufferedOutputStream(new FileOutputStream(outFile));
+            byte[] buf = new byte[2048];
+            int len;
+            while ((len = bStream.read(buf)) > 0) {
+                outStream.write(buf, 0, len);
+            }
+
+            video = processVideo(path);
+
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage(), e);
+            throw new ChooserException(e);
+        } finally {
+            close(bStream);
+            close(outStream);
+        }
+        return video;
     }
 
     @SuppressLint("NewApi")

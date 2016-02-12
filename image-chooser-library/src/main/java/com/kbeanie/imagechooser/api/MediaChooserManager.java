@@ -255,6 +255,13 @@ public class MediaChooserManager extends BChooser implements
     }
 
     @Override
+    public void onProcessedVideos(ChosenVideos videos) {
+        if (listener != null) {
+            listener.onVideosChosen(videos);
+        }
+    }
+
+    @Override
     public void onProcessedImages(ChosenImages images) {
         if (listener != null) {
             listener.onImagesChosen(images);
