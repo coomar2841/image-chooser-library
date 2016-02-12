@@ -21,7 +21,10 @@ package com.kbeanie.imagechooser.api;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.ClipData;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -31,6 +34,8 @@ import com.kbeanie.imagechooser.BuildConfig;
 import com.kbeanie.imagechooser.exceptions.ChooserException;
 import com.kbeanie.imagechooser.threads.ImageProcessorListener;
 import com.kbeanie.imagechooser.threads.ImageProcessorThread;
+
+import java.util.ArrayList;
 
 /**
  * Easy Image Chooser Library for Android Apps. Forget about coding workarounds
@@ -223,6 +228,7 @@ public class ImageChooserManager extends BChooser implements
         try {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("image/*");
+//            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
             if (extras != null) {
                 intent.putExtras(extras);
             }
@@ -289,6 +295,31 @@ public class ImageChooserManager extends BChooser implements
                 thread.setContext(getContext());
                 thread.start();
             }
+        } else if (data.getClipData() != null || data.hasExtra("uris")) {
+            // Multiple Images
+            String[] filePaths;
+            if (data.hasExtra("uris")) {
+                ArrayList<Uri> uris = data.getParcelableArrayListExtra("uris");
+                filePaths = new String[uris.size()];
+                for (int i = 0; i < uris.size(); i++) {
+                    filePaths[i] = uris.get(i).toString();
+                }
+            } else {
+                ClipData clipData = data.getClipData();
+                int count = clipData.getItemCount();
+                filePaths = new String[count];
+                for (int i = 0; i < count; i++) {
+                    ClipData.Item item = clipData.getItemAt(i);
+                    Log.i(TAG, "processImageFromGallery: Item: " + item.getUri());
+                    filePaths[i] = item.getUri().toString();
+                }
+            }
+            ImageProcessorThread thread = new ImageProcessorThread(filePaths, foldername, shouldCreateThumbnails);
+            thread.clearOldFiles(clearOldFiles);
+            thread.setListener(this);
+            thread.setContext(getContext());
+            thread.start();
+//        } else if () {
         } else {
             onError("Image Uri was null!");
         }
@@ -313,6 +344,13 @@ public class ImageChooserManager extends BChooser implements
     public void onError(String reason) {
         if (listener != null) {
             listener.onError(reason);
+        }
+    }
+
+    @Override
+    public void onProcessedImages(ChosenImages images) {
+        if (listener != null) {
+            listener.onImagesChosen(images);
         }
     }
 }

@@ -63,6 +63,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.kbeanie.imagechooser.BuildConfig;
+import com.kbeanie.imagechooser.api.ChosenImage;
 import com.kbeanie.imagechooser.api.FileUtils;
 import com.kbeanie.imagechooser.exceptions.ChooserException;
 
@@ -79,6 +80,7 @@ public abstract class MediaProcessorThread extends Thread {
     private final static int THUMBNAIL_BIG = 1;
 
     private final static int THUMBNAIL_SMALL = 2;
+    protected String[] filePaths = new String[0];
 
     protected String filePath;
 
@@ -100,6 +102,12 @@ public abstract class MediaProcessorThread extends Thread {
         this.shouldCreateThumnails = shouldCreateThumbnails;
     }
 
+    public MediaProcessorThread(String[] filePaths, String foldername, boolean shouldCreateThumnails) {
+        this.filePaths = filePaths;
+        this.foldername = foldername;
+        this.shouldCreateThumnails = shouldCreateThumnails;
+    }
+
     public void setContext(Context context) {
         this.context = context;
     }
@@ -117,10 +125,27 @@ public abstract class MediaProcessorThread extends Thread {
         process();
     }
 
+    protected ChosenImage downloadAndProcessNew(String url) throws ChooserException {
+        String downloadedFilePath = downloadFile(url);
+        ChosenImage image = process(downloadedFilePath);
+        return image;
+    }
+
     protected void process() throws ChooserException {
         if (!filePath.contains(foldername)) {
             copyFileToDir();
         }
+    }
+
+    protected ChosenImage process(String filePath) throws ChooserException {
+        ChosenImage image = new ChosenImage();
+        if (!filePath.contains(foldername)) {
+            String localFilePath = copyFileToDir(filePath);
+            image.setFilePathOriginal(localFilePath);
+        } else {
+            image.setFilePathOriginal(filePath);
+        }
+        return image;
     }
 
     protected String[] createThumbnails(String image) throws ChooserException {
@@ -239,6 +264,32 @@ public abstract class MediaProcessorThread extends Thread {
             close(bstream);
             flush(stream);
             close(stream);
+        }
+    }
+
+    private String copyFileToDir(String filePath) throws ChooserException {
+        BufferedOutputStream outStream = null;
+        BufferedInputStream bStream = null;
+        try {
+            File file;
+            file = new File(Uri.parse(filePath).getPath());
+            File copyTo = new File(FileUtils.getDirectory(foldername) + File.separator + file.getName());
+            bStream = new BufferedInputStream(new FileInputStream(file));
+            outStream = new BufferedOutputStream(new FileOutputStream(copyTo));
+            byte[] buf = new byte[2048];
+            int len;
+            while ((len = bStream.read(buf)) > 0) {
+                outStream.write(buf, 0, len);
+            }
+
+            filePath = copyTo.getAbsolutePath();
+            return filePath;
+        } catch (IOException e) {
+            throw new ChooserException(e);
+        } finally {
+            flush(outStream);
+            close(bStream);
+            close(outStream);
         }
     }
 
@@ -396,6 +447,49 @@ public abstract class MediaProcessorThread extends Thread {
         }
     }
 
+    protected ChosenImage processPicasaMediaNew(String path, String extension) throws ChooserException {
+        if (BuildConfig.DEBUG) {
+            Log.i(TAG, "Picasa Started");
+        }
+        String outFile;
+        ChosenImage image;
+
+        BufferedOutputStream outStream = null;
+        BufferedInputStream bStream = null;
+
+        try {
+            InputStream inputStream = context.getContentResolver()
+                    .openInputStream(Uri.parse(path));
+
+            bStream = new BufferedInputStream(inputStream);
+
+            verifyStream(path, bStream);
+
+            outFile = FileUtils.getDirectory(foldername) + File.separator
+                    + Calendar.getInstance().getTimeInMillis() + extension;
+
+            outStream = new BufferedOutputStream(new FileOutputStream(outFile));
+            byte[] buf = new byte[2048];
+            int len;
+            while ((len = bStream.read(buf)) > 0) {
+                outStream.write(buf, 0, len);
+            }
+            flush(outStream);
+            image = process(path);
+        } catch (IOException e) {
+            throw new ChooserException(e);
+        } finally {
+            close(bStream);
+            close(outStream);
+        }
+
+        if (BuildConfig.DEBUG) {
+            Log.i(TAG, "Picasa Done");
+        }
+
+        return image;
+    }
+
     protected void processGooglePhotosMedia(String path, String extension)
             throws ChooserException {
         if (BuildConfig.DEBUG) {
@@ -450,6 +544,66 @@ public abstract class MediaProcessorThread extends Thread {
         if (BuildConfig.DEBUG) {
             Log.i(TAG, "Picasa Done");
         }
+    }
+
+    protected ChosenImage processGooglePhotosMediaNew(String path, String extension)
+            throws ChooserException {
+        String outFile;
+        ChosenImage image;
+        if (BuildConfig.DEBUG) {
+            Log.i(TAG, "Google photos Started");
+            Log.i(TAG, "URI: " + path);
+            Log.i(TAG, "Extension: " + extension);
+        }
+        String retrievedExtension = checkExtension(Uri.parse(path));
+        if (retrievedExtension != null
+                && !TextUtils.isEmpty(retrievedExtension)) {
+            extension = "." + retrievedExtension;
+        }
+
+        BufferedInputStream inputStream = null;
+        BufferedOutputStream outStream = null;
+
+        try {
+
+            outFile = FileUtils.getDirectory(foldername) + File.separator
+                    + Calendar.getInstance().getTimeInMillis() + extension;
+            ParcelFileDescriptor parcelFileDescriptor = context
+                    .getContentResolver().openFileDescriptor(Uri.parse(path),
+                            "r");
+
+            verifyStream(path, parcelFileDescriptor);
+
+            FileDescriptor fileDescriptor = parcelFileDescriptor
+                    .getFileDescriptor();
+
+            inputStream = new BufferedInputStream(new FileInputStream(fileDescriptor));
+
+            BufferedInputStream reader = new BufferedInputStream(inputStream);
+
+            outStream = new BufferedOutputStream(
+                    new FileOutputStream(outFile));
+            byte[] buf = new byte[2048];
+            int len;
+            while ((len = reader.read(buf)) > 0) {
+                outStream.write(buf, 0, len);
+            }
+            flush(outStream);
+            image = process(outFile);
+        } catch (IOException e) {
+            throw new ChooserException(e);
+        } finally {
+            flush(outStream);
+            close(outStream);
+            close(inputStream);
+        }
+
+
+        if (BuildConfig.DEBUG) {
+            Log.i(TAG, "Picasa Done");
+        }
+
+        return image;
     }
 
     public String checkExtension(Uri uri) {

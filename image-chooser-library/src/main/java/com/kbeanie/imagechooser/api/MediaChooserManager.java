@@ -253,4 +253,11 @@ public class MediaChooserManager extends BChooser implements
             listener.onError(reason);
         }
     }
+
+    @Override
+    public void onProcessedImages(ChosenImages images) {
+        if (listener != null) {
+            listener.onImagesChosen(images);
+        }
+    }
 }

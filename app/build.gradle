@@ -24,7 +24,7 @@ android {
         minSdkVersion 9
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 55
-        versionName "1.5.2"
+        versionName "1.5.5"
     }
     buildTypes {
         release {
@@ -39,11 +39,11 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile project(':image-chooser-library')
 //    compile 'com.kbeanie:image-chooser-library:+@aar'
-    compile 'com.google.android.gms:play-services-base:8.3.0'
-    compile 'com.google.android.gms:play-services-ads:8.3.0'
-    compile 'com.google.android.gms:play-services-analytics:8.3.0'
+    compile 'com.google.android.gms:play-services-base:8.4.0'
+    compile 'com.google.android.gms:play-services-ads:8.4.0'
+    compile 'com.google.android.gms:play-services-analytics:8.4.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
-    compile('com.crashlytics.sdk.android:crashlytics:2.5.2@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
         transitive = true;
     }
 }

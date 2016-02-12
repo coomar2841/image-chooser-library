@@ -8,10 +8,7 @@
 
 >Picking up any file for your app, and it's details.
 
-<a href="https://play.google.com/store/apps/details?id=com.beanie.imagechooserapp&hl=en&referrer=utm_source%3Dicl_github"">
-  <img alt="Get it on Google Play"
-       src="https://developer.android.com/images/brand/en_generic_rgb_wo_45.png" />
-</a>
+<a href="https://play.google.com/store/apps/details?id=com.beanie.imagechooserapp&utm_source=global_co&utm_medium=prtnr&utm_content=Mar2515&utm_campaign=PartBadge&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"><img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" /></a>
 
 ##### Code less for capturing  images/videos
 - Supports picking up images/videos from phone gallery.
@@ -27,13 +24,13 @@
 &lt;dependency&gt;
     &lt;groupId&gt;com.kbeanie&lt;/groupId&gt;
     &lt;artifactId&gt;image-chooser-library&lt;/artifactId&gt;
-    &lt;version&gt;1.5.4&lt;/version&gt;
+    &lt;version&gt;1.5.6&lt;/version&gt;
 &lt;/dependency&gt;
 </code>
 </pre>
 
 ##### Configuring on Android Studio
-> compile 'com.kbeanie:image-chooser-library:1.5.4@aar'
+> compile 'com.kbeanie:image-chooser-library:1.5.6@aar'
 
 ##### Apps using Image Chooser Library
 
@@ -47,6 +44,9 @@ App                 | Link to Play Store     |App                | Link to Play 
 If you would like to add your app to this list, drop me an email.
 
 ### Release Notes
+
+##### Version "1.5.6"
+1. Mutiple Image handling
 
 ##### Version "1.5.4"
 1. Thumbnail issue is fixed.

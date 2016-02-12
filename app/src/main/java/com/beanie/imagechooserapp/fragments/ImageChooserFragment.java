@@ -21,6 +21,7 @@ import com.beanie.imagechooserapp.R;
 import com.crashlytics.android.Crashlytics;
 import com.kbeanie.imagechooser.api.ChooserType;
 import com.kbeanie.imagechooser.api.ChosenImage;
+import com.kbeanie.imagechooser.api.ChosenImages;
 import com.kbeanie.imagechooser.api.ImageChooserListener;
 import com.kbeanie.imagechooser.api.ImageChooserManager;
 
@@ -157,6 +158,11 @@ public class ImageChooserFragment extends Fragment implements
                         Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    @Override
+    public void onImagesChosen(ChosenImages images) {
+
     }
 
     @Override

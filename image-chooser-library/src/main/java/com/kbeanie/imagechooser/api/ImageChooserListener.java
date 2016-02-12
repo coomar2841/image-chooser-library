@@ -23,12 +23,19 @@ public interface ImageChooserListener {
      * 
      * @param image
      */
-    public void onImageChosen(ChosenImage image);
+    void onImageChosen(ChosenImage image);
 
     /**
      * Handle any error conditions if at all, when you receieve this callback
      * 
      * @param reason
      */
-    public void onError(String reason);
+    void onError(String reason);
+
+
+    /**
+     * Callback when multiple images are chosen
+     * @param images
+     */
+    void onImagesChosen(ChosenImages images);
 }

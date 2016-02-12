@@ -19,6 +19,7 @@
 package com.beanie.imagechooserapp;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -41,10 +42,12 @@ import com.google.android.gms.ads.AdView;
 import com.kbeanie.imagechooser.api.ChooserType;
 import com.kbeanie.imagechooser.api.ChosenFile;
 import com.kbeanie.imagechooser.api.ChosenImage;
+import com.kbeanie.imagechooser.api.ChosenImages;
 import com.kbeanie.imagechooser.api.FileChooserListener;
 import com.kbeanie.imagechooser.api.FileChooserManager;
 import com.kbeanie.imagechooser.api.ImageChooserListener;
 import com.kbeanie.imagechooser.api.ImageChooserManager;
+import com.kbeanie.imagechooser.api.IntentUtils;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -112,6 +115,9 @@ public class ImageChooserActivity extends BasicActivity implements
         chooserType = ChooserType.REQUEST_PICK_PICTURE;
         imageChooserManager = new ImageChooserManager(this,
                 ChooserType.REQUEST_PICK_PICTURE, true);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        imageChooserManager.setExtras(bundle);
         imageChooserManager.setImageChooserListener(this);
         imageChooserManager.clearOldFiles();
         try {
@@ -181,6 +187,17 @@ public class ImageChooserActivity extends BasicActivity implements
         });
     }
 
+    @Override
+    public void onImagesChosen(final ChosenImages images) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Log.i(TAG, "On Images Chosen: " + images.size());
+                onImageChosen(images.getImage(0));
+            }
+        });
+    }
+
     private void loadImage(ImageView iv, final String path) {
         Picasso.with(ImageChooserActivity.this)
                 .load(Uri.fromFile(new File(path)))
@@ -217,6 +234,9 @@ public class ImageChooserActivity extends BasicActivity implements
     // to destroying of activity for low memory situations)
     private void reinitializeImageChooser() {
         imageChooserManager = new ImageChooserManager(this, chooserType, true);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        imageChooserManager.setExtras(bundle);
         imageChooserManager.setImageChooserListener(this);
         imageChooserManager.reinitialize(filePath);
     }
@@ -276,22 +296,10 @@ public class ImageChooserActivity extends BasicActivity implements
     private void checkForSharedImage(Intent intent) {
         if (intent != null) {
             if (intent.getAction() != null && intent.getType() != null && intent.getExtras() != null) {
-                String action = intent.getAction();
-                String type = intent.getType();
-                Uri streamData = (Uri) intent.getExtras().get(Intent.EXTRA_STREAM);
-                Log.i(TAG, "Incoming Share: Action: " + action);
-                Log.i(TAG, "Incoming Share: Type: " + type);
-                Log.i(TAG, "Incoming Share: Stream: " + streamData);
-
-                Intent sIntent = new Intent();
-                sIntent.setData(streamData);
-
-                intent.setData(streamData);
-
                 ImageChooserManager m = new ImageChooserManager(this, ChooserType.REQUEST_PICK_PICTURE);
                 m.setImageChooserListener(this);
 
-                m.submit(ChooserType.REQUEST_PICK_PICTURE, sIntent);
+                m.submit(ChooserType.REQUEST_PICK_PICTURE, IntentUtils.getIntentForMultipleSelection(intent));
             }
         }
     }
