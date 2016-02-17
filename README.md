@@ -26,13 +26,13 @@
 &lt;dependency&gt;
     &lt;groupId&gt;com.kbeanie&lt;/groupId&gt;
     &lt;artifactId&gt;image-chooser-library&lt;/artifactId&gt;
-    &lt;version&gt;1.5.7&lt;/version&gt;
+    &lt;version&gt;1.5.8&lt;/version&gt;
 &lt;/dependency&gt;
 </code>
 </pre>
 
 ##### Configuring on Android Studio
-> compile 'com.kbeanie:image-chooser-library:1.5.7@aar'
+> compile 'com.kbeanie:image-chooser-library:1.5.8@aar'
 
 ##### Apps using Image Chooser Library
 
@@ -46,6 +46,9 @@ App                 | Link to Play Store     |App                | Link to Play 
 If you would like to add your app to this list, drop me an email.
 
 ### Release Notes
+
+#### Version "1.5.8"
+1. File chooser should not show "Contacts" as an option.
 
 ##### Version "1.5.7"
 1. Multiple Image handling

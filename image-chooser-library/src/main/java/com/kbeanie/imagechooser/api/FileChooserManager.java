@@ -92,6 +92,7 @@ public class FileChooserManager extends MediaChooserManager implements FileProce
             Intent intent = new Intent(action);
             intent.setType(mimeType);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
             startActivity(intent);
         } catch (ActivityNotFoundException e) {
             throw new ChooserException(e);

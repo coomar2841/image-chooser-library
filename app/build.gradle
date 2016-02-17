@@ -24,7 +24,7 @@ android {
         minSdkVersion 9
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 56
-        versionName "1.5.7"
+        versionName "1.5.8"
     }
     buildTypes {
         release {

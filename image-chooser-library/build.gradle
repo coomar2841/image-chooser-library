@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'maven'
 apply plugin: 'signing'
 
-version = "1.5.7"
+version = "1.5.8"
 group = "com.kbeanie"
 
 configurations {
