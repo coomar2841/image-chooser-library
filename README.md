@@ -47,7 +47,7 @@ If you would like to add your app to this list, drop me an email.
 
 ### Release Notes
 
-#### Version "1.5.8"
+##### Version "1.5.8"
 1. File chooser should not show "Contacts" as an option.
 
 ##### Version "1.5.7"
