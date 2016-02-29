@@ -1,4 +1,5 @@
-**A completely re-designed library is in the works. Check it out here**
+_**A completely re-designed library is in the works. Check it out here**_
+
 [Android Multipicker Library](https://github.com/coomar2841/android-multipicker-library)
 
 **Makes it easy and simple to integrate "Attach that photo/video" feature into your android apps.**
