@@ -50,6 +50,7 @@ public class BasicActivity extends AppCompatActivity {
                 .addTestDevice(Config.NEXUS_S)
                 .addTestDevice(Config.TEST_DEVICE_ID_2)
                 .addTestDevice(Config.TEST_GALAXY_NEXUS)
+                .addTestDevice(Config.TEST_TEMP_DEVICE)
                 .addTestDevice(Config.TEST_OPO);
         AdRequest request = builder.build();
         adView.loadAd(request);

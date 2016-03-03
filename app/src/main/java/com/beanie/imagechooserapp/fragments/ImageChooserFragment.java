@@ -3,6 +3,7 @@ package com.beanie.imagechooserapp.fragments;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -33,6 +34,11 @@ public class ImageChooserFragment extends Fragment implements
     private ImageChooserManager imageChooserManager;
     private int chooserType;
     private String mediaPath;
+
+    private String finalPath;
+
+    private String thumbPath;
+    private String thumbPathSmall;
 
     private ImageView imageViewThumbnail;
 
@@ -112,12 +118,22 @@ public class ImageChooserFragment extends Fragment implements
             if (savedInstanceState.containsKey("chooser_type")) {
                 chooserType = savedInstanceState.getInt("chooser_type");
             }
+            if (savedInstanceState.containsKey("final_path")) {
+                finalPath = savedInstanceState.getString("final_path");
+                thumbPath = savedInstanceState.getString("thumb_path");
+                thumbPathSmall = savedInstanceState.getString("thumb_path_small");
+                textViewFile.setText(finalPath);
+                imageViewThumbnail.setImageURI(Uri.parse(new File(thumbPath).toString()));
+                imageViewThumbSmall.setImageURI(Uri.parse(new File(thumbPathSmall).toString()));
+            }
         }
+
+        Log.d(getClass().getName(), "onActivityCreated: " + mediaPath + " T: " + chooserType);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d("On Activity Result", requestCode + "");
+        Log.d(getClass().getName(), requestCode + "");
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             if (imageChooserManager == null) {
@@ -129,9 +145,22 @@ public class ImageChooserFragment extends Fragment implements
         }
     }
 
+    private Activity activity;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.activity = activity;
+        Log.d(getClass().getName(), "onAttach: ");
+    }
+
     @Override
     public void onImageChosen(final ChosenImage image) {
-        getActivity().runOnUiThread(new Runnable() {
+        Log.d(getClass().getName(), "onImageChosen: " + image.getFilePathOriginal());
+        finalPath = image.getFilePathOriginal();
+        thumbPath = image.getFileThumbnail();
+        thumbPathSmall = image.getFileThumbnailSmall();
+        this.activity.runOnUiThread(new Runnable() {
 
             @Override
             public void run() {
@@ -173,6 +202,12 @@ public class ImageChooserFragment extends Fragment implements
         }
         if (mediaPath != null) {
             outState.putString("media_path", mediaPath);
+        }
+
+        if (finalPath != null) {
+            outState.putString("final_path", finalPath);
+            outState.putString("thumb_path", thumbPath);
+            outState.putString("thumb_path_small", thumbPathSmall);
         }
     }
 }
