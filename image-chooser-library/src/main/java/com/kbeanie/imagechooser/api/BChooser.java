@@ -217,6 +217,10 @@ public abstract class BChooser {
         this.extras = extras;
     }
 
+    public Bundle getExtras() {
+        return this.extras;
+    }
+
     /**
      * Utility method which quickly looks up the file size. Use this, if you want to set a limit to
      * the media chosen, and which your application can safely handle.
