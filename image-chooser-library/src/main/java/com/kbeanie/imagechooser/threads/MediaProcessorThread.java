@@ -552,12 +552,13 @@ public abstract class MediaProcessorThread extends Thread {
 
         BufferedInputStream inputStream = null;
         BufferedOutputStream outStream = null;
+        ParcelFileDescriptor parcelFileDescriptor = null;
 
         try {
 
             filePath = FileUtils.getDirectory(foldername) + File.separator
                     + Calendar.getInstance().getTimeInMillis() + extension;
-            ParcelFileDescriptor parcelFileDescriptor = context
+            parcelFileDescriptor = context
                     .getContentResolver().openFileDescriptor(Uri.parse(path),
                             "r");
 
@@ -585,6 +586,7 @@ public abstract class MediaProcessorThread extends Thread {
             flush(outStream);
             close(outStream);
             close(inputStream);
+            close(parcelFileDescriptor);
         }
 
 
@@ -609,12 +611,13 @@ public abstract class MediaProcessorThread extends Thread {
 
         BufferedInputStream inputStream = null;
         BufferedOutputStream outStream = null;
+        ParcelFileDescriptor parcelFileDescriptor = null;
         String localPath;
         try {
 
             localPath = FileUtils.getDirectory(foldername) + File.separator
                     + Calendar.getInstance().getTimeInMillis() + extension;
-            ParcelFileDescriptor parcelFileDescriptor = context
+            parcelFileDescriptor = context
                     .getContentResolver().openFileDescriptor(Uri.parse(path),
                             "r");
 
@@ -642,6 +645,7 @@ public abstract class MediaProcessorThread extends Thread {
             flush(outStream);
             close(outStream);
             close(inputStream);
+            close(parcelFileDescriptor);
         }
 
 
@@ -668,12 +672,13 @@ public abstract class MediaProcessorThread extends Thread {
 
         BufferedInputStream inputStream = null;
         BufferedOutputStream outStream = null;
+        ParcelFileDescriptor parcelFileDescriptor = null;
 
         try {
 
             outFile = FileUtils.getDirectory(foldername) + File.separator
                     + Calendar.getInstance().getTimeInMillis() + extension;
-            ParcelFileDescriptor parcelFileDescriptor = context
+            parcelFileDescriptor = context
                     .getContentResolver().openFileDescriptor(Uri.parse(path),
                             "r");
 
@@ -701,6 +706,7 @@ public abstract class MediaProcessorThread extends Thread {
             flush(outStream);
             close(outStream);
             close(inputStream);
+            close(parcelFileDescriptor);
         }
 
 

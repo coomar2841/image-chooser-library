@@ -50,6 +50,16 @@ public class StreamHelper {
         }
     }
 
+    public static void close(ParcelFileDescriptor parcelFileDescriptor) throws ChooserException  {
+        if (parcelFileDescriptor != null) {
+            try {
+                parcelFileDescriptor.close();
+            } catch (IOException e) {
+                throw new ChooserException(e);
+            }
+        }
+    }
+
     public static void verifyCursor(Uri uri, Cursor cursor) throws ChooserException {
         if(cursor == null) {
             throw new ChooserException("Didnt not get cursor in return for = " + uri);
