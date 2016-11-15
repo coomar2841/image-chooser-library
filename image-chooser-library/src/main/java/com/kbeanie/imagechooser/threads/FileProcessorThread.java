@@ -145,7 +145,6 @@ public class FileProcessorThread extends MediaProcessorThread {
     @Override
     public void run() {
         try {
-            manageDiretoryCache(mediaExtension);
             processFile();
         } catch (IOException e) {
             e.printStackTrace();

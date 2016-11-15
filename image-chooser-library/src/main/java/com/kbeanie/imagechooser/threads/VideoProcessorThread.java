@@ -59,7 +59,6 @@ public class VideoProcessorThread extends MediaProcessorThread {
     @Override
     public void run() {
         try {
-            manageDiretoryCache("mp4");
             processVideo();
         } catch (IOException e) {
             e.printStackTrace();

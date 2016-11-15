@@ -16,8 +16,6 @@
 
 package com.kbeanie.imagechooser.threads;
 
-import java.io.IOException;
-
 import android.content.Context;
 import android.net.Uri;
 import android.text.TextUtils;
@@ -25,6 +23,8 @@ import android.util.Log;
 
 import com.kbeanie.imagechooser.BuildConfig;
 import com.kbeanie.imagechooser.api.ChosenImage;
+
+import java.io.IOException;
 
 public class ImageProcessorThread extends MediaProcessorThread {
 
@@ -49,7 +49,6 @@ public class ImageProcessorThread extends MediaProcessorThread {
 	@Override
 	public void run() {
 		try {
-			manageDiretoryCache("jpg");
 			processImage();
 		} catch (IOException e) {
 			e.printStackTrace();

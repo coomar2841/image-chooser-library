@@ -52,22 +52,15 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileDescriptor;
-import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
-import java.util.Locale;
 
 public abstract class MediaProcessorThread extends Thread {
     private final static String TAG = "MediaProcessorThread";
-
-    // 500 MB Cache size
-    protected final static int MAX_DIRECTORY_SIZE = 500 * 1024 * 1024;
-    // Number of days to preserve 10 days
-    protected final static int MAX_THRESHOLD_DAYS = (int) (10 * 24 * 60 * 60 * 1000);
 
     private final static int THUMBNAIL_BIG = 1;
 
@@ -83,8 +76,6 @@ public abstract class MediaProcessorThread extends Thread {
 
     protected String mediaExtension;
 
-    protected boolean clearOldFiles = false;
-
     public MediaProcessorThread(String filePath, String foldername,
                                 boolean shouldCreateThumbnails) {
         this.filePath = filePath;
@@ -98,10 +89,6 @@ public abstract class MediaProcessorThread extends Thread {
 
     public void setMediaExtension(String extension) {
         this.mediaExtension = extension;
-    }
-
-    public void clearOldFiles() {
-        this.clearOldFiles = true;
     }
 
     protected void downloadAndProcess(String url) throws Exception {
@@ -283,54 +270,6 @@ public abstract class MediaProcessorThread extends Thread {
             e.printStackTrace();
         }
         return localFilePath;
-    }
-
-    protected void manageDiretoryCache(final String extension) {
-        if (!clearOldFiles) {
-            return;
-        }
-        File directory = null;
-        directory = new File(FileUtils.getDirectory(context, foldername));
-        File[] files = directory.listFiles();
-        long count = 0;
-        if (files == null) {
-            return;
-        }
-        for (File file : files) {
-            count = count + file.length();
-        }
-        if (BuildConfig.DEBUG) {
-            Log.i(TAG, "Directory size: " + count);
-        }
-
-        if (count > MAX_DIRECTORY_SIZE) {
-            final long today = Calendar.getInstance().getTimeInMillis();
-            FileFilter filter = new FileFilter() {
-
-                @Override
-                public boolean accept(File pathname) {
-                    if (today - pathname.lastModified() > MAX_THRESHOLD_DAYS
-                            && pathname
-                            .getAbsolutePath()
-                            .toUpperCase(Locale.ENGLISH)
-                            .endsWith(
-                                    extension
-                                            .toUpperCase(Locale.ENGLISH))) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-            };
-
-            File[] filterFiles = directory.listFiles(filter);
-            int deletedFileCount = 0;
-            for (File file : filterFiles) {
-                deletedFileCount++;
-                file.delete();
-            }
-            Log.i(TAG, "Deleted " + deletedFileCount + " files");
-        }
     }
 
     protected abstract void processingDone(String file, String thumbnail,
