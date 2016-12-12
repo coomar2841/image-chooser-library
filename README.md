@@ -1,3 +1,5 @@
+>Sorry, I will not be making any updates to this library. Will strongly recommend to switch to the option below. The library below still has all the same features. You might have to spend 2-3 hours for the migration, but I think it will be worth. Sorry again.
+
 _**A completely re-designed library is in the works. Check it out here**_
 
 [Android Multipicker Library](https://github.com/coomar2841/android-multipicker-library)
